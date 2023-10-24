@@ -1,0 +1,23 @@
+<?xml version="1.0" ?>
+<payment xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Payment:etc/payment.xsd">
+    <groups>
+        <group id="scalexpert">
+            <label>scalexpert</label>
+        </group>
+    </groups>
+    <methods>
+        <method name="scalexpert_payment_3x">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="scalexpert_payment_4x">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="scalexpert_long_credit_fr">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="scalexpert_long_credit_de">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+    </methods>
+</payment>

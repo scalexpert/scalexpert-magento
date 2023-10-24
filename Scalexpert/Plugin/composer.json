@@ -1,0 +1,17 @@
+{
+	"name" : "scalexpert/module-plugin",
+	"description" : "Société Général scalexpert for Magento 2",
+	"require" : {
+		"php" : "7.4|8.1|8.2"
+	},
+	"type" : "magento2-module",
+	"version" : "1.0.0",
+	"autoload" : {
+		"files" : [
+			"registration.php"
+		],
+		"psr-4" : {
+			"Scalexpert\\Plugin\\" : ""
+		}
+	}
+}

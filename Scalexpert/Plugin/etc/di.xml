@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Scalexpert\Plugin\Logger\Handler">
+        <arguments>
+            <argument name="filesystem" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Scalexpert\Plugin\Logger\Logger">
+        <arguments>
+            <argument name="name" xsi:type="string">scalexpert</argument>
+            <argument name="handlers"  xsi:type="array">
+                <item name="system" xsi:type="object">Scalexpert\Plugin\Logger\Handler</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\Session\SessionStartChecker">
+        <plugin name="Scalexpert_Plugin_Plugin_Magento_Framework_Session_SessionStartChecker" type="Scalexpert\Plugin\Plugin\Magento\Framework\Session\SessionStartChecker" sortOrder="10" disabled="false"/>
+    </type>
+
+</config>

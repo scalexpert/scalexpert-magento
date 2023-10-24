@@ -1,0 +1,44 @@
+<?php /** @var $block \Scalexpert\Plugin\Block\Payment\PaymentResponse */
+      /** @var \Magento\Framework\Escaper $escaper */ ?>
+
+<?php
+$error = $block->getData('error');
+$title = $block->getData('title');
+$orderId = $block->getData('scalexpert_order_id');
+$incrementId = $block->getData('increment_id');
+$informationsApi = $block->getFinancialOrder($orderId);
+$status = $informationsApi['consolidated_status'];
+?>
+
+<div class="page-title-wrapper">
+    <h1 class="page-title">
+        <span class="base" data-ui-id="page-title-wrapper"><?= $escaper->escapeHtml(__($title)) ?></span>
+    </h1>
+    <?php if ($block->getCanViewOrder() && $block->getCanPrintOrder()) :?>
+        <a href="<?= $escaper->escapeUrl($block->getPrintUrl()) ?>"
+           class="action print"
+           target="_blank"
+           rel="noopener">
+            <?= $escaper->escapeHtml(__('Print receipt')) ?>
+        </a>
+    <?php endif;?>
+</div>
+<div class="checkout-success">
+    <?php if ($orderId): ?>
+        <?php if ($block->getCanViewOrder()): ?>
+            <p><?= $escaper->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $escaper->escapeUrl($block->getViewOrderUrl()), $orderId)), ['a', 'strong']) ?></p>
+        <?php  else :?>
+            <p><?= $escaper->escapeHtml(__('Your order # is: <span>%1</span>.', $orderId), ['span']) ?></p>
+        <?php endif; ?>
+
+        <p><?= $escaper->escapeHtml(__('The status of your financing request is: <b>%1</b>.', $status), ['b']) ?></p>
+
+        <p><?= $escaper->escapeHtml(__('We\'ll email you an order confirmation with details and tracking info.')) ?></p>
+    <?php endif; ?>
+
+    <div class="actions-toolbar">
+        <div class="primary">
+            <a class="action primary continue" href="<?= $escaper->escapeUrl($block->getContinueUrl()) ?>"><span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span></a>
+        </div>
+    </div>
+</div>

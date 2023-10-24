@@ -1,0 +1,82 @@
+<?php
+/** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Cart $block */
+
+$product = $block->getItem();
+$warranty = $block->getProductWarranty($product);
+$priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+?>
+
+<?php if ($warranty && $warranty['enabled'] && !in_array($product->getId(),$warranty['items_insurance_id'])) { ?>
+<?php $input_type = ((count($warranty['insurances']) > 1)?'radio':'checkbox'); ?>
+<div class="scalexpert">
+    <div class="scalexpert-box" data-mage-init='{ "collapsible":{ "animate":{ "duration" :300 } }}'>
+        <div class="scalexpert-box-title" data-role="title">
+            <img src="<?= $this->getViewFileUrl('Scalexpert_Plugin::images/umbrella.svg'); ?>" alt="<?= strip_tags($warranty['title']); ?>" width="24">
+            <span><?= $warranty['title']; ?></span>
+            <?php if($warranty['logo']) { ?>
+                <img src="<?= $warranty['logo']; ?>" alt="<?= strip_tags($warranty['title']); ?>" class="scalexpert-logo" width="55">
+            <?php } ?>
+        </div>
+        <div class="scalexpert-box-content" data-role="content">
+            <input type="hidden" name="insurance_item_id" value="<?= (isset($warranty['insurance_item_id'])) ? $warranty['insurance_item_id'] : ''; ?>" />
+            <?php foreach($warranty['insurances'] AS $code => $insurance) { ?>
+                <div class="scalexpert-option">
+                    <input type="<?= $input_type; ?>"
+                           id="item_<?= $this->getItem()->getId(); ?>_insurance_<?= $insurance['insurance_id']; ?>"
+                           value="<?= $warranty['code'].'|'.$insurance['insurance_id']; ?>"
+                           name="item_<?= $this->getItem()->getId(); ?>_insurances"
+                           <?= (($warranty['quotations_insurance_id'] && $warranty['quotations_insurance_id']==$insurance['insurance_id'])?'checked':''); ?>
+                    >
+                    <label for="item_<?= $this->getItem()->getId(); ?>_insurance_<?= $insurance['insurance_id']; ?>">
+                        <span><?= $insurance['description']; ?><?php if($insurance['price']>0): ?> *<?php endif; ?></span>
+                        <?php if($insurance['price']>0): ?>
+                            <span class="scalexpert-warranty-btn" id="scalexpert-warranty-btn-item_<?= $this->getItem()->getId(); ?>_insurance">
+                                <img src="<?= $warranty['picto_info']; ?>" alt="<?= strip_tags($warranty['title']); ?>" width="16">
+                            </span>
+                        <?php endif; ?>
+                        <span class="scalexpert-option-price"><?= $priceHelper->currency($insurance['price'], true, false); ?></span>
+                    </label>
+                    <?php if($insurance['price']>0): ?>
+                        <span class="scalexpert-option-bot"><?= __('In the event of a breakdown, your device is repaired, replaced or refunded with a voucher.'); ?></span>
+                    <?php endif; ?>
+                </div>
+            <?php } ?>
+
+            <?php if($warranty['terms']) { ?>
+                <div class="scalexpert-option-plus"><?= __('*By subscribing to the guarantee, I declare that I have been able to download and print the %1 of the insurance contract.', '<a href="'.$warranty['notice'].'" target="_blank">'.__('Information Notice (IN)').'</a>'); ?></div>
+            <?php } ?>
+
+        </div>
+    </div>
+    <div class="scalexpert-modal-container"
+         data-bind="mageInit: {
+        'Magento_Ui/js/modal/modal':{
+            'type': 'popup',
+            'trigger': '#scalexpert-warranty-btn-item_<?= $this->getItem()->getId(); ?>_insurance',
+            'modalClass': 'scalexpert-modal',
+            'responsive': true,
+            'innerScroll': true,
+            'buttons': []
+        }}">
+
+        <div class="scalexpert-modal-title">
+            <img src="<?= $this->getViewFileUrl('Scalexpert_Plugin::images/umbrella.svg'); ?>" alt="<?= strip_tags($warranty['title']); ?>">
+            <span><?= $warranty['title']; ?></span>
+        </div>
+
+        <div class="scalexpert-modal-content">
+            <?= $warranty['additional']; ?>
+            <?= $warranty['legal_text']; ?>
+        </div>
+
+        <div class="scalexpert-modal-bottom">
+            <?php if($warranty['terms']) { ?>
+                <a href="<?= $warranty['terms']; ?>" target="_blank"><?= __('Product Information Sheet (IPID)'); ?></a>
+            <?php } ?>
+            <?php if($warranty['notice']) { ?>
+                <a href="<?= $warranty['notice']; ?>" target="_blank"><?= __('Information Notice (IN)'); ?></a>
+            <?php } ?>
+        </div>
+
+    </div>
+<?php } ?>
