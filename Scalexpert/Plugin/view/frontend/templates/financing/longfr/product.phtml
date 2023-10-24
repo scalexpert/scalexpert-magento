@@ -1,0 +1,42 @@
+<?php
+/** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Product $block */
+$typePayment = 'long_fr';
+$solutions = $block->getProductFinancing($typePayment);
+?>
+<?php foreach ($solutions as $solution) : ?>
+    <?php if (in_array($solution->solutionCode, \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR)) : ?>
+        <div class="scalexpert-box">
+            <div class="scalexpert-box-title">
+                <span><?= $solution->magentoConfiguration['title']?$solution->magentoConfiguration['title']:$solution->visualTitle; ?></span>
+                <div id="scalexpert-financing-btn-<?= $solution->solutionCode; ?>">
+                    <img src="<?= $solution->visualInformationIcon; ?>" alt="<?= strip_tags($solution->visualTitle); ?>" width="16">
+                </div>
+                <?php if ($solution->magentoConfiguration['logo']) : ?>
+                <img src="<?= $solution->visualLogo; ?>" alt="<?= strip_tags($solution->visualTitle); ?>" class="scalexpert-logo" width="55">
+                <?php endif; ?>
+            </div>
+        </div>
+        <div class="scalexpert-modal-container"
+             data-bind="mageInit: {
+            'Magento_Ui/js/modal/modal':{
+                'type': 'popup',
+                'trigger': '#scalexpert-financing-btn-<?= $solution->solutionCode; ?>',
+                'modalClass': 'scalexpert-modal',
+                'responsive': true,
+                'innerScroll': true,
+                'buttons': []
+            }}">
+
+            <div class="scalexpert-modal-title">
+                <img src="<?= $this->getViewFileUrl('Scalexpert_Plugin::images/emprunt.svg'); ?>" alt="<?= strip_tags($solution->visualTitle); ?>">
+                <span><?= $solution->visualTitle; ?></span>
+            </div>
+
+            <div class="scalexpert-modal-content">
+                <?= $solution->visualAdditionalInformation; ?>
+                <?= $solution->visualLegalText; ?>
+            </div>
+
+        </div>
+    <?php endif; ?>
+<?php endforeach; ?>

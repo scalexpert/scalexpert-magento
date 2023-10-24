@@ -1,0 +1,27 @@
+<?php
+/** @var Scalexpert\Plugin\Block\Adminhtml\Sales\Insurance $block */
+/* @var \Magento\Framework\Escaper $escaper */
+$infos = $block->getInsuranceInformation();
+$priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+?>
+<?php if ($infos && isset($infos[0]['info_insurance'][0]['consolidated_status'])) : ?>
+<div class="block">
+    <div class="block-title">
+        <strong><?= $escaper->escapeHtml(__('Insurance Informations')); ?></strong>
+    </div>
+    <?php foreach($infos as $info) : ?>
+        <?php if (isset($info['info_insurance']) && isset($info['additional_options']) && isset($info['info_insurance'][0]['consolidated_status'])) : ?>
+            <div class="block-content">
+                <span><b><?= $escaper->escapeHtml(__('Product')); ?></b> : <?= $escaper->escapeHtml($info['additional_options'][0]['label']); ?></span><br/>
+                <span><b><?= $escaper->escapeHtml(__('Insurance')); ?></b> : <?= $escaper->escapeHtml($info['additional_options'][0]['value']); ?></span><br/>
+                <span><b><?= $escaper->escapeHtml(__('Article qty')); ?></b> : <?= $escaper->escapeHtml(count($info['info_insurance'][0]['consolidated_status'])); ?></span><br/><br/>
+                <?php $count = 1; foreach($info['info_insurance'][0]['consolidated_status'] as $subscriptionId => $status) : ?>
+                    <span><b><?= $escaper->escapeHtml(__("Article Id %1",$count)); ?></b> : <?= $escaper->escapeHtml($subscriptionId); ?></span><br/>
+                    <span><b><?= $escaper->escapeHtml(__('Article status %1',$count)); ?></b> : <?= $escaper->escapeHtml(__($status)); ?></span><br/><br/>
+                <?php $count ++ ; endforeach ; ?>
+            </div>
+            <br/><br/>
+        <?php endif ; ?>
+    <?php endforeach ; ?>
+</div>
+<?php endif ; ?>

@@ -1,0 +1,13 @@
+.status-invalid{
+    font-weight: 600;
+    color:red;
+}
+
+.status-valid{
+    color:green;
+    font-weight: 600;
+}
+
+p.comment{
+    font-size : 12px;
+}
