@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="payment_method_is_active">
+        <observer name="disable_payment_method_depend_on_product_category" instance="Scalexpert\Plugin\Observer\DisablePaymentMethod" />
+    </event>
+    <event name="checkout_cart_product_add_after">
+        <observer name="create_quote_item_quotation" instance="Scalexpert\Plugin\Observer\CreateQuoteItemQuotation" />
+    </event>
+    <event name="sales_order_invoice_save_after">
+        <observer name="create_invoice_item_subscription" instance="Scalexpert\Plugin\Observer\CreateInvoiceItemSubscription" />
+    </event>
+    <event name="sales_quote_remove_item">
+        <observer name="remove_quote_item_quotation" instance="Scalexpert\Plugin\Observer\RemoveQuoteItemQuotation" />
+    </event>
+    <event name="checkout_cart_update_items_after">
+        <observer name="update_quote_item_quotation" instance="Scalexpert\Plugin\Observer\UpdateQuoteItemQuotation" />
+    </event>
+    <event name="sales_model_service_quote_submit_before">
+        <observer name="convert_quote_item_quotation" instance="Scalexpert\Plugin\Observer\ConvertQuoteItemQuotation" />
+    </event>
+    <event name="sales_order_creditmemo_save_after">
+        <observer name="cancel_financing_or_insurance" instance="Scalexpert\Plugin\Observer\CancelFinancingOrInsurance" />
+    </event>
+</config>

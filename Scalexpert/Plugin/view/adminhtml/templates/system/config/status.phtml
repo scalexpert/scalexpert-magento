@@ -1,0 +1,81 @@
+<div id="status_access" class="status-invalid"><?= __("Check Key Validity : Running"); ?></div>
+<?php
+/**  @var \Scalexpert\Plugin\Block\Adminhtml\System\Config\ValidityStatus $block */
+
+
+
+?>
+
+
+
+<script>
+    require([
+        'jquery',
+        'prototype'
+    ], function ($) {
+        $(document).ready(function () {
+            var statusDiv = $('#status_access');
+            let mode = $('#scalexpert_administration_platform_access_mode').val();
+
+            let idTest = $('#scalexpert_administration_platform_access_id_test').val();
+            let keyTest = $('#scalexpert_administration_platform_access_key_test').val();
+
+            let idProd = $('#scalexpert_administration_platform_access_id_prod').val();
+            let keyProd = $('#scalexpert_administration_platform_access_key_prod').val();
+            if(
+                (mode === 'PRODUCTION' && (idProd === '' || keyProd === '')) ||
+                (mode === 'TEST' && (idTest === '' || keyTest === ''))
+            ){
+                statusDiv.removeClass('status-valid');
+                statusDiv.addClass('status-invalid');
+                statusDiv.text("<?= __('Your API credentials are empty. Save them to enable Scalexpert API') ?>");
+            }else{
+                let urlValidity = "<?= $block->getUrl('scalexpert_plugin/ajax/checkvalidity') ?>";
+                var params;
+                if(mode === 'PRODUCTION'){
+                    params = {
+                        'app_id': idProd,
+                        'app_key': keyProd,
+                        'website' : <?= $this->getRequest()->getParam('website') != null ?$this->getRequest()->getParam('website'):0?>,
+                        'store':<?= $this->getRequest()->getParam('store')?$this->getRequest()->getParam('store'):0 ?>,
+                        'form_key': '<?= $block->getFormKey() ?>'
+                    };
+                }else{
+                    params = {
+                        'app_id': idTest,
+                        'app_key': keyTest,
+                        'website' : <?= $this->getRequest()->getParam('website') != null ?$this->getRequest()->getParam('website'):0?>,
+                        'store':<?= $this->getRequest()->getParam('store')?$this->getRequest()->getParam('store'):0 ?>,
+                        'form_key': '<?= $block->getFormKey() ?>'
+                    };
+                }
+
+
+
+                new Ajax.Request(urlValidity, {
+                    parameters: params,
+                    loaderArea: false,
+                    asynchronous: true,
+                    onSuccess: function (response) {
+                        if (response.responseJSON.validity === '') {
+                            statusDiv.removeClass('status-valid');
+                            statusDiv.addClass('status-invalid');
+                            statusDiv.text("<?= __('Your API Key is invalid') ?>");
+                        } else {
+                            statusDiv.removeClass('status-invalid');
+                            statusDiv.addClass('status-valid');
+                            statusDiv.text("<?= __('Your API Key is valid') ?>");
+                        }
+
+                    },
+                    onError: function (){
+                        statusDiv.removeClass('status-valid');
+                        statusDiv.addClass('status-invalid');
+                        statusDiv.text("<?= __('Your API Key is invalid') ?>");
+                    }
+                });
+            }
+        });
+    });
+</script>
+
