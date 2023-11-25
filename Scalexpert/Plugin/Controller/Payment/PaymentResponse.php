@@ -158,25 +158,11 @@ class PaymentResponse implements HttpPostActionInterface, CsrfAwareActionInterfa
                         $this->checkoutSession->loadCustomerQuote();
                         $this->checkoutSession->setLastRealOrderId($order->getIncrementId());
                     }
-<<<<<<< HEAD
-=======
-                    if($this->_customerSession->isLoggedIn()) {
->>>>>>> main
                         $resultPage = $this->resultPageFactory->create();
                         $resultPage->getLayout()->getBlock('payment.response')->setData('scalexpert_order_id', $orderId);
                         $resultPage->getLayout()->getBlock('payment.response')->setData('title', $title);
                         $resultPage->getLayout()->getBlock('payment.response')->setData('increment_id', $incrementId);
                         return $resultPage;
-<<<<<<< HEAD
-
-=======
-                    } else {
-                        $this->_messageManager->addErrorMessage(__('You must login to see your financial process.'));
-                        $resultRedirect = $this->_redirectFactory->create();
-                        $resultRedirect->setPath('customer/account/login');
-                        return $resultRedirect;
-                    }
->>>>>>> main
                 } catch (\Exception $e){
                     $this->restApi->writeLog("Can't save order id ",$orderId);
                 }

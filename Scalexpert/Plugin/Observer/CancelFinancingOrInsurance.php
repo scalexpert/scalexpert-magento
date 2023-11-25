@@ -77,13 +77,8 @@ class CancelFinancingOrInsurance implements ObserverInterface
                     foreach ($items as $refundItem)
                     {
                         if($productOptions['additional_options'][0]['label'] == $refundItem->getName() && $refundItem->getQty() != $item->getQty()){
-<<<<<<< HEAD
                             $this->messageManager->addNoticeMessage(__("The insurance qty cannot be different from the quantity of the insured product."));
                             throw new \Exception("The insurance qty cannot be different from the quantity of the insured product.");
-=======
-                            $this->messageManager->addNoticeMessage(__("La quantité de l'assurance ne peut pas être différente de la quantité du produit assuré."));
-                            throw new \Exception("La quantité de l'assurance ne peut pas être différente de la quantité du produit assuré.");
->>>>>>> main
                         }
                     }
                     if (floatval($item->getQty() * $item->getBasePriceInclTax()) === floatval($item->getBaseRowTotalInclTax())) {

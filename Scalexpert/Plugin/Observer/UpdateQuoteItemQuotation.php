@@ -115,11 +115,7 @@ class UpdateQuoteItemQuotation implements ObserverInterface
             $insuranceInfosItem = $this->scalexpertHelper->getCurrentInsuranceForQuoteItem($insuranceQuoteItem);
             if($item->getSku() == self::INSURANCE_SKU){
                 if($item->getQty() != $update['qty'] && !$parentAsQtyChange){
-<<<<<<< HEAD
                     $this->messageManager->addNoticeMessage(__("The insurance qty cannot be changed."));
-=======
-                    $this->messageManager->addNoticeMessage(__("La quantité de l'assurance ne peut pas être modifiée."));
->>>>>>> main
                     $insuranceQuoteItem->setQty($item->getQty());
                     $this->cartRepository->save($quote);
                     $quote->setTriggerRecollect(1);
