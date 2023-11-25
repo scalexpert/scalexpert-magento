@@ -3,6 +3,10 @@
 "Enable","Activer"
 "Personalize","Personnaliser"
 "Support","Support"
+<<<<<<< HEAD
+=======
+"Enable","Activer"
+>>>>>>> main
 "Module version","Version du Module"
 "Keys settings","Configuration des clés"
 "Mode","Mode"
@@ -10,6 +14,11 @@
 "Test key","Clé de test"
 "Production key identifier","Identifiant de clé en mode production"
 "Production key","Clé de Production"
+<<<<<<< HEAD
+=======
+"Check your key validity","Vérifier la validité de votre clé"
+"Test your key","Tester votre clé"
+>>>>>>> main
 "Activate / Desactivate your custom offers and options","Activer / Désactiver vos offres et options personnalisées"
 "E-Financing","E-Financement"
 "Waranty","Garantie"
@@ -23,6 +32,10 @@
 "Show insert","Afficher l'encart"
 "Yes","Oui"
 "No","Non"
+<<<<<<< HEAD
+=======
+"To define","A définir"
+>>>>>>> main
 "Enable logs","Activer les logs"
 "Debug","Debug"
 "Product page","Page produit"
@@ -42,11 +55,23 @@
 "Cart reminder page","Page rappel panier"
 "Show reminder on cart page","Afficher le rappel sur la page panier"
 "Personalize reminder","Personnaliser le rappel"
+<<<<<<< HEAD
 "Unexpected error with ajax","Erreur inattendu avec ajax"
+=======
+"Update my API Key","Mettre à jour ma clé API"
+"Unexpected error with ajax","Erreur inattendu avec ajax"
+"Update","Mettre à jour"
+>>>>>>> main
 "Check Key Validity : Running","Vérification de la clé : En cours"
 "Your API Key is valid","Clé valide"
 "Your API Key is invalid","Clé invalide"
 "Key Status","Vérification de la clé"
+<<<<<<< HEAD
+=======
+"Your solution have been updated","Votre solution a été mise à jour"
+"Your solution haven't been updated","Votre solution n'a pas été mise à jour"
+"Your solution haven\'t been updated","Votre solution n'a pas été mise à jour"
+>>>>>>> main
 "This option is not available in your contract","Cette option n'est pas disponible dans votre contrat"
 "Activate this option","Activer cette option"
 "Your API credentials are empty. Save them to enable Scalexpert API","Vos identifiants API sont vides. Merci de les sauvegarder pour activer Scalexpert"
@@ -59,6 +84,10 @@
 "When activated the debug file will be located in: var/log/scalexpert.log","Une fois activé, le fichier de débogage se trouvera dans : var/log/scalexpert.log"
 "Subscribe to this offer","Souscrire à cette offre"
 "Press the CTRL key to select multiple categories","Appuyez sur la touche CTRL afin de sélectionner de multiples catégories"
+<<<<<<< HEAD
+=======
+"After Product Qty","Après le champ quantité"
+>>>>>>> main
 "Before Product Qty","Avant le champ quantité"
 "After Product Title","Après le nom du produit"
 "After Product AddToCart Button","Après le bouton d'ajout au panier"
@@ -67,9 +96,18 @@
 "Credit subscription id","ID de la transaction"
 "Registration timestamp","Souscris le"
 "Last update timestamp","Mis à jour le"
+<<<<<<< HEAD
 "Buyer financed amount","Montant financé"
 "Consolidated status","Statut"
 "Insurance Informations", "Informations assurances"
+=======
+"Solution code","Code solution"
+"Merchant basket id","Panier n°"
+"Merchant global order id","Commande n°"
+"Buyer financed amount","Montant financé"
+"Consolidated status","Statut"
+"Insurance Information", "Informations assurances"
+>>>>>>> main
 "Product", "Produit"
 "Insurance","Durée de l'assurance"
 "Article Id %1","Id article %1"
@@ -83,10 +121,15 @@
 "REJECTED","Refusé"
 "ABORTED","Annulé"
 "CANCELLED","Annulé"
+<<<<<<< HEAD
+=======
+"accepted","Accepté"
+>>>>>>> main
 "SUBSCRIBED","Souscrit"
 "ACTIVATED","Actif"
 "TERMINATED","Terminé"
 "Article qty","Nombre d'articles"
+<<<<<<< HEAD
 "The insurance qty cannot be changed.","La quantité d'assurance ne peut pas être modifiée."
 "The insurance qty cannot be different from the quantity of the insured product.","La quantité assurée ne peut être différente de la quantité du produit assuré."
 "Invalid api return : id is missing !","Retour API invalide : l'identifiant est manquant !"
@@ -99,3 +142,5 @@
 "The status of your financing request is: <b>%1</b>.","Le statut de votre demande de financement est : <b>%1</b>."
 "We\'ll email you an order confirmation with details and tracking info.","Nous vous enverrons par e-mail une confirmation de commande avec les détails et les informations de suivi."
 "Continue Shopping","Continuer vos achats"
+=======
+>>>>>>> main

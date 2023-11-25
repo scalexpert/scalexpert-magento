@@ -4,7 +4,11 @@
     <default>
         <scalexpert_administration>
             <configuration>
+<<<<<<< HEAD
                 <plugin_version>1.1.0</plugin_version>
+=======
+                <plugin_version>1.0.0</plugin_version>
+>>>>>>> main
             </configuration>
         </scalexpert_administration>
 
