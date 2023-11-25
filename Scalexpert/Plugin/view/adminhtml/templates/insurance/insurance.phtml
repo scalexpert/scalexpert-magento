@@ -7,11 +7,7 @@ $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
 ?>
 <?php if ($infos && isset($infos[0]['info_insurance'][0]['consolidated_status'])) : ?>
     <div class="admin__page-section-item-title">
-<<<<<<< HEAD
         <span class="title"><?= $escaper->escapeHtml(__('Insurance Informations')); ?></span><br/>
-=======
-        <span class="title"><?= $escaper->escapeHtml(__('Insurance Information')); ?></span><br/>
->>>>>>> main
     </div>
         <?php foreach($infos as $info) : ?>
             <?php if (isset($info['info_insurance']) && isset($info['additional_options']) && isset($info['info_insurance'][0]['consolidated_status'])) : ?>
