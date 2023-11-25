@@ -90,8 +90,13 @@ class CreateInvoiceItemSubscription implements ObserverInterface
                 foreach ($invoice_items as $invoiced_item)
                 {
                     if($productOptions['additional_options'][0]['label'] == $invoiced_item->getName() && $invoiced_item->getQty() != $invoice_item->getQty()){
+<<<<<<< HEAD
+                        $this->messageManager->addNoticeMessage(__("The insurance qty cannot be different from the quantity of the insured product."));
+                        throw new \Exception("The insurance qty cannot be different from the quantity of the insured product.");
+=======
                         $this->messageManager->addNoticeMessage(__("La quantité de l'assurance ne peut pas être différente de la quantité du produit assuré."));
                         throw new \Exception("La quantité de l'assurance ne peut pas être différente de la quantité du produit assuré.");
+>>>>>>> main
                     }
                 }
                 $insuranceInformations = $productOptions['info_insurance'];
