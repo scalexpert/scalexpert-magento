@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Observer;
 
 use Magento\Framework\DataObject;
@@ -8,6 +15,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Payment\Model\Method\AbstractMethod;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class DisablePaymentMethod implements ObserverInterface
 {
@@ -27,18 +35,26 @@ class DisablePaymentMethod implements ObserverInterface
     protected $restApi;
 
     /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Scalexpert\Plugin\Model\SystemConfigData $systemConfigData
      * @param \Scalexpert\Plugin\Model\RestApi $restApi
+     * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Scalexpert\Plugin\Model\SystemConfigData $systemConfigData,
-        \Scalexpert\Plugin\Model\RestApi $restApi
+        \Scalexpert\Plugin\Model\RestApi $restApi,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->systemConfigData = $systemConfigData;
         $this->restApi = $restApi;
+        $this->scopeConfig = $scopeConfig;
     }
 
     private function quoteItemHasWarranty($quoteItem){
@@ -129,7 +145,7 @@ class DisablePaymentMethod implements ObserverInterface
             }
             if (!$isExcludeCategory) {
                 $quotetotal = $quote->getBaseSubtotal();
-                $countryId = $quote->getBillingAddress()->getCountryId();
+                $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
                 $financing = $this->restApi->getFinancingEligibleSolutions($quotetotal, $countryId);
                 $financingCode = array();
                 if ($financing['status']) {

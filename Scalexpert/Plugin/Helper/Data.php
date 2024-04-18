@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
@@ -23,7 +30,7 @@ class Data extends AbstractHelper
         parent::__construct($context);
     }
 
-    function getCategoryTree($categoryIds)
+    public function getCategoryTree($categoryIds)
     {
         $categoryCollection = $this->_categoryCollectionFactory->create();
         $categories = $categoryCollection->addFieldToFilter('entity_id', ['in' => $categoryIds])
@@ -33,7 +40,7 @@ class Data extends AbstractHelper
         $categoryTree = [];
 
         foreach ($categories as $category) {
-            $pathIds = explode('/', $category->getPath());
+            $pathIds = explode('/', $category->getPath() ?? '');
             $pathNames = [];
 
             foreach ($pathIds as $pathId) {

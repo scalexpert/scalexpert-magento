@@ -1,7 +1,16 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Model;
 
+use Magento\Store\Model\ScopeInterface;
+use Scalexpert\Plugin\Model\SystemConfigData;
 
 class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigProviderInterface {
 
@@ -44,13 +53,13 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
         $quote = $this->checkoutSession->getQuote();
 
         $quotetotal = $quote->getBaseSubtotal();
-        $countryId = $quote->getBillingAddress()->getCountryId();
+        $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
         $financing = $this->restApi->getFinancingEligibleSolutions($quotetotal, $countryId);
         $codes_per_methods = [
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
         ];
         $method_per_code = [];
         foreach ($codes_per_methods as $method => $codes) {
@@ -59,11 +68,14 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
             }
         }
 
-
         $data_per_method = [
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => [
-                'customTitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE),
-                'customSubtitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
                 'visualTitle' => '',
                 'visualDescription' => '',
                 'visualInformationIcon' => '',
@@ -72,11 +84,15 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualTableImage' => '',
                 'visualLogo' => '',
                 'visualInformationNoticeURL' => '',
-                'visualProductTermsURL' => ''
+                'visualProductTermsURL' => '',
             ],
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => [
-                'customTitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE),
-                'customSubtitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
                 'visualTitle' => '',
                 'visualDescription' => '',
                 'visualInformationIcon' => '',
@@ -85,11 +101,15 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualTableImage' => '',
                 'visualLogo' => '',
                 'visualInformationNoticeURL' => '',
-                'visualProductTermsURL' => ''
+                'visualProductTermsURL' => '',
             ],
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => [
-                'customTitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE),
-                'customSubtitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
                 'visualTitle' => '',
                 'visualDescription' => '',
                 'visualInformationIcon' => '',
@@ -98,11 +118,15 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualTableImage' => '',
                 'visualLogo' => '',
                 'visualInformationNoticeURL' => '',
-                'visualProductTermsURL' => ''
+                'visualProductTermsURL' => '',
             ],
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => [
-                'customTitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE),
-                'customSubtitle' => $this->scopeConfig->getValue(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
                 'visualTitle' => '',
                 'visualDescription' => '',
                 'visualInformationIcon' => '',
@@ -111,7 +135,7 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualTableImage' => '',
                 'visualLogo' => '',
                 'visualInformationNoticeURL' => '',
-                'visualProductTermsURL' => ''
+                'visualProductTermsURL' => '',
             ],
         ];
 

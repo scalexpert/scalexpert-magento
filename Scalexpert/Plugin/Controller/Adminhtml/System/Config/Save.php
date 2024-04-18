@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Controller\Adminhtml\System\Config;
 
 use Magento\Backend\App\Action\Context;
@@ -412,7 +419,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         }
         $unEligibleSolutionCodes = array_diff(array_keys($matchingSolutionCodes),$eligibleSolutionCodes);
         foreach ($unEligibleSolutionCodes as $solutionCode){
-            $this->systemConfigData->setScalexpertConfigData($matchingSolutionCodes[$solutionCode],false,$scope,$scopeId);
+            $this->systemConfigData->setScalexpertConfigData($matchingSolutionCodes[$solutionCode],0,$scope,$scopeId);
 
             $contract = $this->contractsCollectionFactory->create()
                 ->addFieldToFilter('path',['eq',$matchingSolutionCodes[$solutionCode]])
@@ -772,6 +779,26 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
 
             $hasScalexpertValidConfig = $this->validateScalespertAdminConfigData($configData);
 
+            if (!$hasScalexpertValidConfig) {
+                $configKeysToDisable = [
+                    'long_credit_de' => 'e_funding',
+                    'long_credit_fr' => 'e_funding',
+                    'payment_4x' => 'e_funding',
+                    'payment_3x' => 'e_funding',
+                    'warranty_extension' => 'warranty_extension'
+                ];
+                $issetEFundingGroups = isset($configData['groups']['activation']['groups']['e_funding']['groups']);
+                if ($issetEFundingGroups) {
+                    foreach ($configKeysToDisable as $configKey => $type) {
+                        if($type == 'e_funding'){
+                            $configData['groups']['activation']['groups']['e_funding']['groups'][$configKey]['fields']['active']['value'] = 0;
+                        }
+                        else{
+                            $configData['groups']['activation']['groups'][$configKey]['fields']['active']['value'] = 0;
+                        }
+                    }
+                }
+            }
             if($hasScalexpertValidConfig === self::INVALID_API_DATA){
                 $this->messageManager->addError(__('Invalid Scalexpert Data Config'));
                 /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
@@ -800,7 +827,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             }
 
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
-            $messages = explode("\n", $e->getMessage());
+            $messages = explode("\n", $e->getMessage() ?? '');
             foreach ($messages as $message) {
                 $this->messageManager->addError($message);
             }

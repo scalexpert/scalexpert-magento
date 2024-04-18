@@ -1,0 +1,15 @@
+<?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
+/** @var $block \Scalexpert\Plugin\Block\Onepage\Success */ ?>
+
+<?php if ($block->isPaymentOffline() && $block->orderHaveInsurance()):?>
+<p><?= __('Votre demande de souscription d\'assurance est en attente de votre paiement et sera traitée ultérieurement') ?></p>
+<?php endif; ?>

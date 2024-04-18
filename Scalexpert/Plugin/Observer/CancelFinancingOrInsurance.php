@@ -1,4 +1,12 @@
 <?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Observer;
 
 use Magento\Framework\Event\Observer as EventObserver;
@@ -55,10 +63,10 @@ class CancelFinancingOrInsurance implements ObserverInterface
             $methodAdditional = $this->json->unserialize($payment->getAdditionalData());
             $amount = $observer->getEvent()->getCreditmemo()->getBaseGrandTotal();
             $refundFinancing = $this->restApi->cancelFinancingSubscription($methodAdditional['credit_subscription_id'], $amount);
-            $informationsApi = $this->restApi->getFinancingSubscriptionsByOrderId($observer->getEvent()->getCreditmemo()->getOrder()->getId());
+            $informationsApi = $this->restApi->getFinancingSubscriptionsByOrderId($observer->getEvent()->getCreditmemo()->getOrder()->getIncrementId());
             if ($refundFinancing['status'] && $informationsApi['status']) {
                 $methodAdditional['consolidated_status'] = $informationsApi['result']->subscriptions[0]->consolidatedStatus;
-                $methodAdditional['buyer_financedAmount'] = $informationsApi['result']->buyerFinancedAmount;
+                $methodAdditional['buyer_financedAmount'] = $informationsApi['result']->subscriptions[0]->buyerFinancedAmount;
                 $methodAdditional['last_update_timestamp'] = $informationsApi['result']->subscriptions[0]->lastUpdateTimestamp;
                 $payment->setAdditionalData($this->json->serialize($methodAdditional));
             }
