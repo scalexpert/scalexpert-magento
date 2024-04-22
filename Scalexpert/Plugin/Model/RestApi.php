@@ -1,13 +1,24 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Model;
+
+use Magento\Store\Model\ScopeInterface;
+use Magento\Sales\Model\OrderRepository;
+
 
 class RestApi
 {
-    const TIMEOUT = 30;
+    const TIMEOUT = 10;
     const FINANCING = 'financing';
     const INSURANCE = 'insurance';
-    const API_URL_ROOT_TEST = 'https://api.scalexpert.hml.societegenerale.com/baas/uatc/';
+    const API_URL_ROOT_TEST = 'https://api.scalexpert.uatc.societegenerale.com/baas/uatc/';
     const API_URL_ROOT_PRODUCTION = 'https://api.scalexpert.societegenerale.com/baas/prod/';
     const API_URL_AUTH = 'auth-server/api/v1/oauth2/token';
     const API_URL_FINANCING = 'e-financing/api/v1/';
@@ -29,7 +40,19 @@ class RestApi
      */
     protected $paymentRedirectFactory;
 
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var OrderRepository
+     */
+    private $salesOrderRepository;
+
     private $_bearer;
+    protected $serializer;
+
 
     public function __construct(
         \Scalexpert\Plugin\Model\SystemConfigData $systemConfigData,
@@ -38,7 +61,10 @@ class RestApi
         \Scalexpert\Plugin\Helper\Data $helperData,
         \Magento\Framework\UrlInterface $urlBuilder,
         \Magento\Customer\Model\Session $customerSession,
-        PaymentRedirectFactory $paymentRedirectFactory
+        PaymentRedirectFactory $paymentRedirectFactory,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        \Magento\Framework\Serialize\Serializer\Json $serializer,
+        OrderRepository $orderRepository
     ) {
         $this->systemConfigData = $systemConfigData;
         $this->curl = $curl;
@@ -47,6 +73,9 @@ class RestApi
         $this->_urlBuilder = $urlBuilder;
         $this->customerSession = $customerSession;
         $this->paymentRedirectFactory = $paymentRedirectFactory;
+        $this->scopeConfig = $scopeConfig;
+        $this->serializer = $serializer;
+        $this->salesOrderRepository = $orderRepository;
         $this->_bearer = null;
     }
 
@@ -252,7 +281,7 @@ class RestApi
 
             $this->writeLog('endPoint:: ' , $endPointUrl);
             $this->writeLog('status:: ' , $this->curl->getStatus());
-            $this->writeLog('body:: ' , $this->curl->getBody());
+            //$this->writeLog('body:: ' , $this->curl->getBody());
 
             if ($this->curl->getStatus() === 200) {
                 $result = $this->curl->getBody();
@@ -397,6 +426,7 @@ class RestApi
     private function _getSolutionCodeFromOrder($order) {
         $quotetotal = $order->getBaseSubtotal();
         $countryId = $order->getBillingAddress()->getCountryId();
+        $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
         $financing = $this->getFinancingEligibleSolutions($quotetotal, $countryId);
 
         /** @var \Magento\Sales\Model\Order $order */
@@ -441,6 +471,8 @@ class RestApi
         $errorMessage = '';
         $errorCode = '';
         $result = '';
+        $curlStatusError = '';
+        $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
 
         if ($solutionCode) {
             $bearer = $this->getBearer(self::FINANCING);
@@ -455,7 +487,8 @@ class RestApi
                     $this->curl->addHeader("Cache-control", "no-cache");
 
                     $params = [
-                        '_secure' => true
+                        '_secure' => true,
+                        'order_id' => $order->getId() // use to recover orderId when cancel link on financial page
                     ];
 
                     $cartItems = array();
@@ -467,7 +500,7 @@ class RestApi
                             "label" => $item->getName(),
                             "price" => floatval($item->getPriceInclTax() - $item->getBaseDiscountAmount()),
                             "currencyCode" => $order->getOrderCurrencyCode(),
-                            "orderId" => (string)($order->getId()),
+                            "orderId" => (string)($order->getIncrementId()),
                             "brandName" => "NC",
                             "description" => $item->getDescription() ? trim(strip_tags($item->getDescription())) : "NC",
                             "specifications" => "NC",
@@ -482,19 +515,22 @@ class RestApi
                         "financedAmount" => floatval($order->getBaseGrandTotal()),
                         "solutionCode" => $solutionCode,
                         "merchantBasketId" => (string)($order->getQuoteId()),
-                        "merchantGlobalOrderId" => (string)($order->getId()),
+                        "merchantGlobalOrderId" => (string)($order->getIncrementId()),
                         "merchantBuyerId" => $order->getCustomerId() ? $order->getCustomerId() : $order->getCustomerEmail(),
                         "merchantUrls" => [
                             "confirmation" => $this->_urlBuilder->getUrl('scalexpert/payment/paymentresponse', $params)
                         ],
                         "buyers" => [
                             [
+                                "birthName" => $order->getBillingAddress()->getLastname(),
                                 "billingContact" => [
                                     "lastName" => $order->getBillingAddress()->getLastname(),
                                     "firstName" => $order->getBillingAddress()->getFirstname(),
                                     "commonTitle" => $order->getBillingAddress()->getPrefix() ? $order->getBillingAddress()->getPrefix() : "MR",
                                     "email" => $order->getBillingAddress()->getEmail(),
-                                    "mobilePhoneNumber" => preg_replace('/^(?:\+?33|0)?/','+33', $order->getBillingAddress()->getTelephone()),
+                                    "mobilePhoneNumber" => $this->cleanPhoneNumber(
+                                        $order->getShippingAddress()->getTelephone(),
+                                        $countryId),
                                     "professionalTitle" => $order->getBillingAddress()->getCompany() ? $order->getBillingAddress()->getCompany() : "",
                                     "phoneNumber" => ""
                                 ],
@@ -513,7 +549,9 @@ class RestApi
                                     "firstName" => $order->getShippingAddress()->getFirstname(),
                                     "commonTitle" => $order->getShippingAddress()->getPrefix() ? $order->getShippingAddress()->getPrefix() : "MR",
                                     "email" => $order->getShippingAddress()->getEmail(),
-                                    "mobilePhoneNumber" => preg_replace('/^(?:\+?33|0)?/','+33', $order->getShippingAddress()->getTelephone()),
+                                    "mobilePhoneNumber" => $this->cleanPhoneNumber(
+                                        $order->getShippingAddress()->getTelephone(),
+                                        $countryId),
                                     "professionalTitle" => $order->getShippingAddress()->getCompany() ? $order->getShippingAddress()->getCompany() : "",
                                     "phoneNumber" => ""
                                 ],
@@ -532,7 +570,9 @@ class RestApi
                                     "firstName" => $order->getBillingAddress()->getFirstname(),
                                     "commonTitle" => $order->getCustomerPrefix() ? $order->getCustomerPrefix() : "MR",
                                     "email" => $order->getCustomerEmail(),
-                                    "mobilePhoneNumber" => preg_replace('/^(?:\+?33|0)?/','+33', $order->getBillingAddress()->getTelephone()),
+                                    "mobilePhoneNumber" => $this->cleanPhoneNumber(
+                                        $order->getBillingAddress()->getTelephone(),
+                                        $countryId),
                                     "professionalTitle" => "",
                                     "phoneNumber" => ""
                                 ],
@@ -566,8 +606,8 @@ class RestApi
 
                     $pattern = '/"id":"([a-f0-9\-]+)".*"value":"https:\/\/[^\/]+\/nxweb\/coordonnees\/([a-f0-9\-]+)"/';
                     $patternCredit = '/"id":"([a-f0-9\-]+)".*"value":"https:\/\/[^\/]+\/integration\/merchant\/userlogin\/\?u=([a-f0-9\-]+)&p/';
-
-                    if (preg_match($pattern, $this->curl->getBody(), $matches) || preg_match($patternCredit, $this->curl->getBody(), $matches)) {
+                    $patternCreditDe = '/"id":"([a-f0-9\-]+)".*"value":"https:\/\/[^\/]+\/hblo\?auxiliaryDataId=([a-f0-9\-]+)&culture=de-DE/';
+                    if (preg_match($pattern, $this->curl->getBody(), $matches) || preg_match($patternCredit, $this->curl->getBody(), $matches) || preg_match($patternCreditDe, $this->curl->getBody(), $matches)) {
                         $customerId = $this->customerSession->getCustomerId();
                         $id = $matches[1];
                         $coordinatesId = $matches[2];
@@ -582,6 +622,19 @@ class RestApi
                             $paymentRedirect->setCustomerId($customerId);
                             $paymentRedirect->setOrderId($order->getId());
                             $paymentRedirect->save();
+
+                            $payment = $order->getPayment();
+                            $datetime = new \DateTime('now', new \DateTimeZone('UTC'));
+                            $dataPayment = array(
+                                'credit_subscription_id' => $id,
+                                'consolidated_status' => 'INITIALIZED',
+                                'buyer_financedAmount' => floatval($order->getBaseGrandTotal()),
+                                'registration_timestamp' => $datetime->format('c'),
+                                'last_update_timestamp' => $datetime->format('c')
+                            );
+                            $payment->setAdditionalData($this->serializer->serialize($dataPayment));
+                            $this->salesOrderRepository->save($order);
+
                         }catch(\Exception $e){
                             $this->writeLog("Exception: ",$e->getMessage());
                         }
@@ -608,9 +661,11 @@ class RestApi
                             case 403 :
                                 $errorMessage = $result->errorMessage;
                                 $errorCode = $result->errorCode;
+                                $curlStatusError = $this->curl->getStatus();
                                 break;
                             default:
                                 $errorMessage = 'API Scalexpert : Unknow error';
+                                $curlStatusError = 'Unknow';
                         }
 
                     }
@@ -633,7 +688,8 @@ class RestApi
             'status' => $status,
             'result' => $result,
             'error_code' => $errorCode,
-            'error_message' => $errorMessage
+            'error_message' => $errorMessage,
+            'curl_status' => $curlStatusError
         );
     }
 
@@ -718,7 +774,7 @@ class RestApi
 
             $this->writeLog('endPoint:: ' , $endPointUrl);
             $this->writeLog('status:: ' , $this->curl->getStatus());
-            $this->writeLog('body:: ' , $this->curl->getBody());
+            //$this->writeLog('body:: ' , $this->curl->getBody());
 
             if ($this->curl->getStatus() === 200) {
                 $result = $this->curl->getBody();
@@ -1025,6 +1081,7 @@ class RestApi
         $status = false;
         $errorMessage = '';
         $result = '';
+        $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
 
         if ($bearer['status']) {
             try {
@@ -1039,8 +1096,9 @@ class RestApi
                     "solutionCode" => $solutionCode,
                     "quoteId" => strval($quoteId),
                     "insuranceId" => strval($insuranceId),
-                    "merchantBasketId" => strval($order->getEntityId()),
+                    "merchantBasketId" => strval($order->getQuoteId()),
                     "merchantBuyerId" => strval($order->getCustomerId() ? $order->getCustomerId() : $order->getCustomerEmail()),
+                    "merchantGlobalOrderId" => (string)($order->getIncrementId()),
                     "producerQuoteExpirationDate" => preg_replace('/^(\d{4}-\d{2}-\d{2}).*$/', '$1', $quoteExpiration),
                     "producerQuoteInsurancePrice" => floatval($quotePrice),
                     "buyer" => [
@@ -1048,8 +1106,12 @@ class RestApi
                             "lastName" =>  $order->getCustomerLastname(),
                             "firstName" => $order->getCustomerFirstname(),
                             "email" => $order->getCustomerEmail(),
-                            "mobilePhoneNumber" => preg_replace('/^(?:\+?33|0)?/','+33', $order->getBillingAddress()->getTelephone()),
-                            "phoneNumber" => preg_replace('/^(?:\+?33|0)?/','+33', $order->getBillingAddress()->getTelephone())
+                            "mobilePhoneNumber" => $this->cleanPhoneNumber(
+                                $order->getBillingAddress()->getTelephone(),
+                                $countryId),
+                            "phoneNumber" => $this->cleanPhoneNumber(
+                                $order->getBillingAddress()->getTelephone(),
+                                $countryId)
                         ],
                         "address" => [
                             "streetNumber" => 0,
@@ -1068,7 +1130,6 @@ class RestApi
                         "brandName" => $productItem->getAttributeText('manufacturer')?$productItem->getAttributeText('manufacturer'):"NC",
                         "price" => floatval($productItem->getPrice()),
                         "currencyCode" => $order->getGlobalCurrencyCode(),
-                        "orderId" => $order->getEntityId(),
                         "category" => $this->_helperData->getCategoryTree($productItem->getCategoryIds()),
                         "insurancePrice" => floatval($quotePrice),
                         "sku" => $productItem->getSku()
@@ -1256,5 +1317,26 @@ class RestApi
             'result' => $result,
             'error-message' => $errorMessage
         );
+    }
+
+    /**
+     * @param $phoneNumber
+     * @param $countryCode
+     * @return array|mixed|string|string[]|null
+     */
+    public function cleanPhoneNumber($phoneNumber, $countryCode)
+    {
+        switch($countryCode) {
+            case 'DE':
+                $phoneNumber = preg_replace('/^(?:\+?49|0)?/','+49', $phoneNumber);
+                break;
+            case 'FR':
+                $phoneNumber = preg_replace('/^(?:\+?33|0)?/','+33', $phoneNumber);
+                break;
+            default:
+                break;
+        }
+
+        return $phoneNumber;
     }
 }

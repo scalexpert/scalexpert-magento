@@ -1,4 +1,13 @@
 <?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
 /** @var Scalexpert\Plugin\Block\Adminhtml\Sales\Insurance $block */
 /* @var \Magento\Framework\Escaper $escaper */
 $infos = $block->getInsuranceInformation();
@@ -16,7 +25,6 @@ $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
                 <span><b><?= $escaper->escapeHtml(__('Insurance')); ?></b> : <?= $escaper->escapeHtml($info['additional_options'][0]['value']); ?></span><br/>
                 <span><b><?= $escaper->escapeHtml(__('Article qty')); ?></b> : <?= $escaper->escapeHtml(count($info['info_insurance'][0]['consolidated_status'])); ?></span><br/><br/>
                 <?php $count = 1; foreach($info['info_insurance'][0]['consolidated_status'] as $subscriptionId => $status) : ?>
-                    <span><b><?= $escaper->escapeHtml(__("Article Id %1",$count)); ?></b> : <?= $escaper->escapeHtml($subscriptionId); ?></span><br/>
                     <span><b><?= $escaper->escapeHtml(__('Article status %1',$count)); ?></b> : <?= $escaper->escapeHtml(__($status)); ?></span><br/><br/>
                 <?php $count ++ ; endforeach ; ?>
             </div>

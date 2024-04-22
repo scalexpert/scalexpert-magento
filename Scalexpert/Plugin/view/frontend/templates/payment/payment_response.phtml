@@ -1,4 +1,14 @@
-<?php /** @var $block \Scalexpert\Plugin\Block\Payment\PaymentResponse */
+<?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
+/** @var $block \Scalexpert\Plugin\Block\Payment\PaymentResponse */
       /** @var \Magento\Framework\Escaper $escaper */ ?>
 
 <?php
@@ -6,8 +16,8 @@ $error = $block->getData('error');
 $title = $block->getData('title');
 $orderId = $block->getData('scalexpert_order_id');
 $incrementId = $block->getData('increment_id');
-$informationsApi = $block->getFinancialOrder($orderId);
-$status = $informationsApi['consolidated_status'];
+$informationsApi = $block->getFinancialOrder($incrementId);
+$status = __($informationsApi['consolidated_status']);
 ?>
 
 <div class="page-title-wrapper">
@@ -24,11 +34,11 @@ $status = $informationsApi['consolidated_status'];
     <?php endif;?>
 </div>
 <div class="checkout-success">
-    <?php if ($orderId): ?>
+    <?php if ($incrementId): ?>
         <?php if ($block->getCanViewOrder()): ?>
-            <p><?= $escaper->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $escaper->escapeUrl($block->getViewOrderUrl()), $orderId)), ['a', 'strong']) ?></p>
+            <p><?= $escaper->escapeHtml(__('Your order number is: %1.', sprintf('<a href="%s" class="order-number"><strong>%s</strong></a>', $escaper->escapeUrl($block->getViewOrderUrl()), $incrementId)), ['a', 'strong']) ?></p>
         <?php  else :?>
-            <p><?= $escaper->escapeHtml(__('Your order # is: <span>%1</span>.', $orderId), ['span']) ?></p>
+            <p><?= $escaper->escapeHtml(__('Your order # is: <span>%1</span>.', $incrementId), ['span']) ?></p>
         <?php endif; ?>
 
         <p><?= $escaper->escapeHtml(__('The status of your financing request is: <b>%1</b>.', $status), ['b']) ?></p>

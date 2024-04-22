@@ -1,5 +1,12 @@
 <?php
-
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
 namespace Scalexpert\Plugin\Block\FinancingAndInsurance;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -91,12 +98,25 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             }
         }
 
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        if ($configurationExcludedProduct) {
+            $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+            $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+            $productSku = $this->getProduct()->getSku();
+
+            if (in_array($productSku, $configurationExcludedProduct)) {
+                $excludedProduct = true;
+            }
+        }
+
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_ENABLE),
             'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE),
             'subtitle' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
-            'excluded_category' => $excludedCategory
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
         );
     }
 
@@ -113,12 +133,25 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             }
         }
 
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        if ($configurationExcludedProduct) {
+            $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+            $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+            $productSku = $this->getProduct()->getSku();
+
+            if (in_array($productSku, $configurationExcludedProduct)) {
+                $excludedProduct = true;
+            }
+        }
+
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_ENABLE),
             'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE),
             'subtitle' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
-            'excluded_category' => $excludedCategory
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
         );
     }
 
@@ -135,12 +168,25 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             }
         }
 
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        if ($configurationExcludedProduct) {
+            $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+            $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+            $productSku = $this->getProduct()->getSku();
+
+            if (in_array($productSku, $configurationExcludedProduct)) {
+                $excludedProduct = true;
+            }
+        }
+
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_ENABLE),
             'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE),
             'subtitle' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
-            'excluded_category' => $excludedCategory
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
         );
     }
 
@@ -157,12 +203,25 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             }
         }
 
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        if ($configurationExcludedProduct) {
+            $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+            $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+            $productSku = $this->getProduct()->getSku();
+
+            if (in_array($productSku, $configurationExcludedProduct)) {
+                $excludedProduct = true;
+            }
+        }
+
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_ENABLE),
             'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE),
             'subtitle' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE),
-            'excluded_category' => $excludedCategory
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
         );
     }
 
@@ -185,11 +244,30 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             }
         }
 
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_CHECKOUT_CART_CUSTOMIZE_CHECKOUT_CART_BLOCK_EXCLUDE_PRODUCT);
+        if ($configurationExcludedProduct) {
+            $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+            $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+            if($insuranceInfos){
+                $parentItem = $quote->getItemById($insuranceInfos[0]['quote_item_id']);
+                $productSku = $parentItem->getProduct()->getSku();
+            }
+            else{
+                $productSku = $this->getProduct()->getSku();
+            }
+
+            if (in_array($productSku, $configurationExcludedProduct)) {
+                $excludedProduct = true;
+            }
+        }
+
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_CHECKOUT_CART_SHOW_CHECKOUT_CART_BLOCK_ENABLE),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_CHECKOUT_CART_CUSTOMIZE_CHECKOUT_CART_BLOCK_TITLE),
             'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_CHECKOUT_CART_CUSTOMIZE_CHECKOUT_CART_BLOCK_LOGO_ENABLE),
-            'excluded_category' => $excludedCategory
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
         );
     }
 
@@ -198,6 +276,7 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
 
         $isEnabledIsConfigurationBlockProduct = $configurationWarrantyBlockProduct['enable'];
         $isProductCategoryInExcludedCategories = $configurationWarrantyBlockProduct['excluded_category'];
+        $isProductExcluded = $configurationWarrantyBlockProduct['excluded_product'];
         $isWarrantyFirstItemStatusTrue = false;
         if(isset($warranty['items'][0]['status']) && $warranty['items'][0]['status']){
             $isWarrantyFirstItemStatusTrue = $warranty['items'][0]['status'];
@@ -205,6 +284,7 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
 
         return ($isEnabledIsConfigurationBlockProduct
             && !$isProductCategoryInExcludedCategories
+            && !$isProductExcluded
             && $isWarrantyFirstItemStatusTrue);
     }
 

@@ -1,4 +1,13 @@
 <?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
 /** @var Scalexpert\Plugin\Block\Payment\Info $block */
 /* @var \Magento\Framework\Escaper $escaper */
 $info = $block->getPaymentDetail();
@@ -10,9 +19,14 @@ $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
     <div><span><?= $escaper->escapeHtml($info['method_title']); ?></span></div><br/>
     <div>
         <span><b><?= $escaper->escapeHtml(__('Buyer financed amount')); ?></b></span> : <span><?= $escaper->escapeHtml($priceHelper->currency($info['buyer_financedAmount'], true, false)); ?></span><br/>
-        <span><b><?= $escaper->escapeHtml(__('Consolidated status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['consolidated_status'])); ?></span><br/><br/>
+        <?php if (!$info['status_message_error']): ?>
+            <span><b><?= $escaper->escapeHtml(__('Consolidated status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['consolidated_status'])); ?></span><br/><br/>
+        <?php else: ?>
+            <span><b><?= $escaper->escapeHtml(__('Financing Status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['status_message_error'])); ?></span><br/>
+        <?php endif; ?>
         <span><b><?= $escaper->escapeHtml(__('Credit subscription id')); ?></b></span> : <span><?= $escaper->escapeHtml($info['credit_subscription_id']); ?></span><br/>
         <span><b><?= $escaper->escapeHtml(__('Registration timestamp')); ?></b></span> : <span><?= $escaper->escapeHtml($registration->format("Y-m-d H:i:s")); ?></span><br/>
         <span><b><?= $escaper->escapeHtml(__('Last update timestamp')); ?></b></span> : <span><?= $escaper->escapeHtml($update->format("Y-m-d H:i:s")); ?></span><br/>
     </div>
+
 <?php endif; ?>
