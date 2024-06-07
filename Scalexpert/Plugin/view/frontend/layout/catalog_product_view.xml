@@ -26,73 +26,29 @@
                    after="-"/>
         </referenceContainer>
 
-        <referenceBlock name="page.main.title">
+        <referenceBlock name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.title.scalexpert.payment.3x.insert"
-                   as="scalexpert_payment3x_insert_product_after_title"
-                   template="Scalexpert_Plugin::financing/3x/product.phtml"
+                   name="catalog.product.view.after.title.scalexpert.simulate"
+                   as="scalexpert_simulate_product_after_title"
+                   template="Scalexpert_Plugin::simulate/preload.phtml"
                    before="-"/>
         </referenceBlock>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.before.qty.scalexpert.payment.3x.insert"
-                   as="scalexpert_payment3x_insert_product_before_qty"
-                   template="Scalexpert_Plugin::financing/3x/product.phtml"
+                   name="catalog.product.view.before.qty.scalexpert.simulate"
+                   as="scalexpert_simulate_product_before_qty"
+                   template="Scalexpert_Plugin::simulate/preload.phtml"
                    before="-"/>
         </referenceContainer>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.addtocart.scalexpert.payment.3x.insert"
-                   as="scalexpert_payment3x_insert_product_after_addtocart"
-                   template="Scalexpert_Plugin::financing/3x/product.phtml"
+                   name="catalog.product.view.after.addtocart.scalexpert.simulate"
+                   as="scalexpert_simulate_insert_product_after_addtocart"
+                   template="Scalexpert_Plugin::simulate/preload.phtml"
                    after="-"/>
         </referenceContainer>
 
-        <referenceBlock name="page.main.title">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.title.scalexpert.payment.4x.insert"
-                   as="scalexpert_payment4x_insert_product_after_title"
-                   template="Scalexpert_Plugin::financing/4x/product.phtml"
-                   before="-"/>
-        </referenceBlock>
-        <referenceContainer name="product.info.form.content">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.before.qty.scalexpert.payment.4x.insert"
-                   as="scalexpert_payment4x_insert_product_before_qty"
-                   template="Scalexpert_Plugin::financing/4x/product.phtml"
-                   before="-"/>
-        </referenceContainer>
-        <referenceContainer name="product.info.form.content">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.addtocart.scalexpert.payment.4x.insert"
-                   as="scalexpert_payment4x_insert_product_after_addtocart"
-                   template="Scalexpert_Plugin::financing/4x/product.phtml"
-                   after="-"/>
-        </referenceContainer>
-
-        <referenceBlock name="page.main.title">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.title.scalexpert.credit.fr.insert"
-                   as="scalexpert_credit_fr_insert_product_after_title"
-                   template="Scalexpert_Plugin::financing/longfr/product.phtml"
-                   before="-"/>
-        </referenceBlock>
-        <referenceContainer name="product.info.form.content">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.before.qty.scalexpert.credit.fr.insert"
-                   as="scalexpert_credit_fr_insert_product_before_qty"
-                   template="Scalexpert_Plugin::financing/longfr/product.phtml"
-                   before="-"/>
-        </referenceContainer>
-        <referenceContainer name="product.info.form.content">
-            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
-                   name="catalog.product.view.after.addtocart.scalexpert.credit.fr.insert"
-                   as="scalexpert_credit_fr_insert_product_after_addtocart"
-                   template="Scalexpert_Plugin::financing/longfr/product.phtml"
-                   after="-"/>
-        </referenceContainer>
-
-        <referenceBlock name="page.main.title">
+        <referenceBlock name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.title.scalexpert.credit.de.insert"
                    as="scalexpert_credit_de_insert_product_after_title"

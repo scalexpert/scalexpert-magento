@@ -28,3 +28,11 @@
     Added information message for customer on payment success page if the order contain a insurance and the payment is offline 
     Added information message for customer on payment failure page if API return an error 
     Minor code fixes
+
+1.3.0, 2024-06-07:
+=============
+    
+    Added simulation widget on product page and payment page
+    Bug fix: fix payment method display without fees on backoffice
+    Fixed translations
+    

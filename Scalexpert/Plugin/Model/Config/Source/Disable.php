@@ -102,9 +102,13 @@ class Disable extends Field
 
         $isWarrantyConfig = strpos($element->getName(), "[warranty_extension]") !== false;
         $isEfunding3XConfig = strpos($element->getName(), "[e_funding][groups][payment_3x]") !== false;
+        $isEfunding3XWithFeesConfig = strpos($element->getName(), "[e_funding][groups][payment_3x_with_fees]") !== false;
         $isEfunding4XConfig = strpos($element->getName(), "[e_funding][groups][payment_4x]") !== false;
+        $isEfunding4XWithFeesConfig = strpos($element->getName(), "[e_funding][groups][payment_4x_with_fees]") !== false;
         $isEfundingLongCreditFRConfig = strpos($element->getName(), "[e_funding][groups][long_credit_fr]") !== false;
+        $isEfundingLongCreditFRWithFeesConfig = strpos($element->getName(), "[e_funding][groups][long_credit_fr_with_fees]") !== false;
         $isEfundingLongCreditDEConfig = strpos($element->getName(), "[e_funding][groups][long_credit_de]") !== false;
+        $isEfundingLongCreditDEWithFeesConfig = strpos($element->getName(), "[e_funding][groups][long_credit_de_with_fees]") !== false;
 
 
         $disableField = $this->disableFieldByBackendElement($element,$scope,$scopeId);
@@ -121,7 +125,9 @@ class Disable extends Field
             $warranty = ($locale == 'fr') ? 'garantie' : 'warranty';
             if($isWarrantyConfig){
                 $html.= "<a href ='https://scalexpert.societegenerale.com/app/".$locale."/page/".$warranty."' target='_blank'>".__('Subscribe to this offer').'</a>';
-            }elseif ($isEfunding3XConfig || $isEfunding4XConfig || $isEfundingLongCreditFRConfig || $isEfundingLongCreditDEConfig){
+            }elseif ($isEfunding3XConfig || $isEfunding4XConfig || $isEfundingLongCreditFRConfig || $isEfundingLongCreditDEConfig
+                || $isEfunding3XWithFeesConfig || $isEfunding4XWithFeesConfig || $isEfundingLongCreditFRWithFeesConfig || $isEfundingLongCreditDEWithFeesConfig
+            ){
                 $html.= "<a href ='https://scalexpert.societegenerale.com/app/".$locale."/page/".$financing."' target='_blank'>".__('Subscribe to this offer').'</a>';
             }else{
                 $html.= "<a href ='https://dev.scalexpert.societegenerale.com/".$locale."/prod' target='_blank'>".__('Activate this option').'</a>';
@@ -141,9 +147,14 @@ class Disable extends Field
         $isActivationConfig = strpos($element->getName(), "groups[activation]") !== false;
         $isWarrantyConfig = strpos($element->getName(), "[warranty_extension]") !== false;
         $isEfunding3XConfig = strpos($element->getName(), "[e_funding][groups][payment_3x]") !== false;
+        $isEfunding3XWithFeesConfig = strpos($element->getName(), "[e_funding][groups][payment_3x_with_fees]") !== false;
         $isEfunding4XConfig = strpos($element->getName(), "[e_funding][groups][payment_4x]") !== false;
+        $isEfunding4XWithFeesConfig = strpos($element->getName(), "[e_funding][groups][payment_4x_with_fees]") !== false;
         $isEfundingLongCreditFRConfig = strpos($element->getName(), "[e_funding][groups][long_credit_fr]") !== false;
+        $isEfundingLongCreditFRWithFeesConfig = strpos($element->getName(), "[e_funding][groups][long_credit_fr_with_fees]") !== false;
         $isEfundingLongCreditDEConfig = strpos($element->getName(), "[e_funding][groups][long_credit_de]") !== false;
+        $isEfundingLongCreditDEWithFeesConfig = strpos($element->getName(), "[e_funding][groups][long_credit_de_with_fees]") !== false;
+
 
         $isWarrantyEnabled = $this->systemConfigData->getScalexpertConfigData(
             $this->systemConfigData::XML_SCALEXPERT_WARRANTY_ENABLE,$scope,$scopeId);
@@ -164,6 +175,14 @@ class Disable extends Field
             ->getFirstItem();
         $is3xAllowed = $contract3x->getData('is_allowed');
 
+        $is3xWithFeesEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE,$scope,$scopeId);
+        $contract3xWithFees = $this->contractsCollectionFactory->create()
+            ->addFieldToSelect('is_allowed')
+            ->addFieldToFilter('scope',['eq' => $scope])
+            ->addFieldToFilter('store',['eq' => $scopeId])
+            ->addFieldToFilter('path',['eq',$this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE])
+            ->getFirstItem();
+        $is3xWithFeesAllowed = $contract3xWithFees->getData('is_allowed');
 
         $is4xEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,$scope,$scopeId);
         $contract4x = $this->contractsCollectionFactory->create()
@@ -174,6 +193,15 @@ class Disable extends Field
             ->getFirstItem();
         $is4xAllowed = $contract4x->getData('is_allowed');
 
+        $is4xWithFeesEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE,$scope,$scopeId);
+        $contract4xWithFees = $this->contractsCollectionFactory->create()
+            ->addFieldToSelect('is_allowed')
+            ->addFieldToFilter('scope',['eq' => $scope])
+            ->addFieldToFilter('store',['eq' => $scopeId])
+            ->addFieldToFilter('path',['eq',$this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE])
+            ->getFirstItem();
+        $is4xWithFeesAllowed = $contract4xWithFees->getData('is_allowed');
+
         $isLongCreditFREnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,$scope,$scopeId);
         $contractLongCreditFR = $this->contractsCollectionFactory->create()
             ->addFieldToSelect('is_allowed')
@@ -182,6 +210,15 @@ class Disable extends Field
             ->addFieldToFilter('path',['eq',$this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE])
             ->getFirstItem();
         $isLongCreditFRAllowed = $contractLongCreditFR->getData('is_allowed');
+
+        $isLongCreditFRWithFeesEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,$scope,$scopeId);
+        $contractLongCreditFRWithFees = $this->contractsCollectionFactory->create()
+            ->addFieldToSelect('is_allowed')
+            ->addFieldToFilter('scope',['eq' => $scope])
+            ->addFieldToFilter('store',['eq' => $scopeId])
+            ->addFieldToFilter('path',['eq',$this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE])
+            ->getFirstItem();
+        $isLongCreditFRWithFeesAllowed = $contractLongCreditFRWithFees->getData('is_allowed');
 
         $isLongCreditDEEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,$scope,$scopeId);
         $contractLongCreditDE = $this->contractsCollectionFactory->create()
@@ -192,6 +229,15 @@ class Disable extends Field
             ->getFirstItem();
         $isLongCreditDEAllowed = $contractLongCreditDE->getData('is_allowed');
 
+        $isLongCreditDEWithFeesEnabled = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE,$scope,$scopeId);
+        $contractLongCreditDEWithFees = $this->contractsCollectionFactory->create()
+            ->addFieldToSelect('is_allowed')
+            ->addFieldToFilter('scope',['eq' => $scope])
+            ->addFieldToFilter('store',['eq' => $scopeId])
+            ->addFieldToFilter('path',['eq',$this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE])
+            ->getFirstItem();
+        $isLongCreditDEWithFeesAllowed = $contractLongCreditDEWithFees->getData('is_allowed');
+
         $statusFlag = $this->systemConfigData->getScalexpertConfigData($this->systemConfigData::XML_SCALEXPERT_PLATFORM_ACCESS_STATUS_ACCESS,$scope,$scopeId);
 
 
@@ -199,9 +245,13 @@ class Disable extends Field
             ($statusFlag == null || $statusFlag == 0) ||
             ($isWarrantyConfig && !$isWarrantyEnabled && ($isWarrantyAllowed == 0)) ||
             ($isEfunding3XConfig && !$is3xEnabled && ($is3xAllowed == 0)) ||
+            ($isEfunding3XWithFeesConfig && !$is3xWithFeesEnabled && ($is3xWithFeesAllowed == 0)) ||
             ($isEfunding4XConfig && !$is4xEnabled && ($is4xAllowed == 0)) ||
+            ($isEfunding4XWithFeesConfig && !$is4xWithFeesEnabled && ($is4xWithFeesAllowed == 0)) ||
             ($isEfundingLongCreditFRConfig && !$isLongCreditFREnabled && ($isLongCreditFRAllowed == 0)) ||
-            ($isEfundingLongCreditDEConfig && !$isLongCreditDEEnabled && ($isLongCreditDEAllowed == 0));
+            ($isEfundingLongCreditFRWithFeesConfig && !$isLongCreditFRWithFeesEnabled && ($isLongCreditFRWithFeesAllowed == 0)) ||
+            ($isEfundingLongCreditDEConfig && !$isLongCreditDEEnabled && ($isLongCreditDEAllowed == 0)) ||
+            ($isEfundingLongCreditDEWithFeesConfig && !$isLongCreditDEWithFeesEnabled && ($isLongCreditDEWithFeesAllowed == 0));
     }
 
     private function getPathByBackendElement($element){
@@ -226,6 +276,15 @@ class Disable extends Field
         $isCreditLongFrPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_fr][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
         /**
+         * Long Credit FR with fees
+         */
+        $isCreditFrWithFeesTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr_with_fees][groups][product][groups][customize_product_block][fields][title][value]";
+        $isCreditLongFrWithFeesPaymentTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
+        $isCreditLongFrWithFeesPaymentSubTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        /**
          * Long Credit DE
          */
         $isCreditDeTitleConfig = $element->getName() ==
@@ -234,6 +293,15 @@ class Disable extends Field
             "groups[e_funding][groups][long_credit_de][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $isCreditLongDePaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_de][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        /**
+         * Long Credit DE with fees
+         */
+        $isCreditDeWithFeesTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_de_with_fees][groups][product][groups][customize_product_block][fields][title][value]";
+        $isCreditLongDeWithFeesPaymentTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_de_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
+        $isCreditLongDeWithFeesPaymentSubTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_de_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
         /**
          * 4X
          */
@@ -244,6 +312,15 @@ class Disable extends Field
         $is4XPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_4x][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
         /**
+         * 4X with fees
+         */
+        $is4XWithFeesTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_4x_with_fees][groups][product][groups][customize_product_block][fields][title][value]";
+        $is4XWithFeesPaymentTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_4x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
+        $is4XWithFeesPaymentSubTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_4x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        /**
          * 3X
          */
         $is3XTitleConfig = $element->getName() ==
@@ -252,6 +329,15 @@ class Disable extends Field
             "groups[e_funding][groups][payment_3x][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $is3XPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_3x][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        /**
+         * 3X with fees
+         */
+        $is3XWithFeesTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_3x_with_fees][groups][product][groups][customize_product_block][fields][title][value]";
+        $is3XWithFeesPaymentTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_3x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
+        $is3XWithFeesPaymentSubTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_3x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
         switch (true){
             case $isWarrantyTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
@@ -271,6 +357,15 @@ class Disable extends Field
             case $is3XPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $is3XWithFeesTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
+                break;
+            case $is3XWithFeesPaymentTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE;
+                break;
+            case $is3XWithFeesPaymentSubTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
             case $is4XTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -279,6 +374,15 @@ class Disable extends Field
                 break;
             case $is4XPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
+            case $is4XWithFeesTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
+                break;
+            case $is4XWithFeesPaymentTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE;
+                break;
+            case $is4XWithFeesPaymentSubTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
             case $isCreditFrTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
@@ -289,6 +393,15 @@ class Disable extends Field
             case $isCreditLongFrPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $isCreditFrWithFeesTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
+                break;
+            case $isCreditLongFrWithFeesPaymentTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE;
+                break;
+            case $isCreditLongFrWithFeesPaymentSubTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
             case $isCreditDeTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -297,6 +410,15 @@ class Disable extends Field
                 break;
             case $isCreditLongDePaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
+            case $isCreditDeWithFeesTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
+                break;
+            case $isCreditLongDeWithFeesPaymentTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE;
+                break;
+            case $isCreditLongDeWithFeesPaymentSubTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
             default:
                 return null;

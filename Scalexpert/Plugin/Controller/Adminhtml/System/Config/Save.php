@@ -150,9 +150,9 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
     private function writeApiDefaultConfigFromSolution($eligibleSolution,$scope,$store){
         $matchingSolutionCodes = [
             'SCDELT-DXTS' => [
-                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
-                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE,
-                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
+                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCDELT-DXCO' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
@@ -160,9 +160,9 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRLT-TXPS' => [
-                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
-                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE,
-                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
+                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRLT-TXNO' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
@@ -175,9 +175,9 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-4XPS' => [
-                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
-                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE,
-                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
+                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-3XTS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
@@ -185,9 +185,9 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-3XPS' => [
-                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
-                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE,
-                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
+                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'CIFRWE-DXCO' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
@@ -362,14 +362,14 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
 
     protected function setEligiblesSolution($eligibleSolutionCodes,$scope = null,$scopeId = null){
         $matchingSolutionCodes = [
-            'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
+            'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE,
             'SCDELT-DXCO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
-            'SCFRLT-TXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
+            'SCFRLT-TXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,
             'SCFRLT-TXNO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
             'SCFRSP-4XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
-            'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
+            'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE,
             'SCFRSP-3XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE,
-            'SCFRSP-3XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE,
+            'SCFRSP-3XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE,
             'CIFRWE-DXCO' => $this->systemConfigData::XML_SCALEXPERT_WARRANTY_ENABLE
         ];
         foreach ($eligibleSolutionCodes as $solutionCode){
@@ -623,14 +623,14 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         $this->logger->info("Has mode changed :".$hasModeChanged);
 
         $matchingPaymentCodes = [
-            'SCDELT-DXTS' => 'long_credit_de',
+            'SCDELT-DXTS' => 'long_credit_de_with_fees',
             'SCDELT-DXCO' => 'long_credit_de',
-            'SCFRLT-TXPS' => 'long_credit_fr',
+            'SCFRLT-TXPS' => 'long_credit_fr_with_fees',
             'SCFRLT-TXNO' => 'long_credit_fr',
             'SCFRSP-4XTS' => 'payment_4x',
-            'SCFRSP-4XPS' => 'payment_4x',
+            'SCFRSP-4XPS' => 'payment_4x_with_fees',
             'SCFRSP-3XTS' => 'payment_3x',
-            'SCFRSP-3XPS' => 'payment_3x',
+            'SCFRSP-3XPS' => 'payment_3x_with_fees',
             'CIFRWE-DXCO' =>  'warranty_extension',
         ];
 
@@ -668,14 +668,26 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                                 case "payment_3x":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE;
                                     break;
+                                case "payment_3x_with_fees":
+                                    $configPath = $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE;
+                                    break;
                                 case "payment_4x":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE;
+                                    break;
+                                case "payment_4x_with_fees":
+                                    $configPath = $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE;
                                     break;
                                 case "long_credit_fr":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE;
                                     break;
+                                case "long_credit_fr_with_fees":
+                                    $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE;
+                                    break;
                                 case "long_credit_de":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE;
+                                    break;
+                                case "long_credit_de_with_fees":
+                                    $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE;
                                     break;
                                 case "warranty_extension":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_WARRANTY_ENABLE;
@@ -782,9 +794,13 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             if (!$hasScalexpertValidConfig) {
                 $configKeysToDisable = [
                     'long_credit_de' => 'e_funding',
+                    'long_credit_de_with_fees' => 'e_funding',
                     'long_credit_fr' => 'e_funding',
+                    'long_credit_fr_with_fees' => 'e_funding',
                     'payment_4x' => 'e_funding',
+                    'payment_4x_with_fees' => 'e_funding',
                     'payment_3x' => 'e_funding',
+                    'payment_3x_with_fees' => 'e_funding',
                     'warranty_extension' => 'warranty_extension'
                 ];
                 $issetEFundingGroups = isset($configData['groups']['activation']['groups']['e_funding']['groups']);

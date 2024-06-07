@@ -113,9 +113,13 @@ class RestApi
 
             if(
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE) ||
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE) ||
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE) ||
-                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE)
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE) ||
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE) ||
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE)
             ) {
                 $scope .= 'e-financing:rw ';
             }
@@ -436,14 +440,26 @@ class RestApi
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
                 break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES:
+                $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES;
+                break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES:
+                $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES;
                 break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR;
                 break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES:
+                $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
+                break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES:
+                $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES;
                 break;
         }
 
@@ -1320,6 +1336,94 @@ class RestApi
     }
 
     /**
+     * @param $creditSubscriptionId
+     * @param $carrierCode
+     * @param $trackingNumber
+     * @return array
+     */
+    public function confirmDeliveryFinancingSubscription($creditSubscriptionId, $carrierCode, $trackingNumber)
+    {
+        $bearer = $this->getBearer(self::FINANCING);
+        $status = false;
+        $errorMessage = '';
+        $result = '';
+
+        if ($bearer['status']) {
+            try {
+                $endPointUrl = $bearer['api_root_url'] . self::API_URL_FINANCING . 'subscriptions/' . $creditSubscriptionId . '/_confirmDelivery';
+
+                $this->curl->addHeader("Accept", "application/json");
+                $this->curl->addHeader("Content-Type", "application/json");
+                $this->curl->addHeader("Authorization", "Bearer " . $bearer['bearer']);
+                $this->curl->addHeader("Cache-control", "no-cache");
+
+                $this->curl->setTimeout(self::TIMEOUT);
+
+                $scalexpertCarrierCode = array(
+                    "UPS",
+                    "DHL",
+                    "CHRONOPOST",
+                    "LA_POSTE",
+                    "DPD",
+                    "RELAIS_COLIS",
+                    "MONDIAL_RELAY",
+                    "FEDEX",
+                    "GLS"
+                );
+
+                if (in_array(strtoupper($carrierCode), $scalexpertCarrierCode)) {
+                    $carrierCode = strtoupper($carrierCode);
+                } else {
+                    $carrierCode = "UNKNOWN";
+                }
+
+                $data = array(
+                    "isDelivered" => true,
+                    "trackingNumber" => $trackingNumber,
+                    "operator" => $carrierCode,
+                );
+
+                $this->curl->post($endPointUrl, json_encode($data, JSON_UNESCAPED_UNICODE));
+                $this->writeLog('endPoint:: ', $endPointUrl);
+                $this->writeLog('data send:: ', $data);
+                $this->writeLog('status:: ', $this->curl->getStatus());
+                $this->writeLog('body:: ', $this->curl->getBody());
+
+                if ($this->curl->getStatus() === 204) {
+                    $status = true;
+
+                } else {
+                    switch ($this->curl->getStatus()) {
+                        case 401:
+                            $errorMessage = 'API Scalexpert : Unauthorized';
+                            break;
+                        case 403:
+                            $errorMessage = 'API Scalexpert : Forbidden';
+                            break;
+                        default:
+                            $errorMessage = 'API Scalexpert : Unknow error';
+                    }
+                }
+
+            } catch (\Exception $e) {
+                $errorMessage = "API Scalexpert exception: " . $e->getMessage();
+            }
+        } else {
+            $errorMessage = $bearer['error-message'];
+        }
+
+        if($errorMessage) {
+            $this->writeLog('ERROR:: ' , $errorMessage);
+        }
+
+        return array(
+            'status' => $status,
+            'result' => $result,
+            'error-message' => $errorMessage
+        );
+    }
+
+    /**
      * @param $phoneNumber
      * @param $countryCode
      * @return array|mixed|string|string[]|null
@@ -1338,5 +1442,91 @@ class RestApi
         }
 
         return $phoneNumber;
+    }
+
+    /**
+     * @param $amount
+     * @param array $solutionCodes
+     * @param $needEligibilityData
+     * @return array
+     */
+    public function getSimulateSolutions($amount, array $solutionCodes, $needEligibilityData = true)
+    {
+        $bearer = $this->getBearer(self::FINANCING);
+        $status = false;
+        $errorMessage = '';
+        $resultApi = '';
+
+        if ($bearer['status']) {
+            try {
+                $endPointUrl = $bearer['api_root_url'] . self::API_URL_FINANCING . '_simulate-solutions';
+
+                $this->curl->addHeader("Accept", "application/json");
+                $this->curl->addHeader("Content-Type", "application/json");
+                $this->curl->addHeader("Authorization", "Bearer " . $bearer['bearer']);
+                $this->curl->addHeader("Cache-control", "no-cache");
+
+                $this->curl->setTimeout(self::TIMEOUT);
+
+                $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
+
+                $data = array(
+                    "financedAmount" => (float)$amount,
+                    "buyerBillingCountry" => $countryId,
+                    "solutionCodes" => $solutionCodes
+                );
+
+                $this->curl->post($endPointUrl, json_encode($data, JSON_UNESCAPED_UNICODE));
+                $this->writeLog('endPoint:: ', $endPointUrl);
+                $this->writeLog('data send:: ', $data);
+                $this->writeLog('status:: ', $this->curl->getStatus());
+                $this->writeLog('body:: ', $this->curl->getBody());
+
+                if ($this->curl->getStatus() === 200) {
+                    $resultApi = $this->curl->getBody();
+                    $resultApi = (json_decode($resultApi));
+                    $status = true;
+
+                } else {
+                    switch ($this->curl->getStatus()) {
+                        case 400:
+                            $errorMessage = 'API Scalexpert : Bad request';
+                            break;
+                        case 401:
+                            $errorMessage = 'API Scalexpert : Unauthorized';
+                            break;
+                        case 403:
+                            $errorMessage = 'API Scalexpert : Forbidden';
+                            break;
+                        case 500:
+                            $errorMessage = 'API Scalexpert : Internal servor error';
+                            break;
+                        default:
+                            $errorMessage = 'API Scalexpert : Unknow error';
+                    }
+                }
+
+            } catch (\Exception $e) {
+                $errorMessage = "API Scalexpert exception: " . $e->getMessage();
+            }
+        } else {
+            $errorMessage = $bearer['error-message'];
+        }
+
+        if($errorMessage) {
+            $this->writeLog('ERROR:: ' , $errorMessage);
+        }
+
+        $resultData = array(
+            'status' => $status,
+            'result' => $resultApi,
+            'error-message' => $errorMessage
+        );
+
+        if ($needEligibilityData) {
+            $resultData['result-eligibility'] = $this->getFinancingEligibleSolutions($amount,$countryId);
+        }
+
+        return $resultData;
     }
 }

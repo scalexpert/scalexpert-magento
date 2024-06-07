@@ -26,9 +26,13 @@ class SystemConfigData
     const XML_SCALEXPERT_PLATFORM_ACCESS_STATUS_ACCESS = 'scalexpert_administration/platform_access/status_access';
     const XML_SCALEXPERT_WARRANTY_ENABLE = 'scalexpert_administration/activation/warranty_extension/active';
     const XML_SCALEXPERT_PAYMENT_3X_ENABLE = 'scalexpert_administration/activation/e_funding/payment_3x/active';
+    const XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE = 'scalexpert_administration/activation/e_funding/payment_3x_with_fees/active';
     const XML_SCALEXPERT_PAYMENT_4X_ENABLE = 'scalexpert_administration/activation/e_funding/payment_4x/active';
+    const XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE = 'scalexpert_administration/activation/e_funding/payment_4x_with_fees/active';
     const XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE = 'scalexpert_administration/activation/e_funding/long_credit_fr/active';
+    const XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE = 'scalexpert_administration/activation/e_funding/long_credit_fr_with_fees/active';
     const XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE = 'scalexpert_administration/activation/e_funding/long_credit_de/active';
+    const XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE = 'scalexpert_administration/activation/e_funding/long_credit_de_with_fees/active';
 
 
     /**
@@ -49,9 +53,7 @@ class SystemConfigData
      * xml path for payment 3X configuration
      */
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_payment3x/product_block/active';
-    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION = 'scalexpert_payment3x/product_block/position';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_payment3x/product_block/title';
-    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE = 'scalexpert_payment3x/product_block/show_logo';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_ENABLE = 'scalexpert_payment3x/payment_method/active';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_payment_3x/sort_order';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_payment3x/payment_method/title';
@@ -60,12 +62,22 @@ class SystemConfigData
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_payment3x/payment_method/exclude_products';
 
     /**
+     * xml path for payment 3X with fees configuration
+     */
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_payment3x_with_fees/product_block/active';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_payment3x_with_fees/product_block/title';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_ENABLE = 'scalexpert_payment3x_with_fees/payment_method/active';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_payment3x_with_fees/sort_order';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_payment3x_with_fees/payment_method/title';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE = 'scalexpert_payment3x_with_fees/payment_method/subtitle';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY = 'scalexpert_payment3x_with_fees/payment_method/exclude_categories';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_payment3x_with_fees/payment_method/exclude_products';
+
+    /**
      * xml path for payment 4X configuration
      */
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_payment4x/product_block/active';
-    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION = 'scalexpert_payment4x/product_block/position';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_payment4x/product_block/title';
-    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE = 'scalexpert_payment4x/product_block/show_logo';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_ENABLE = 'scalexpert_payment4x/payment_method/active';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_payment_4x/sort_order';
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_payment4x/payment_method/title';
@@ -74,12 +86,22 @@ class SystemConfigData
     const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_payment4x/payment_method/exclude_products';
 
     /**
+     * xml path for payment 4X with fees configuration
+     */
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_payment4x_with_fees/product_block/active';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_payment4x_with_fees/product_block/title';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_ENABLE = 'scalexpert_payment4x_with_fees/payment_method/active';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_payment4x_with_fees/sort_order';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_payment4x_with_fees/payment_method/title';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE = 'scalexpert_payment4x_with_fees/payment_method/subtitle';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY = 'scalexpert_payment4x_with_fees/payment_method/exclude_categories';
+    const XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_payment4x_with_fees/payment_method/exclude_products';
+
+    /**
      * xml path for long credit FR configuration
      */
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_long_credit_fr/product_block/active';
-    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION = 'scalexpert_long_credit_fr/product_block/position';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_long_credit_fr/product_block/title';
-    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE = 'scalexpert_long_credit_fr/product_block/show_logo';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_ENABLE = 'scalexpert_long_credit_fr/payment_method/active';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_long_credit_fr/sort_order';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_long_credit_fr/payment_method/title';
@@ -88,41 +110,95 @@ class SystemConfigData
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_long_credit_fr/payment__method/exclude_products';
 
     /**
+     * xml path for long credit with feesFR configuration
+     */
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_long_credit_fr_with_fees/product_block/active';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_long_credit_fr_with_fees/product_block/title';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_ENABLE = 'scalexpert_long_credit_fr_with_fees/payment_method/active';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_long_credit_fr_with_fees/sort_order';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_long_credit_fr_with_fees/payment_method/title';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE = 'scalexpert_long_credit_fr_with_fees/payment_method/subtitle';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY = 'scalexpert_long_credit_fr_with_fees/payment__method/exclude_categories';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_long_credit_fr_with_fees/payment__method/exclude_products';
+
+    /**
      * xml path for long credit DE configuration
      */
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_long_credit_de/product_block/active';
-    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION = 'scalexpert_long_credit_de/product_block/position';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_long_credit_de/product_block/title';
-    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE = 'scalexpert_long_credit_de/product_block/show_logo';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_ENABLE = 'scalexpert_long_credit_de/payment_method/active';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_long_credit_de/sort_order';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_long_credit_de/payment_method/title';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE = 'scalexpert_long_credit_de/payment_method/subtitle';
     const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY = 'scalexpert_long_credit_de/payment__method/exclude_categories';
-    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_long_credit_de/payment__method/exclude_productss';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_long_credit_de/payment__method/exclude_products';
 
+    /**
+     * xml path for long credit DE with fees configuration
+     */
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE = 'scalexpert_long_credit_de_with_fees/product_block/active';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE = 'scalexpert_long_credit_de_with_fees/product_block/title';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_ENABLE = 'scalexpert_long_credit_de_with_fees/payment_method/active';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_POSITION = 'payment/scalexpert_long_credit_de_with_fees/sort_order';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE = 'scalexpert_long_credit_de_with_fees/payment_method/title';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE = 'scalexpert_long_credit_de_with_fees/payment_method/subtitle';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY = 'scalexpert_long_credit_de_with_fees/payment__method/exclude_categories';
+    const XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT = 'scalexpert_long_credit_de_with_fees/payment__method/exclude_products';
 
+    /**
+     * xml path for insert personnalisation configuration
+     */
+    const XML_SCALEXPERT_CUSTOMISATION_INSERT_PRODUCT_BLOCK_POSITION = 'e_funding/custom_financing_insert/position';
+    const XML_SCALEXPERT_CUSTOMISATION_INSERT_PRODUCT_BLOCK_LOGO_ENABLE = 'e_funding/custom_financing_insert/show_logo';
     const XML_SCALEXPERT_DEBUG_ENABLE = 'scalexpert_support/debug/active';
 
 
 
-    const SCALEXPERT_PAYMENT_CODES_3X = ['SCFRSP-3XTS', 'SCFRSP-3XPS'];
-    const SCALEXPERT_PAYMENT_CODES_4X = ['SCFRSP-4XTS', 'SCFRSP-4XPS'];
-    const SCALEXPERT_PAYMENT_CODES_LONG_FR = ['SCFRLT-TXPS', 'SCFRLT-TXNO'];
-    const SCALEXPERT_PAYMENT_CODES_LONG_DE = ['SCDELT-DXTS', 'SCDELT-DXCO'];
+    const SCALEXPERT_PAYMENT_CODES_3X = ['SCFRSP-3XTS'];
+    const SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES = ['SCFRSP-3XPS'];
+    const SCALEXPERT_PAYMENT_CODES_4X = ['SCFRSP-4XTS'];
+    const SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES = ['SCFRSP-4XPS'];
+    const SCALEXPERT_PAYMENT_CODES_LONG_FR = ['SCFRLT-TXNO'];
+    const SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES = ['SCFRLT-TXPS'];
+    const SCALEXPERT_PAYMENT_CODES_LONG_DE = ['SCDELT-DXCO'];
+    const SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES = ['SCDELT-DXTS'];
+
+    const SCALEXPERT_PAYMENT_CODES_DE_SOLUTION = [
+        self::SCALEXPERT_PAYMENT_CODES_LONG_DE,
+        self::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES
+    ];
+
+
 
 
     const SCALEXPERT_MAGENTO_CODE_3X = 'scalexpert_payment_3x';
+    const SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES = 'scalexpert_payment_3x_with_fees';
     const SCALEXPERT_MAGENTO_CODE_4X = 'scalexpert_payment_4x';
+    const SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES = 'scalexpert_payment_4x_with_fees';
     const SCALEXPERT_MAGENTO_CODE_LONG_FR = 'scalexpert_long_credit_fr';
+    const SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES = 'scalexpert_long_credit_fr_with_fees';
     const SCALEXPERT_MAGENTO_CODE_LONG_DE = 'scalexpert_long_credit_de';
-    const SCALEXPERT_MAGENTO_CODE_ALL_PAYMENT = ['scalexpert_payment_3x', 'scalexpert_payment_4x','scalexpert_long_credit_fr','scalexpert_long_credit_de'];
+    const SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES = 'scalexpert_long_credit_de_with_fees';
+    const SCALEXPERT_MAGENTO_CODE_ALL_PAYMENT = [
+        'scalexpert_payment_3x',
+        'scalexpert_payment_3x_with_fees',
+        'scalexpert_payment_4x',
+        'scalexpert_payment_4x_with_fees',
+        'scalexpert_long_credit_fr',
+        'scalexpert_long_credit_fr_with_fees',
+        'scalexpert_long_credit_de',
+        'scalexpert_long_credit_de_with_fees'
+    ];
 
     const SCALEXPERT_MAGENTO_ALL_CODE = array(
         self::SCALEXPERT_MAGENTO_CODE_3X,
+        self::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES,
         self::SCALEXPERT_MAGENTO_CODE_4X,
+        self::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES,
         self::SCALEXPERT_MAGENTO_CODE_LONG_FR,
-        self::SCALEXPERT_MAGENTO_CODE_LONG_DE
+        self::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES,
+        self::SCALEXPERT_MAGENTO_CODE_LONG_DE,
+        self::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES
     );
 
 

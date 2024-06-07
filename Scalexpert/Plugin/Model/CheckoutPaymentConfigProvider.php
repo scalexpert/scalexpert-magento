@@ -52,14 +52,19 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
         /** @var \Magento\Quote\Model\Quote  */
         $quote = $this->checkoutSession->getQuote();
 
-        $quotetotal = $quote->getBaseSubtotal();
+        $quotetotal = $quote->getBaseGrandTotal();
         $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
         $financing = $this->restApi->getFinancingEligibleSolutions($quotetotal, $countryId);
+
         $codes_per_methods = [
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES,
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES,
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES,
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES,
         ];
         $method_per_code = [];
         foreach ($codes_per_methods as $method => $codes) {
@@ -75,6 +80,23 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 ),
                 'customSubtitle' => $this->scopeConfig->getValue(
                     SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
+                'visualTitle' => '',
+                'visualDescription' => '',
+                'visualInformationIcon' => '',
+                'visualAdditionalInformation' => '',
+                'visualLegalText' => '',
+                'visualTableImage' => '',
+                'visualLogo' => '',
+                'visualInformationNoticeURL' => '',
+                'visualProductTermsURL' => '',
+            ],
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
                 ),
                 'visualTitle' => '',
                 'visualDescription' => '',
@@ -103,12 +125,46 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualInformationNoticeURL' => '',
                 'visualProductTermsURL' => '',
             ],
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
+                'visualTitle' => '',
+                'visualDescription' => '',
+                'visualInformationIcon' => '',
+                'visualAdditionalInformation' => '',
+                'visualLegalText' => '',
+                'visualTableImage' => '',
+                'visualLogo' => '',
+                'visualInformationNoticeURL' => '',
+                'visualProductTermsURL' => '',
+            ],
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => [
                 'customTitle' => $this->scopeConfig->getValue(
                     SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE
                 ),
                 'customSubtitle' => $this->scopeConfig->getValue(
                     SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
+                'visualTitle' => '',
+                'visualDescription' => '',
+                'visualInformationIcon' => '',
+                'visualAdditionalInformation' => '',
+                'visualLegalText' => '',
+                'visualTableImage' => '',
+                'visualLogo' => '',
+                'visualInformationNoticeURL' => '',
+                'visualProductTermsURL' => '',
+            ],
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
                 ),
                 'visualTitle' => '',
                 'visualDescription' => '',
@@ -137,9 +193,26 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualInformationNoticeURL' => '',
                 'visualProductTermsURL' => '',
             ],
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
+                'visualTitle' => '',
+                'visualDescription' => '',
+                'visualInformationIcon' => '',
+                'visualAdditionalInformation' => '',
+                'visualLegalText' => '',
+                'visualTableImage' => '',
+                'visualLogo' => '',
+                'visualInformationNoticeURL' => '',
+                'visualProductTermsURL' => '',
+            ],
         ];
 
-
+        $finalSolutions = array();
         if ($financing['status']) {
             foreach ($financing['result']->solutions as $solution) {
                 $solutionCode = $solution->solutionCode;
@@ -155,6 +228,33 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                         $data_per_method[$method]['visualLogo'] = $solution->communicationKit->visualLogo;
                         $data_per_method[$method]['visualInformationNoticeURL'] = $solution->communicationKit->visualInformationNoticeURL;
                         $data_per_method[$method]['visualProductTermsURL'] = $solution->communicationKit->visualProductTermsURL;
+
+
+                        if (!in_array($solution->solutionCode, $this->getDeSolution())) {
+                            array_push($finalSolutions, $solution->solutionCode);
+                        }
+                    }
+                }
+            }
+
+            $simulations = $this->restApi->getSimulateSolutions($quotetotal, $finalSolutions, false);
+
+            if ($simulations['status']) {
+                foreach ($simulations['result']->solutionSimulations as $sim) {
+                    foreach ($financing['result']->solutions as $solution) {
+                        $solutionCode = $solution->solutionCode;
+                        if (isset($method_per_code[$solutionCode])) {
+                            $method = $method_per_code[$solutionCode];
+                            if (isset($data_per_method[$method])) {
+                                if ($solutionCode === $sim->solutionCode) {
+                                    $durations = $sim->simulations;
+                                    foreach ($durations as $duration) {
+                                        $duration = json_decode(json_encode ($duration) , true);
+                                        $data_per_method[$method]['simulate'][$duration['duration']]['simulations'] = $duration;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -163,4 +263,11 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
         return $data_per_method;
     }
 
+    public function getDeSolution()
+    {
+        return array_merge(
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES
+        );
+    }
 }

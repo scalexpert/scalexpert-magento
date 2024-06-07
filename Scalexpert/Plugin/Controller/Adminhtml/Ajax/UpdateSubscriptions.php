@@ -53,14 +53,14 @@ class UpdateSubscriptions extends ActionConfig
         $insuranceBuyerBillingCountryToCheck = ['FR','DE'];
 
         $matchingSolutionCodes = [
-            'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
+            'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE,
             'SCDELT-DXCO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
-            'SCFRLT-DXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
+            'SCFRLT-DXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,
             'SCFRLT-DXNO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
             'SCFRSP-4XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
-            'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
+            'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE,
             'SCFRSP-3XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE,
-            'SCFRSP-3XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE,
+            'SCFRSP-3XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE,
             'CIFRWE-DXCO' => $this->systemConfigData::XML_SCALEXPERT_WARRANTY_ENABLE
         ];
 

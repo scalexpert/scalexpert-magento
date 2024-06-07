@@ -20,13 +20,25 @@
         <method name="scalexpert_payment_3x">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="scalexpert_payment_3x_with_fees">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="scalexpert_payment_4x">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="scalexpert_payment_4x_with_fees">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
         <method name="scalexpert_long_credit_fr">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="scalexpert_long_credit_fr_with_fees">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="scalexpert_long_credit_de">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
+        <method name="scalexpert_long_credit_de_with_fees">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
     </methods>

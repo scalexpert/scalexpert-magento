@@ -9,12 +9,12 @@
  */
 namespace Scalexpert\Plugin\Model\System\Config\Source;
 
-class Payment4XProductBlockPosition implements \Magento\Framework\Data\OptionSourceInterface
+class FinancingProductBlockPosition implements \Magento\Framework\Data\OptionSourceInterface
 
 {
-    const POS_AFTER_TITLE = 'catalog.product.view.after.title.scalexpert.payment.4x.insert';
-    const POS_BEFORE_QTY = 'catalog.product.view.before.qty.scalexpert.payment.4x.insert';
-    const POS_AFTER_ADDTOCART = 'catalog.product.view.after.addtocart.scalexpert.payment.4x.insert';
+    const POS_AFTER_TITLE = 'catalog.product.view.after.title.scalexpert.simulate';
+    const POS_BEFORE_QTY = 'catalog.product.view.before.qty.scalexpert.simulate';
+    const POS_AFTER_ADDTOCART = 'catalog.product.view.after.addtocart.scalexpert.simulate';
 
     public function toOptionArray()
     {
