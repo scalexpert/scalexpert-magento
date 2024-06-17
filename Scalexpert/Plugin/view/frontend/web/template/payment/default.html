@@ -21,16 +21,25 @@
                    data-bind="attr: {'id': getCode()}, value: getCode(), checked: isChecked, click: selectPaymentMethod, visible: isRadioButtonVisible()"/>
 
             <label data-bind="attr: {'for': getCode()}" class="scalexpert-paiement-title">
-                <span data-bind="text: getTitle()"></span>
+                <span data-bind="text: getVisualTitle()"></span>
+                <!-- ko if: isBankCard() && getMensualitesSimple() -->
+                    <span class="scalexpert-simulate-text" data-bind="html: getMensualitesSimple()"></span>
+                <!--/ko-->
             </label>
 
-            <div data-bind="attr: {'id': 'scalexpert-financing-btn-' + getCode()}">
-                <img data-bind="attr: {'src': getVisualInformationIcon(), 'alt': getTitle()}" width="16">
+            <div data-bind="attr: {'id': 'scalexpert-simulate-btn-' + getCode()}">
+                <img data-bind="attr: {'src': getVisualInformationIcon(), 'alt': getVisualTitle()}" width="16">
             </div>
 
-            <img data-bind="attr: {'src': getVisualLogo(), 'alt': getTitle()}" class="scalexpert-logo" width="55">
+            <!-- ko if: getVisualLogo() -->
+                <img data-bind="attr: {'src': getVisualLogo(), 'alt': getVisualTitle()}" class="scalexpert-logo" width="55">
+            <!--/ko-->
 
         </div>
+
+        <!-- ko if: isBankCard() && getMensualites() -->
+            <div class="scalexpert-simulate-text" data-bind="html: getMensualites()"></div>
+        <!--/ko-->
 
         <!-- ko if: getSubtitle() -->
             <div class="scalexpert-paiement-subtitle" data-bind="text: getSubtitle()"></div>
@@ -73,24 +82,96 @@
         </div>
 
     </div>
+
     <div class="scalexpert-modal-container"
          data-bind="mageInit: {
-        'Magento_Ui/js/modal/modal':{
-            'type': 'popup',
-            'trigger': '#scalexpert-financing-btn-' + getCode(),
-            'modalClass': 'scalexpert-modal',
-            'responsive': true,
-            'innerScroll': true,
-            'buttons': []
-        }}">
-        <div class="scalexpert-modal-title">
-            <img data-bind="attr: {'src': getVisualEmprunt(), 'alt': getSubtitle()}">
-            <div data-bind="text: getTitle()"></div>
-        </div>
+            'Magento_Ui/js/modal/modal':{
+                'type': 'popup',
+                'trigger': '#scalexpert-simulate-btn-' + getCode(),
+                'modalClass': 'scalexpert-modal',
+                'responsive': true,
+                'innerScroll': true,
+                'buttons': []
+            }}">
+
+        <div class="scalexpert-modal-title" data-bind="text: getVisualTitle()"></div>
+
         <div class="scalexpert-modal-content">
-            <div data-bind="html: getVisualAdditionalInformation()"></div>
-            <div data-bind="html: getVisualLegalText()"></div>
+            <div class="scalexpert-modal-blocs">
+                <div class="scalexpert-modal-bloc" data-bind="html: getVisualAdditionalInformation()"></div>
+
+                <!-- ko if: getSimulation() -->
+                    <div class="scalexpert-modal-bloc">
+
+                        <div class="scalexpert-modal-simulate">
+                            <div class="scalexpert-modal-simulate-top">
+                                <b data-bind="i18n: 'Simulez votre paiement'"></b>
+                                <!-- ko if: getVisualLogo() -->
+                                    <img data-bind="attr: {'src': getVisualLogo(), 'alt': 'Société Générale'}" class="scalexpert-simulate-logo" width="54">
+                                <!--/ko-->
+                            </div>
+                            <div class="scalexpert-modal-simulate-solutions">
+                                <!-- ko foreach: {data: getDataAll(), as: 'options'} -->
+                                    <div data-bind="attr: {'id': 'scalexpert-simulate-item-' + options[0]}, css: (options[0] == $parents[0].selectedOption()) ? 'active' : '', click: function() { $parents[0].selectedOption(options[0]); return true; }" class="scalexpert-simulate-item">
+                                        x<span data-bind="text: options[0]"></span>
+                                    </div>
+                                <!--/ko-->
+                            </div>
+                            <div class="scalexpert-modal-simulate-text">
+                                <!-- ko if: getMultipleInstallment(selectedOption()) -->
+                                    Soit <b>un 1er prélèvement</b> de <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span></b> (frais inclus) puis <b><span data-bind="text: getDuration(selectedOption())"></span> prélèvements</b> de <b><span data-bind="text: getAmount(1, selectedOption(), true)"></span></b>
+                                <!--/ko-->
+                                <!-- ko ifnot: getMultipleInstallment(selectedOption()) -->
+                                    Soit <b><span data-bind="text: selectedOption()"></span> prélèvements</b> de <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span></b>
+                                <!--/ko-->
+                            </div>
+                            <hr>
+                            <div class="scalexpert-modal-simulate-details">
+                                <!-- ko ifnot: getMultipleInstallment(selectedOption()) -->
+                                    <div>
+                                        <span data-bind="i18n: 'Montant total dû'"></span>
+                                        <span><span data-bind="text: getDueTotalAmount(selectedOption())"></span></span>
+                                    </div>
+                                    <div>
+                                        <span>Payer en <span data-bind="text: selectedOption()"></span> fois</span>
+                                        <span><span data-bind="text: getAmount(0, selectedOption(), true)"></span></span>
+                                    </div>
+                                <!--/ko-->
+                                <!-- ko if: getMultipleInstallment(selectedOption()) -->
+                                    <div>
+                                        <span data-bind="i18n: 'Montant total dû'"></span>
+                                        <span><span data-bind="text: getDueTotalAmount(selectedOption())"></span></span>
+                                    </div>
+                                    <!-- ko foreach: {data: getInstallments(selectedOption()), as: 'installment'} -->
+                                        <div>
+                                            <span data-bind="text: installment.label"></span>
+                                            <span data-bind="text: installment.amount"></span>
+                                        </div>
+                                    <!--/ko-->
+                                <!--/ko-->
+                            </div>
+                            <div class="scalexpert-modal-simulate-conditions">
+                                <span><span data-bind="i18n: 'Montant du financement'"></span> : <span data-bind="text: getInitialAmount(selectedOption())"></span>.</span>
+                                <span><span data-bind="i18n: 'TAEG FIXE'"></span> : <span data-bind="text: getEffectiveAnnualPercentageRate(selectedOption())"></span>.</span>
+                                <!-- ko if: !isBankCard() -->
+                                    <span><span data-bind="i18n: 'Taux débiteur fixe'"></span> : <span data-bind="text: getNominalPercentageRate(selectedOption())"></span>.</span>
+                                    <span><span data-bind="i18n: 'Coût du crédit'"></span> : <span data-bind="text: getTotalCost(selectedOption())"></span>.</span>
+                                    <span><span data-bind="i18n: 'Frais de dossier'"></span> : <span data-bind="text: getFeesAmount(selectedOption())"></span>.</span>
+                                <!--/ko-->
+                                <!-- ko if: isBankCard() -->
+                                    <span><span data-bind="i18n: 'Frais'"></span> : <span data-bind="text: getFeesAmount(selectedOption())"></span>.</span>
+                                <!--/ko-->
+                                <span><span data-bind="i18n: 'Montant total dû'"></span> : <span data-bind="text: getDueTotalAmount(selectedOption())"></span>.</span>
+                            </div>
+                        </div>
+
+                    </div>
+                <!--/ko-->
+
+            </div>
+            <div class="scalexpert-modal-conditions" data-bind="html: getVisualLegalText()"></div>
         </div>
+
     </div>
 
 </div>

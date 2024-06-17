@@ -15,7 +15,18 @@ define(
         'use strict';
 
         return Component.extend({
-            salexpertPaymentData: window.checkoutConfig.scalexpert_long_credit_fr
+            salexpertPaymentData: window.checkoutConfig.scalexpert_long_credit_fr,
+            isBankcard: false,
+            defaults: {
+                template: 'Scalexpert_Plugin/payment/default',
+                redirectAfterPlaceOrder: false,
+                selectedOption : Object.entries(window.checkoutConfig.scalexpert_long_credit_fr.simulate)[0][0] ? Object.entries(window.checkoutConfig.scalexpert_long_credit_fr.simulate)[0][0] : null,
+            },
+            initialize: function () {
+                this._super();
+                this.selectedOption = Object.entries(window.checkoutConfig.scalexpert_long_credit_fr.simulate)[0][0];
+                this.observe('selectedOption');
+            }
         });
     }
 );

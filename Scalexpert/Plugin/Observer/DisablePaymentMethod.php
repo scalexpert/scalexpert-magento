@@ -65,9 +65,13 @@ class DisablePaymentMethod implements ObserverInterface
         $disable = false;
         $isScalexpertPayment = in_array($paymentCode,[
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES
         ]);
         if($isScalexpertPayment){
             foreach ($quoteItems as $quoteItem){
@@ -91,7 +95,7 @@ class DisablePaymentMethod implements ObserverInterface
         $canBeDisable = false;
         $paymentCodeSolutionCode = array();
 
-
+        $configurationExcludedProduct = null;
 
         switch ($paymentCode) {
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X:
@@ -99,32 +103,120 @@ class DisablePaymentMethod implements ObserverInterface
                 if($configurationExcludedCategory) {
                     $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
                 }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
                 $canBeDisable = true;
                 $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES:
+                $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+                if($configurationExcludedCategory) {
+                    $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+                }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
+                $canBeDisable = true;
+                $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES;
                 break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X:
                 $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
                 if($configurationExcludedCategory) {
                     $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
                 }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
                 $canBeDisable = true;
                 $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES:
+                $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+                if($configurationExcludedCategory) {
+                    $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+                }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
+                $canBeDisable = true;
+                $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES;
                 break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR:
                 $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
                 if($configurationExcludedCategory) {
                     $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
                 }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
                 $canBeDisable = true;
                 $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES:
+                $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+                if($configurationExcludedCategory) {
+                    $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+                }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
+                $canBeDisable = true;
+                $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
                 break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE:
                 $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
                 if($configurationExcludedCategory) {
                     $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
                 }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
                 $canBeDisable = true;
                 $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES:
+                $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+                if($configurationExcludedCategory) {
+                    $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+                }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
+                $canBeDisable = true;
+                $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES;
                 break;
             default:
                 break;
@@ -140,6 +232,14 @@ class DisablePaymentMethod implements ObserverInterface
                         $result->setData('is_available', false);
                         $isExcludeCategory = true;
                         break;
+                    }
+                    if (!is_null($configurationExcludedProduct)) {
+                        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+                        if (in_array($item->getSku(), $configurationExcludedProduct)) {
+                            $result->setData('is_available', false);
+                            $isExcludeCategory = true;
+                            break;
+                        }
                     }
                 }
             }

@@ -74,12 +74,13 @@ class Product extends \Magento\Catalog\Block\Product\View
         return $this->scalexpertHelper->getWarranty($this->getProduct(), $countryId);
     }
 
-    public function getConfigurationPayment3xBlockProduct()
+    public function getConfigurationPayment3xBlockProduct($product)
     {
         $excludedCategory = false;
         $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
         $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
-        $productCategoryIds = $this->getProduct()->getCategoryIds();
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
 
         if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
             $excludedCategory = true;
@@ -89,8 +90,10 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
         $configurationExcludedProduct = str_replace(';', ';', $configurationExcludedProduct ?? '');
         $configurationExcludedProduct = explode(',', $configurationExcludedProduct ?? '');
-        $productSku = $this->getProduct()->getSku();
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
 
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
         if (in_array($productSku, $configurationExcludedProduct)) {
             $excludedProduct = true;
         }
@@ -98,20 +101,52 @@ class Product extends \Magento\Catalog\Block\Product\View
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE),
             'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
-            'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
-            'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
         );
     }
 
-    public function getConfigurationPayment4xBlockProduct()
+    public function getConfigurationPayment3xWithFeesBlockProduct($product)
+    {
+        $excludedCategory = false;
+        $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+        $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
+
+        if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
+            $excludedCategory = true;
+        }
+
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        $configurationExcludedProduct = str_replace(';', ';', $configurationExcludedProduct ?? '');
+        $configurationExcludedProduct = explode(',', $configurationExcludedProduct ?? '');
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+        if (in_array($productSku, $configurationExcludedProduct)) {
+            $excludedProduct = true;
+        }
+
+        return array(
+            'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE),
+            'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
+            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
+        );
+    }
+
+    public function getConfigurationPayment4xBlockProduct($product)
     {
         $excludedCategory = false;
         $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
         $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
-        $productCategoryIds = $this->getProduct()->getCategoryIds();
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
 
         if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
             $excludedCategory = true;
@@ -121,7 +156,9 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
         $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
         $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
-        $productSku = $this->getProduct()->getSku();
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
         if (in_array($productSku, $configurationExcludedProduct)) {
             $excludedProduct = true;
         }
@@ -129,20 +166,51 @@ class Product extends \Magento\Catalog\Block\Product\View
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE),
             'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
-            'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
-            'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
         );
     }
 
-    public function getConfigurationLongCreditFrBlockProduct()
+    public function getConfigurationPayment4xWithFeesBlockProduct($product)
+    {
+        $excludedCategory = false;
+        $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+        $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
+
+        if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
+            $excludedCategory = true;
+        }
+
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+        $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+        if (in_array($productSku, $configurationExcludedProduct)) {
+            $excludedProduct = true;
+        }
+
+        return array(
+            'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE),
+            'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
+            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
+        );
+    }
+
+    public function getConfigurationLongCreditFrBlockProduct($product)
     {
         $excludedCategory = false;
         $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
         $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
-        $productCategoryIds = $this->getProduct()->getCategoryIds();
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
 
         if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
             $excludedCategory = true;
@@ -152,8 +220,10 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
         $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
         $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
-        $productSku = $this->getProduct()->getSku();
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
 
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
         if (in_array($productSku, $configurationExcludedProduct)) {
             $excludedProduct = true;
         }
@@ -161,20 +231,52 @@ class Product extends \Magento\Catalog\Block\Product\View
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE),
             'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
-            'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
-            'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
         );
     }
 
-    public function getConfigurationLongCreditDeBlockProduct()
+    public function getConfigurationLongCreditFrWithFeesBlockProduct($product)
+    {
+        $excludedCategory = false;
+        $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+        $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
+
+        if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
+            $excludedCategory = true;
+        }
+
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+        $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+        if (in_array($productSku, $configurationExcludedProduct)) {
+            $excludedProduct = true;
+        }
+
+        return array(
+            'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE),
+            'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
+            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
+        );
+    }
+
+    public function getConfigurationLongCreditDeBlockProduct($product)
     {
         $excludedCategory = false;
         $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
         $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
-        $productCategoryIds = $this->getProduct()->getCategoryIds();
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
 
         if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
             $excludedCategory = true;
@@ -184,8 +286,10 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
         $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
         $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
-        $productSku = $this->getProduct()->getSku();
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
 
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
         if (in_array($productSku, $configurationExcludedProduct)) {
             $excludedProduct = true;
         }
@@ -193,9 +297,40 @@ class Product extends \Magento\Catalog\Block\Product\View
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE),
             'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
-            'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION),
             'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
-            'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
+        );
+    }
+
+    public function getConfigurationLongCreditDeWithFeesBlockProduct($product)
+    {
+        $excludedCategory = false;
+        $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+        $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
+
+        if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
+            $excludedCategory = true;
+        }
+
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+        $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+        if (in_array($productSku, $configurationExcludedProduct)) {
+            $excludedProduct = true;
+        }
+
+        return array(
+            'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE),
+            'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
+            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
         );
@@ -217,7 +352,7 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
         $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
         $productSku = $this->getProduct()->getSku();
-
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
         if (in_array($productSku, $configurationExcludedProduct)) {
             $excludedProduct = true;
         }
@@ -230,6 +365,14 @@ class Product extends \Magento\Catalog\Block\Product\View
             'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
+        );
+    }
+
+    public function getConfigurationInsertBlockProduct()
+    {
+        return array(
+            'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_INSERT_PRODUCT_BLOCK_POSITION),
+            'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_INSERT_PRODUCT_BLOCK_LOGO_ENABLE),
         );
     }
 
@@ -257,7 +400,7 @@ class Product extends \Magento\Catalog\Block\Product\View
 
         $informations = [];
 
-        if (false !== $warranty['solutions']['status']) {
+        if (false !== $warranty['solutions']['status'] && isset($warranty['solutions']['result']->solutions[0])) {
             $configurationWarrantyBlockProductTitle = $configurationWarrantyBlockProduct['title'];
             $apiTitle = $warranty['solutions']['result']->solutions[0]->communicationKit->visualTitle;
 
@@ -317,34 +460,60 @@ class Product extends \Magento\Catalog\Block\Product\View
         return $informations;
     }
 
-    public function getProductFinancing() {
-        $configurationPayment3xBlockProduct = $this->getConfigurationPayment3xBlockProduct();
-        $configurationPayment4xBlockProduct = $this->getConfigurationPayment4xBlockProduct();
-        $configurationLongCreditFrBlockProduct = $this->getConfigurationLongCreditFrBlockProduct();
-        $configurationLongCreditDeBlockProduct = $this->getConfigurationLongCreditDeBlockProduct();
+    public function getProductFinancing($productId) {
+        $product = $this->productRepository->getById($productId);
+        $configurationPayment3xBlockProduct = $this->getConfigurationPayment3xBlockProduct($product);
+        $configurationPayment3xWithFeesBlockProduct = $this->getConfigurationPayment3xWithFeesBlockProduct($product);
+        $configurationPayment4xBlockProduct = $this->getConfigurationPayment4xBlockProduct($product);
+        $configurationPayment4xWithFeesBlockProduct = $this->getConfigurationPayment4xWithFeesBlockProduct($product);
+        $configurationLongCreditFrBlockProduct = $this->getConfigurationLongCreditFrBlockProduct($product);
+        $configurationLongCreditFrWithFeesBlockProduct = $this->getConfigurationLongCreditFrWithFeesBlockProduct($product);
+        $configurationLongCreditDeBlockProduct = $this->getConfigurationLongCreditDeBlockProduct($product);
+        $configurationLongCreditDeWithFeesBlockProduct = $this->getConfigurationLongCreditDeWithFeesBlockProduct($product);
+        $configurationInsertBlockProduct = $this->getConfigurationInsertBlockProduct();
 
         $enabled_solutions = array();
-        $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
-        $fincancing = $this->getFinancingEligibleSolutions($countryId);
-        if($fincancing['status']){
+        $countryId = $this->getCountryId();
+        $financing = $this->getFinancingEligibleSolutions($countryId);
+//        $amount = $this->getProduct()->getPrice();
+        $amount = $product->getPrice();
+        $finalSolutions = array();
+        if($financing['status']){
             $paymentCode3XSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
+            $paymentCode3XWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES;
             $paymentCode4XSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X;
+            $paymentCode4XWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES;
             $LongCreditFrSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR;
+            $LongCreditFrWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
             $longCreditDeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
+            $longCreditDeWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES;
 
-            foreach($fincancing['result']->solutions as $solution){
+            foreach($financing['result']->solutions as $solution){
                 if (in_array($solution->solutionCode, $paymentCode3XSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment3xBlockProduct;
+                }
+                if (in_array($solution->solutionCode, $paymentCode3XWithFeesSolutionCode)) {
+                    $solution->communicationKit->magentoConfiguration = $configurationPayment3xWithFeesBlockProduct;
                 }
                 if (in_array($solution->solutionCode, $paymentCode4XSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment4xBlockProduct;
                 }
+                if (in_array($solution->solutionCode, $paymentCode4XWithFeesSolutionCode)) {
+                    $solution->communicationKit->magentoConfiguration = $configurationPayment4xWithFeesBlockProduct;
+                }
                 if (in_array($solution->solutionCode, $LongCreditFrSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditFrBlockProduct;
+                }
+                if (in_array($solution->solutionCode, $LongCreditFrWithFeesSolutionCode)) {
+                    $solution->communicationKit->magentoConfiguration = $configurationLongCreditFrWithFeesBlockProduct;
                 }
                 if (in_array($solution->solutionCode, $longCreditDeSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditDeBlockProduct;
                 }
+                if (in_array($solution->solutionCode, $longCreditDeWithFeesSolutionCode)) {
+                    $solution->communicationKit->magentoConfiguration = $configurationLongCreditDeWithFeesBlockProduct;
+                }
+                $solution->communicationKit->magentoConfiguration['logo'] = $configurationInsertBlockProduct['logo'];
                 if(!isset($solution->communicationKit->magentoConfiguration)
                     || !$solution->communicationKit->magentoConfiguration['enable']
                     || !$solution->communicationKit->magentoConfiguration['show']
@@ -353,9 +522,48 @@ class Product extends \Magento\Catalog\Block\Product\View
                 ) {
                     continue 1;
                 }
-                $enabled_solutions[] = $solution->communicationKit;
+
+
+                if (!in_array($solution->solutionCode, $this->getDeSolution())) {
+                    array_push($finalSolutions, $solution->solutionCode);
+                } else {
+                    $enabled_solutions[] = $solution->communicationKit;
+                }
+            }
+
+            $simulations = $this->restApi->getSimulateSolutions(
+                $amount,
+                $finalSolutions,
+                false
+            );
+            if ($simulations['status']) {
+                foreach ($simulations['result']->solutionSimulations as $sim) {
+                    foreach($financing['result']->solutions as $solution) {
+                        if ($solution->solutionCode === $sim->solutionCode) {
+                            $durations = $sim->simulations;
+                            foreach ($durations as $duration)
+                            {
+                                $code = $solution->communicationKit->solutionCode;
+                                $merchantKit = json_decode(json_encode ($solution->communicationKit) , true);
+                                $duration = json_decode(json_encode ($duration) , true);
+                                $enabled_solutions[$duration['duration'].'-'.$code]['solutionCode'] = $code;
+                                $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit'] = $merchantKit;
+                                $enabled_solutions[$duration['duration'].'-'.$code]['simulations'] = $duration;
+                                if (!is_null($enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['magentoConfiguration']['title'])) {
+                                    $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['visualTitle'] =
+                                        $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['magentoConfiguration']['title'];
+                                }
+                                if ($enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['magentoConfiguration']['logo'] === '0') {
+                                    $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['visualLogo'] = null;
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
+
+        ksort($enabled_solutions, SORT_NATURAL);
         return $enabled_solutions;
     }
 
@@ -366,13 +574,39 @@ class Product extends \Magento\Catalog\Block\Product\View
     {
 
         $configurationWarrantyBlockProduct = $this->getConfigurationWarrantyBlockProduct();
-        $configurationPayment3xBlockProduct = $this->getConfigurationPayment3xBlockProduct();
-        $configurationPayment4xBlockProduct = $this->getConfigurationPayment4xBlockProduct();
-        $configurationLongCreditFrBlockProduct = $this->getConfigurationLongCreditFrBlockProduct();
-        $configurationLongCreditDeBlockProduct = $this->getConfigurationLongCreditDeBlockProduct();
-        $positions = array($configurationWarrantyBlockProduct['position'],$configurationPayment3xBlockProduct['position'],$configurationPayment4xBlockProduct['position'],$configurationLongCreditFrBlockProduct['position'],$configurationLongCreditDeBlockProduct['position']);
+        $configurationInsertBlockProduct = $this->getConfigurationInsertBlockProduct();
+        $simulateLayout = 'scalexpert_simulate_product';
+
+        $positions = array( $configurationWarrantyBlockProduct['position'], $configurationInsertBlockProduct['position'], $simulateLayout);
+
+        switch ($configurationInsertBlockProduct['position']) {
+            case 'catalog.product.view.after.title.scalexpert.simulate':
+                $positions[] = 'catalog.product.view.after.title.scalexpert.credit.de.insert';
+                break;
+            case 'catalog.product.view.before.qty.scalexpert.simulate':
+                $positions[] = 'catalog.product.view.before.qty.scalexpert.credit.de.insert';
+                break;
+            case 'catalog.product.view.after.addtocart.scalexpert.simulate':
+                $positions[] = 'catalog.product.view.after.addtocart.scalexpert.credit.de.insert';
+                break;
+        }
 
         return (in_array($this->getNameInLayout(),$positions) ? parent::_toHtml() : '');
     }
 
+    /**
+     * @return array[]
+     */
+    public function getDeSolution()
+    {
+        return array_merge(
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES
+        );
+    }
+
+    public function getCountryId()
+    {
+        return $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
+    }
 }

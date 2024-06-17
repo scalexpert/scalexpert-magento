@@ -23,9 +23,13 @@ define([
             // Hide message block if needed
             let methodPayment = this.containers[0].index;
             if (methodPayment === 'scalexpert_payment_3x'
+                || methodPayment === 'scalexpert_payment_3x_with_fees'
                 || methodPayment === 'scalexpert_payment_4x'
+                || methodPayment === 'scalexpert_payment_4x_with_fees'
                 || methodPayment === 'scalexpert_long_credit_fr'
+                || methodPayment === 'scalexpert_long_credit_fr_with_fees'
                 || methodPayment === 'scalexpert_long_credit_de'
+                || methodPayment === 'scalexpert_long_credit_de_with_fees'
             ) {
                 this.hideTimeout = 15000;
             }

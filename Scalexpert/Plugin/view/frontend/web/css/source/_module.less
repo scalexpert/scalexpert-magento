@@ -233,7 +233,7 @@
             display: none;
         }
         .modal-inner-wrap {
-            max-width: 860px;
+            max-width: 870px;
             padding: 16px 24px;
             border-radius: 4px;
             .action-close {
@@ -281,11 +281,141 @@
             line-height: 20px;
             font-weight: 400;
             color: #000;
-            ul, ol {
+            ul {
                 margin-bottom: 16px;
                 padding-left: 18px;
                 li {
                     margin-bottom: 0;
+                }
+            }
+            ol {
+                margin: 0;
+                padding-left: 0;
+                counter-reset: i;
+                list-style: none;
+                li {
+                    position: relative;
+                    counter-increment: i;
+                    margin-bottom: 24px;
+                    padding-left: 40px;
+                    &:before {
+                        content: counter(i);
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 24px;
+                        height: 24px;
+                        font-size: 14px;
+                        line-height: 24px;
+                        font-weight: 700;
+                        text-align: center;
+                        color: #FFF;
+                        background: #E60028;
+                        border-radius: 50px;
+                    }
+                }
+            }
+            b {
+                font-weight: 600;
+            }
+            .scalexpert_subtitle {
+                margin: 0 0 24px;
+            }
+            .scalexpert-modal {
+                &-blocs {
+                    display: flex;
+                    flex-direction: column-reverse;
+                    gap: 24px;
+                    margin-bottom: 24px;
+                }
+                &-bloc {
+                    width: 100%;
+                }
+                &-conditions {
+                    margin-bottom: 8px;
+                    font-size: 14px;
+                    line-height: 20px;
+                    font-weight: 400;
+                    color: #000;
+                    .scalexpert_important {
+                        font-size: 15px;
+                        font-weight: 600;
+                    }
+                }
+                &-simulate {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+                    padding: 12px 16px;
+                    border: 1px solid #E6E6E6;
+                    border-radius: 4px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, .12);
+                    &-top {
+                        display: flex;
+                        gap: 10px;
+                        justify-content: space-between;
+                        align-items: center;
+                    }
+                    &-solutions {
+                        display: flex;
+                        flex-wrap: wrap;
+                        align-items: center;
+                        gap: 8px;
+                        > div {
+                            min-width: 36px;
+                            padding: 4px 0;
+                            font-weight: 600;
+                            text-align: center;
+                            color: #545454;
+                            border: 2px solid #545454;
+                            border-radius: 8px;
+                            box-sizing: border-box;
+                            cursor: pointer;
+                            transition-duration: .3s;
+                            &.active {
+                                color: #FFF;
+                                background-color: #E2010B;
+                                border-color: #E2010B;
+                            }
+                        }
+                    }
+                    &-text {
+                        font-size: 14px;
+                        line-height: 20px;
+                        font-weight: 400;
+                        color: #333;
+                        b {
+                            font-weight: 700;
+                            color: #E2010B;
+                        }
+                    }
+                    hr {
+                        margin: 0;
+                        border-color: #E6E6E6;
+                    }
+                    &-details {
+                        font-size: 14px;
+                        line-height: 20px;
+                        color: #666;
+                        > div {
+                            display: flex;
+                            gap: 16px;
+                            justify-content: space-between;
+                            align-items: center;
+                            padding: 8px 16px;
+                            border-bottom: 1px solid #E6E6E6;
+                            &:first-child {
+                                font-size: 15px;
+                                font-weight: 600;
+                                border-color: #666;
+                            }
+                        }
+                    }
+                    &-conditions {
+                        font-size: 12px;
+                        line-height: 20px;
+                        color: #808080;
+                    }
                 }
             }
         }
@@ -316,12 +446,16 @@
         border-radius: 4px;
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, .12);
         .payment-method-title {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
             padding: 0 !important;
             border: unset !important;
         }
         &-top {
             display: flex;
             align-items: center;
+            gap: 4px;
             input {
                 position: absolute;
                 top: 0;
@@ -339,10 +473,11 @@
                 position: relative;
                 display: flex;
                 align-items: center;
+                gap: 4px;
                 padding-left: 32px;
                 font-size: 12px;
                 line-height: 24px;
-                font-weight: 600;
+                font-weight: 400;
                 color: #333;
                 cursor: pointer;
                 &:before {
@@ -370,7 +505,6 @@
                 }
             }
             div {
-                margin-left: 8px;
                 cursor: pointer;
                 img {
                     display: block;
@@ -379,9 +513,15 @@
             .scalexpert-logo {
                 margin-left: auto;
             }
+            + .scalexpert-simulate-text {
+                padding-left: 32px;
+                font-size: 12px;
+                line-height: 18px;
+                font-weight: 400;
+                color: #333;
+            }
         }
         &-subtitle {
-            margin-top: 6px;
             padding-left: 32px;
             font-size: 12px;
             line-height: initial;
@@ -391,6 +531,92 @@
         .payment-method-content {
             margin-top: 12px;
             padding: 0 !important;
+        }
+    }
+
+    .scalexpert-simulate {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin: 8px 0;
+        font-family: 'Montserrat', sans-serif;
+        font-size: 14px;
+        line-height: 20px;
+        &-top {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            margin-bottom: 5px;
+            font-weight: 400;
+            color: #010035;
+            > span {
+                cursor: pointer;
+            }
+            img {
+                display: block;
+            }
+        }
+        &-content {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 4px;
+            font-weight: 600;
+        }
+        &-bot {
+            font-size: 11px;
+            line-height: 16px;
+            color: #545454;
+            .scalexpert_important {
+                font-size: 12px;
+                font-weight: 600;
+            }
+        }
+        &-item {
+            min-width: 28px;
+            padding: 2px 0;
+            font-size: 12px;
+            text-align: center;
+            border: 2px solid #545454;
+            border-radius: 8px;
+            box-sizing: border-box;
+            cursor: pointer;
+            transition-duration: .3s;
+            &.active {
+                color: #FFF;
+                background-color: #E2010B;
+                border-color: #E2010B;
+                box-shadow: 0 4px 4px rgba(0, 0, 0, .25);
+            }
+            &:last-of-type {
+                margin-right: 4px;
+            }
+        }
+        &-text {
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: 600;
+            color: #010035;
+            b {
+                color: #E2010B;
+            }
+        }
+    }
+
+}
+
+
+/* DESKTOP - 1024+ */
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+
+    .scalexpert-modal {
+        &-content {
+            .scalexpert-modal {
+                &-blocs {
+                    flex-direction: row;
+                    gap: 48px;
+                }
+            }
         }
     }
 
@@ -442,10 +668,6 @@
             label {
                 font-size: 14px;
             }
-        }
-        &-subtitle {
-            margin-top: 12px;
-            font-size: 14px;
         }
         .payment-method-content {
             margin-top: 16px;
