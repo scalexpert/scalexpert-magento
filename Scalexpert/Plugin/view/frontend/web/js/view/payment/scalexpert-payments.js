@@ -44,6 +44,10 @@ define(
                 component: 'Scalexpert_Plugin/js/view/payment/method-renderer/scalexpert-long-credit-fr-with-fees'
             },
             {
+                type: 'scalexpert_long_credit_fr_without_fees',
+                component: 'Scalexpert_Plugin/js/view/payment/method-renderer/scalexpert-long-credit-fr-without-fees'
+            },
+            {
                 type: 'scalexpert_long_credit_de',
                 component: 'Scalexpert_Plugin/js/view/payment/method-renderer/scalexpert-long-credit-de'
             },

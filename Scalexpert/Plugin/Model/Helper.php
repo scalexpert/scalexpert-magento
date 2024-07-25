@@ -59,7 +59,7 @@ class Helper
 
                 if ($solutionResult['status']) {
                     $itemId = $solutionResult['result']->id;
-                    $searchItem = $this->restApi->searchInsuranceItem($solutionCode, $product->getPrice(), $itemId);
+                    $searchItem = $this->restApi->searchInsuranceItem($solutionCode, $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(), $itemId);
                     if ($searchItem['status']) {
                         array_push($searchData, $searchItem);
                     }

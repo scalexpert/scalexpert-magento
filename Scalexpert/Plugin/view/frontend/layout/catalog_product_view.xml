@@ -11,6 +11,13 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="product.info.main">
+            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
+                   name="catalog.product.view.after.title.scalexpert.warranty.insert"
+                   as="scalexpert_warranty_insert_product_after_title"
+                   template="Scalexpert_Plugin::insurance/product.phtml"
+                   before="-"/>
+        </referenceContainer>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.before.qty.scalexpert.warranty.insert"
@@ -18,7 +25,14 @@
                    template="Scalexpert_Plugin::insurance/product.phtml"
                    before="-"/>
         </referenceContainer>
-        <referenceContainer name="product.info.form.content">
+        <referenceContainer name="product.info.options.wrapper">
+            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
+                   name="catalog.product.view.before.qty.scalexpert.warranty.insert.conf"
+                   as="scalexpert_warranty_insert_product_before_qty_conf"
+                   template="Scalexpert_Plugin::insurance/product.phtml"
+                   after="-"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.addtocart.scalexpert.warranty.insert"
                    as="scalexpert_warranty_insert_product_after_addtocart"
@@ -26,13 +40,13 @@
                    after="-"/>
         </referenceContainer>
 
-        <referenceBlock name="product.info.main">
+        <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.title.scalexpert.simulate"
                    as="scalexpert_simulate_product_after_title"
                    template="Scalexpert_Plugin::simulate/preload.phtml"
                    before="-"/>
-        </referenceBlock>
+        </referenceContainer>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.before.qty.scalexpert.simulate"
@@ -40,7 +54,14 @@
                    template="Scalexpert_Plugin::simulate/preload.phtml"
                    before="-"/>
         </referenceContainer>
-        <referenceContainer name="product.info.form.content">
+        <referenceContainer name="product.info.options.wrapper">
+            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
+                   name="catalog.product.view.before.qty.scalexpert.simulate.conf"
+                   as="scalexpert_simulate_product_before_qty_conf"
+                   template="Scalexpert_Plugin::simulate/preload.phtml"
+                   after="-"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.addtocart.scalexpert.simulate"
                    as="scalexpert_simulate_insert_product_after_addtocart"
@@ -48,13 +69,13 @@
                    after="-"/>
         </referenceContainer>
 
-        <referenceBlock name="product.info.main">
+        <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.title.scalexpert.credit.de.insert"
                    as="scalexpert_credit_de_insert_product_after_title"
                    template="Scalexpert_Plugin::financing/longde/product.phtml"
                    before="-"/>
-        </referenceBlock>
+        </referenceContainer>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.before.qty.scalexpert.credit.de.insert"
@@ -62,7 +83,14 @@
                    template="Scalexpert_Plugin::financing/longde/product.phtml"
                    before="-"/>
         </referenceContainer>
-        <referenceContainer name="product.info.form.content">
+        <referenceContainer name="product.info.options.wrapper">
+            <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
+                   name="catalog.product.view.before.qty.scalexpert.credit.de.insert.conf"
+                   as="scalexpert_credit_de_insert_product_before_qty_conf"
+                   template="Scalexpert_Plugin::financing/longde/product.phtml"
+                   after="-"/>
+        </referenceContainer>
+        <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.addtocart.scalexpert.credit.de.insert"
                    as="scalexpert_credit_de_insert_product_after_addtocart"

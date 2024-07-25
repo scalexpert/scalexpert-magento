@@ -28,6 +28,7 @@ define([
                 || methodPayment === 'scalexpert_payment_4x_with_fees'
                 || methodPayment === 'scalexpert_long_credit_fr'
                 || methodPayment === 'scalexpert_long_credit_fr_with_fees'
+                || methodPayment === 'scalexpert_long_credit_fr_without_fees'
                 || methodPayment === 'scalexpert_long_credit_de'
                 || methodPayment === 'scalexpert_long_credit_de_with_fees'
             ) {

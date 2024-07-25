@@ -55,6 +55,7 @@ class Info extends \Magento\Payment\Block\Info
             $info['merchant_global_order_id'] = isset($add['merchant_global_order_id']) ? $add['merchant_global_order_id'] : false;
             $info['buyer_financedAmount'] = isset($add['buyer_financedAmount']) ? $add['buyer_financedAmount'] : false;
             $info['consolidated_status'] = isset($add['consolidated_status']) ? $add['consolidated_status'] : false;
+            $info['consolidated_sub_status'] = isset($add['consolidated_sub_status']) ? $add['consolidated_sub_status'] : false;
             $info['method_title'] = $payment->getMethodInstance()->getTitle();
             $info['status_message_error'] = isset($add['status_message_error']) ? $add['status_message_error'] : false;
         }

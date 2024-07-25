@@ -11,8 +11,8 @@ namespace Scalexpert\Plugin\Setup\Patch\Data;
 
 use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchInterface;
 use Magento\Framework\App\State;
 
 class AddInsuranceVirtualProduct implements DataPatchInterface
@@ -28,16 +28,19 @@ class AddInsuranceVirtualProduct implements DataPatchInterface
     private $productFactory;
 
     protected $_appState;
+    protected $_storeManager;
 
     public function __construct(
         ProductRepositoryInterface $productRepository,
         ProductInterfaceFactory $productFactory,
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        \Magento\Store\Model\StoreManagerInterface $storeManager
     )
     {
         $this->productRepository = $productRepository;
         $this->productFactory = $productFactory;
         $this->_appState = $appState;
+        $this->_storeManager = $storeManager;
     }
 
     /**
@@ -60,16 +63,20 @@ class AddInsuranceVirtualProduct implements DataPatchInterface
 
     public function apply()
     {
-        $this->_appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        try {
+            $this->_appState->setAreaCode(\Magento\Framework\App\Area::AREA_ADMINHTML);
+        } catch (LocalizedException $e) {
+
+        }
         $product = $this->productFactory->create();
         $product->setSku('Insurance');
         $product->setName('Assurance');
-        $product->setAttributeSetId(4);
-        $product->setStatus(1);
-        $product->setVisibility(1);
-        $product->setTypeId('virtual');
+        $product->setAttributeSetId($product->getDefaultAttributeSetId());
+        $product->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_NOT_VISIBLE);
+        $product->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_VIRTUAL);
         $product->setPrice(1);
-        $product->setWebsiteIds([1]);
+        $product->setWebsiteIds([$this->_storeManager->getDefaultStoreView()->getWebsiteId()]);
         $product->setStockData(
             array(
                 'use_config_manage_stock' => 0,

@@ -36,3 +36,19 @@
     Bug fix: fix payment method display without fees on backoffice
     Fixed translations
     
+1.3.1, 2024-07-22:
+=============
+    
+    Added simulation widget on configurable product page
+    Added csp whitelist
+    Updated virtual product creation
+    Bug fix: fix payment method display on checkout page
+    Bug fix: inclusion of discount prices
+    
+1.4.0, 2024-07-25:
+=============
+    
+    Added financing sub status in backoffice payment information
+    Added new payment method "Long credit without fees FR"
+    Added reorder button on financing failure page
+    Bug fix: warranty personalization was not disabled when option not active on contract

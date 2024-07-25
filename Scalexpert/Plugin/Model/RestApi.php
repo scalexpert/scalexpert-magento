@@ -118,6 +118,7 @@ class RestApi
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE) ||
+                $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE) ||
                 $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE)
             ) {
@@ -455,6 +456,9 @@ class RestApi
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
                 break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES:
+                $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITHOUT_FEES;
+                break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE:
                 $searchedCodes = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
                 break;
@@ -644,6 +648,8 @@ class RestApi
                             $dataPayment = array(
                                 'credit_subscription_id' => $id,
                                 'consolidated_status' => 'INITIALIZED',
+                                'consolidated_sub_status' => 'SUBSCRIPTION IN PROGRESS',
+                                'solution_code' => $solutionCode,
                                 'buyer_financedAmount' => floatval($order->getBaseGrandTotal()),
                                 'registration_timestamp' => $datetime->format('c'),
                                 'last_update_timestamp' => $datetime->format('c')
@@ -1432,10 +1438,10 @@ class RestApi
     {
         switch($countryCode) {
             case 'DE':
-                $phoneNumber = preg_replace('/^(?:\+?49|0)?/','+49', $phoneNumber);
+                $phoneNumber = preg_replace('/^(?:\+?49|\+?33|0)?/','+49', $phoneNumber);
                 break;
             case 'FR':
-                $phoneNumber = preg_replace('/^(?:\+?33|0)?/','+33', $phoneNumber);
+                $phoneNumber = preg_replace('/^(?:\+?49|\+?33|0)?/','+33', $phoneNumber);
                 break;
             default:
                 break;

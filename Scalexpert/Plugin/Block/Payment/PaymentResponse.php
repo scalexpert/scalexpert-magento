@@ -55,4 +55,13 @@ class PaymentResponse extends \Magento\Checkout\Block\Onepage\Success
         }
         return $apiReturn;
     }
+
+    /**
+     * @return int|null
+     */
+    public function isOrderIsGuest()
+    {
+        $order = $this->_checkoutSession->getLastRealOrder();
+        return $order->getCustomerIsGuest();
+    }
 }
