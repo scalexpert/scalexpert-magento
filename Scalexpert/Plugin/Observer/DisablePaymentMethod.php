@@ -70,6 +70,7 @@ class DisablePaymentMethod implements ObserverInterface
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES,
+            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE,
             \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES
         ]);
@@ -187,6 +188,23 @@ class DisablePaymentMethod implements ObserverInterface
 
                 $canBeDisable = true;
                 $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
+                break;
+            case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES:
+                $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(
+                    \Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+                if($configurationExcludedCategory) {
+                    $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+                }
+
+                $configurationExcludedProducts = $this->systemConfigData->getScalexpertConfigData(
+                    \Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+                if ($configurationExcludedProducts) {
+                    $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProducts ?? '');
+                    $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+                }
+
+                $canBeDisable = true;
+                $paymentCodeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITHOUT_FEES;
                 break;
             case \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE:
                 $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);

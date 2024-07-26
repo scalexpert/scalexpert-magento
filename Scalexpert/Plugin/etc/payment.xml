@@ -35,6 +35,9 @@
         <method name="scalexpert_long_credit_fr_with_fees">
             <allow_multiple_address>0</allow_multiple_address>
         </method>
+        <method name="scalexpert_long_credit_fr_without_fees">
+            <allow_multiple_address>0</allow_multiple_address>
+        </method>
         <method name="scalexpert_long_credit_de">
             <allow_multiple_address>0</allow_multiple_address>
         </method>

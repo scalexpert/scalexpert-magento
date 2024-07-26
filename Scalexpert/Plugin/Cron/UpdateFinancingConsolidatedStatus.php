@@ -111,6 +111,7 @@ class UpdateFinancingConsolidatedStatus
                             $updatedDataPayment['registration_timestamp'] = $subscription->registrationTimestamp;
                             $updatedDataPayment['buyer_financedAmount'] = $subscription->buyerFinancedAmount;
                             $updatedDataPayment['consolidated_status'] = $subscription->consolidatedStatus;
+                            $updatedDataPayment['consolidated_sub_status'] = $subscription->consolidatedSubstatus;
                             $payment->setAdditionalData($this->serializer->serialize($updatedDataPayment));
                             $this->salesOrderRepository->save($order);
                             $this->restApi->writeLog("Order updated by cron, order id : ", $subscription->merchantGlobalOrderId);

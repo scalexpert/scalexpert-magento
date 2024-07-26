@@ -66,6 +66,7 @@ class CancelFinancingOrInsurance implements ObserverInterface
             $informationsApi = $this->restApi->getFinancingSubscriptionsByOrderId($observer->getEvent()->getCreditmemo()->getOrder()->getIncrementId());
             if ($refundFinancing['status'] && $informationsApi['status']) {
                 $methodAdditional['consolidated_status'] = $informationsApi['result']->subscriptions[0]->consolidatedStatus;
+                $methodAdditional['consolidated_sub_status'] = $informationsApi['result']->subscriptions[0]->consolidatedSubstatus;
                 $methodAdditional['buyer_financedAmount'] = $informationsApi['result']->subscriptions[0]->buyerFinancedAmount;
                 $methodAdditional['last_update_timestamp'] = $informationsApi['result']->subscriptions[0]->lastUpdateTimestamp;
                 $payment->setAdditionalData($this->json->serialize($methodAdditional));

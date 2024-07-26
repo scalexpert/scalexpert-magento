@@ -55,7 +55,8 @@ class UpdateSubscriptions extends ActionConfig
         $matchingSolutionCodes = [
             'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE,
             'SCDELT-DXCO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
-            'SCFRLT-DXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,
+            'SCFRLT-TXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,
+            'SCFRLT-TXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE,
             'SCFRLT-DXNO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
             'SCFRSP-4XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
             'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE,

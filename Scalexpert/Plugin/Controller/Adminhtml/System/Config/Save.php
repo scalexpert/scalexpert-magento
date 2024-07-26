@@ -159,6 +159,11 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
+            'SCFRLT-TXTS' => [
+                'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
+                'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+            ],
             'SCFRLT-TXPS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
@@ -196,167 +201,165 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             ]
         ];
 
+        if(isset($matchingSolutionCodes[$eligibleSolution->solutionCode])) {
+            $solutionCommunicationKit = $eligibleSolution->communicationKit;
+            $productBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
+            $pathProductBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['product_block_title'];
 
-        $solutionCommunicationKit = $eligibleSolution->communicationKit;
-        $productBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
-        $pathProductBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['product_block_title'];
-
-        $apiDefault = $this->defaultApiCollectionFactory->create()
-            ->addFieldToFilter('path',['eq' => $pathProductBlockTitle])
-            ->addFieldToFilter('scope',['eq' => $scope])
-            ->addFieldToFilter('store',['eq' => $store])
-            ->getFirstItem();
-        if($apiDefault != null){
-            $apiDefault->setPath($pathProductBlockTitle);
-            $apiDefault->setScope($scope);
-            $apiDefault->setStore($store);
-            $apiDefault->setDefaultValue($productBlockTitle);
-            $apiDefault->save();
-        }else {
-            $apiDefault = $this->defautApiFactory->create();
-            $apiDefault->setPath($pathProductBlockTitle);
-            $apiDefault->setScope($scope);
-            $apiDefault->setStore($store);
-            $apiDefault->setDefaultValue($productBlockTitle);
-        }
-        $apiDefault->save();
-
-        $this->systemConfigData->setScalexpertConfigData(
-            $pathProductBlockTitle,
-            $productBlockTitle,
-            $scope,
-            $store
-        );
-
-
-        if($eligibleSolution->solutionCode == 'CIFRWE-DXCO'){
-            $cartBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
-            $pathCartBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['cart_block_title'];
             $apiDefault = $this->defaultApiCollectionFactory->create()
-                ->addFieldToFilter('path',['eq' => $pathCartBlockTitle])
-                ->addFieldToFilter('scope',['eq' => $scope])
-                ->addFieldToFilter('store',['eq' => $store])
+                ->addFieldToFilter('path', ['eq' => $pathProductBlockTitle])
+                ->addFieldToFilter('scope', ['eq' => $scope])
+                ->addFieldToFilter('store', ['eq' => $store])
                 ->getFirstItem();
-            if($apiDefault != null){
-                $apiDefault->setPath($pathCartBlockTitle);
+            if ($apiDefault != null) {
+                $apiDefault->setPath($pathProductBlockTitle);
                 $apiDefault->setScope($scope);
                 $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($cartBlockTitle);
+                $apiDefault->setDefaultValue($productBlockTitle);
                 $apiDefault->save();
-            }else {
+            } else {
                 $apiDefault = $this->defautApiFactory->create();
-                $apiDefault->setPath($pathCartBlockTitle);
+                $apiDefault->setPath($pathProductBlockTitle);
                 $apiDefault->setScope($scope);
                 $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($cartBlockTitle);
+                $apiDefault->setDefaultValue($productBlockTitle);
             }
             $apiDefault->save();
 
             $this->systemConfigData->setScalexpertConfigData(
-                $pathCartBlockTitle,
-                $cartBlockTitle,
-                $scope,
-                $store
-            );
-
-            if(isset($solutionCommunicationKit->visualDescription)){
-                $productBlockSubtitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualDescription);
-                $pathProductBlockSubtitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['product_block_subtitle'];
-
-                $apiDefault = $this->defaultApiCollectionFactory->create()
-                    ->addFieldToFilter('path',['eq',$pathProductBlockSubtitle])
-                    ->addFieldToFilter('scope',['eq' => $scope])
-                    ->addFieldToFilter('store',['eq' => $store])
-                    ->getFirstItem();
-                if($apiDefault != null){
-                    $apiDefault->setPath($pathProductBlockSubtitle);
-                    $apiDefault->setDefaultValue($productBlockSubtitle);
-                    $apiDefault->setScope($scope);
-                    $apiDefault->setStore($store);
-                    $apiDefault->save();
-                }else {
-                    $apiDefault = $this->defautApiFactory->create();
-                    $apiDefault->setPath($pathProductBlockSubtitle);
-                    $apiDefault->setDefaultValue($productBlockSubtitle);
-                    $apiDefault->setScope($scope);
-                    $apiDefault->setStore($store);
-                }
-                $apiDefault->save();
-
-                $this->systemConfigData->setScalexpertConfigData(
-                    $pathProductBlockSubtitle,
-                    $productBlockSubtitle,
-                    $scope,
-                    $store
-                );
-            }
-        }else{
-            $paymentMethodBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
-            $pathPaymentMethodBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['payment_method_title'];
-
-            $apiDefault = $this->defaultApiCollectionFactory->create()
-                ->addFieldToFilter('path',['eq' => $pathPaymentMethodBlockTitle])
-                ->addFieldToFilter('scope',['eq' => $scope])
-                ->addFieldToFilter('store',['eq' => $store])
-                ->getFirstItem();
-            if($apiDefault != null){
-                $apiDefault->setPath($pathPaymentMethodBlockTitle);
-                $apiDefault->setScope($scope);
-                $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($paymentMethodBlockTitle);
-                $apiDefault->save();
-            }else {
-                $apiDefault = $this->defautApiFactory->create();
-                $apiDefault->setPath($pathPaymentMethodBlockTitle);
-                $apiDefault->setScope($scope);
-                $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($paymentMethodBlockTitle);
-            }
-            $apiDefault->save();
-
-            $this->systemConfigData->setScalexpertConfigData(
-                $pathPaymentMethodBlockTitle,
-                $paymentMethodBlockTitle,
+                $pathProductBlockTitle,
+                $productBlockTitle,
                 $scope,
                 $store
             );
 
 
-            if(isset($solutionCommunicationKit->visualDescription)){
-                $paymentMethodBlockSubtitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualDescription);
-                $pathPaymentMethodBlockSubtitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['payment_method_subtitle'];
-
+            if ($eligibleSolution->solutionCode == 'CIFRWE-DXCO') {
+                $cartBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
+                $pathCartBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['cart_block_title'];
                 $apiDefault = $this->defaultApiCollectionFactory->create()
-                    ->addFieldToFilter('path',['eq' => $pathPaymentMethodBlockSubtitle])
-                    ->addFieldToFilter('scope',['eq' => $scope])
-                    ->addFieldToFilter('store',['eq' => $store])
+                    ->addFieldToFilter('path', ['eq' => $pathCartBlockTitle])
+                    ->addFieldToFilter('scope', ['eq' => $scope])
+                    ->addFieldToFilter('store', ['eq' => $store])
                     ->getFirstItem();
-                if($apiDefault != null){
-                    $apiDefault->setPath($pathPaymentMethodBlockSubtitle);
+                if ($apiDefault != null) {
+                    $apiDefault->setPath($pathCartBlockTitle);
                     $apiDefault->setScope($scope);
                     $apiDefault->setStore($store);
-                    $apiDefault->setDefaultValue($paymentMethodBlockSubtitle);
+                    $apiDefault->setDefaultValue($cartBlockTitle);
                     $apiDefault->save();
-                }else {
+                } else {
                     $apiDefault = $this->defautApiFactory->create();
-                    $apiDefault->setPath($pathPaymentMethodBlockSubtitle);
+                    $apiDefault->setPath($pathCartBlockTitle);
                     $apiDefault->setScope($scope);
                     $apiDefault->setStore($store);
-                    $apiDefault->setDefaultValue($paymentMethodBlockSubtitle);
+                    $apiDefault->setDefaultValue($cartBlockTitle);
                 }
                 $apiDefault->save();
 
                 $this->systemConfigData->setScalexpertConfigData(
-                    $pathPaymentMethodBlockSubtitle,
-                    $paymentMethodBlockSubtitle,
+                    $pathCartBlockTitle,
+                    $cartBlockTitle,
                     $scope,
                     $store
                 );
+
+                if (isset($solutionCommunicationKit->visualDescription)) {
+                    $productBlockSubtitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualDescription);
+                    $pathProductBlockSubtitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['product_block_subtitle'];
+
+                    $apiDefault = $this->defaultApiCollectionFactory->create()
+                        ->addFieldToFilter('path', ['eq', $pathProductBlockSubtitle])
+                        ->addFieldToFilter('scope', ['eq' => $scope])
+                        ->addFieldToFilter('store', ['eq' => $store])
+                        ->getFirstItem();
+                    if ($apiDefault != null) {
+                        $apiDefault->setPath($pathProductBlockSubtitle);
+                        $apiDefault->setDefaultValue($productBlockSubtitle);
+                        $apiDefault->setScope($scope);
+                        $apiDefault->setStore($store);
+                        $apiDefault->save();
+                    } else {
+                        $apiDefault = $this->defautApiFactory->create();
+                        $apiDefault->setPath($pathProductBlockSubtitle);
+                        $apiDefault->setDefaultValue($productBlockSubtitle);
+                        $apiDefault->setScope($scope);
+                        $apiDefault->setStore($store);
+                    }
+                    $apiDefault->save();
+
+                    $this->systemConfigData->setScalexpertConfigData(
+                        $pathProductBlockSubtitle,
+                        $productBlockSubtitle,
+                        $scope,
+                        $store
+                    );
+                }
+            } else {
+                $paymentMethodBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
+                $pathPaymentMethodBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['payment_method_title'];
+
+                $apiDefault = $this->defaultApiCollectionFactory->create()
+                    ->addFieldToFilter('path', ['eq' => $pathPaymentMethodBlockTitle])
+                    ->addFieldToFilter('scope', ['eq' => $scope])
+                    ->addFieldToFilter('store', ['eq' => $store])
+                    ->getFirstItem();
+                if ($apiDefault != null) {
+                    $apiDefault->setPath($pathPaymentMethodBlockTitle);
+                    $apiDefault->setScope($scope);
+                    $apiDefault->setStore($store);
+                    $apiDefault->setDefaultValue($paymentMethodBlockTitle);
+                    $apiDefault->save();
+                } else {
+                    $apiDefault = $this->defautApiFactory->create();
+                    $apiDefault->setPath($pathPaymentMethodBlockTitle);
+                    $apiDefault->setScope($scope);
+                    $apiDefault->setStore($store);
+                    $apiDefault->setDefaultValue($paymentMethodBlockTitle);
+                }
+                $apiDefault->save();
+
+                $this->systemConfigData->setScalexpertConfigData(
+                    $pathPaymentMethodBlockTitle,
+                    $paymentMethodBlockTitle,
+                    $scope,
+                    $store
+                );
+
+
+                if (isset($solutionCommunicationKit->visualDescription)) {
+                    $paymentMethodBlockSubtitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualDescription);
+                    $pathPaymentMethodBlockSubtitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['payment_method_subtitle'];
+
+                    $apiDefault = $this->defaultApiCollectionFactory->create()
+                        ->addFieldToFilter('path', ['eq' => $pathPaymentMethodBlockSubtitle])
+                        ->addFieldToFilter('scope', ['eq' => $scope])
+                        ->addFieldToFilter('store', ['eq' => $store])
+                        ->getFirstItem();
+                    if ($apiDefault != null) {
+                        $apiDefault->setPath($pathPaymentMethodBlockSubtitle);
+                        $apiDefault->setScope($scope);
+                        $apiDefault->setStore($store);
+                        $apiDefault->setDefaultValue($paymentMethodBlockSubtitle);
+                        $apiDefault->save();
+                    } else {
+                        $apiDefault = $this->defautApiFactory->create();
+                        $apiDefault->setPath($pathPaymentMethodBlockSubtitle);
+                        $apiDefault->setScope($scope);
+                        $apiDefault->setStore($store);
+                        $apiDefault->setDefaultValue($paymentMethodBlockSubtitle);
+                    }
+                    $apiDefault->save();
+
+                    $this->systemConfigData->setScalexpertConfigData(
+                        $pathPaymentMethodBlockSubtitle,
+                        $paymentMethodBlockSubtitle,
+                        $scope,
+                        $store
+                    );
+                }
             }
         }
-
-
-
     }
 
 
@@ -365,6 +368,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             'SCDELT-DXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE,
             'SCDELT-DXCO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE,
             'SCFRLT-TXPS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE,
+            'SCFRLT-TXTS' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE,
             'SCFRLT-TXNO' => $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE,
             'SCFRSP-4XTS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE,
             'SCFRSP-4XPS' => $this->systemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE,
@@ -625,6 +629,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         $matchingPaymentCodes = [
             'SCDELT-DXTS' => 'long_credit_de_with_fees',
             'SCDELT-DXCO' => 'long_credit_de',
+            'SCFRLT-TXTS' => 'long_credit_fr_without_fees',
             'SCFRLT-TXPS' => 'long_credit_fr_with_fees',
             'SCFRLT-TXNO' => 'long_credit_fr',
             'SCFRSP-4XTS' => 'payment_4x',
@@ -682,6 +687,9 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                                     break;
                                 case "long_credit_fr_with_fees":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE;
+                                    break;
+                                case "long_credit_fr_without_fees":
+                                    $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE;
                                     break;
                                 case "long_credit_de":
                                     $configPath = $this->systemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE;
@@ -797,6 +805,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
                     'long_credit_de_with_fees' => 'e_funding',
                     'long_credit_fr' => 'e_funding',
                     'long_credit_fr_with_fees' => 'e_funding',
+                    'long_credit_fr_without_fees' => 'e_funding',
                     'payment_4x' => 'e_funding',
                     'payment_4x_with_fees' => 'e_funding',
                     'payment_3x' => 'e_funding',

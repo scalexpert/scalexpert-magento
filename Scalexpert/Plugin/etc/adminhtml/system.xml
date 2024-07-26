@@ -118,6 +118,15 @@
                         </field>
                     </group>
 
+                    <group id="long_credit_fr_without_fees" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="68">
+                        <label>Long credit without fees (FR)</label>
+                        <field id="active" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Enable</label>
+                            <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                        </field>
+                    </group>
+
                     <group id="long_credit_de" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="70">
                         <label>Long credit (DE)</label>
                         <field id="active" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -234,6 +243,7 @@
                             <label>Show Société Générale logo</label>
                             <config_path>scalexpert_warranty/cart_block/show_logo</config_path>
                             <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                            <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
                         </field>
                     </group>
                 </group>
@@ -752,6 +762,88 @@
                         <field id="exclude_product" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                             <label>Products to exclude</label>
                             <config_path>scalexpert_long_credit_fr_with_fees/payment__method/exclude_products</config_path>
+                            <can_be_empty>1</can_be_empty>
+                            <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            <comment>Separate SKU by ; or |</comment>
+                        </field>
+                    </group>
+                </group>
+
+                <group id="long_credit_fr_without_fees" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="47">
+                    <label>Long credit without fees (FR)</label>
+
+                    <group id="product" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                        <label>Product page</label>
+
+                        <group id="show_product_block" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                            <label>Show insert</label>
+                            <field id="active" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Show insert on product page</label>
+                                <config_path>scalexpert_long_credit_fr_without_fees/product_block/active</config_path>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+                        </group>
+
+                        <group id="customize_product_block" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                            <label>Personalize insert</label>
+
+                            <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Title</label>
+                                <config_path>scalexpert_long_credit_fr_without_fees/product_block/title</config_path>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+                        </group>
+                    </group>
+
+                    <group id="payment_configuration" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                        <label>Payment method page</label>
+                        <group id="show_payment_method" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="10">
+                            <label>Show long credit without fees (FR) payment as payment method</label>
+
+                            <field id="active" translate="label" sortOrder="10" type="select" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Show as payment method</label>
+                                <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                                <config_path>scalexpert_long_credit_fr_without_fees/payment_method/active</config_path>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+
+                            <field id="sort_order" translate="label" sortOrder="20" type="text" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Position</label>
+                                <config_path>payment/scalexpert_long_credit_fr_without_fees/sort_order</config_path>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+                        </group>
+
+                        <group id="customize_payment_method" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                            <label>Personalize payment method</label>
+
+                            <field id="title" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Title</label>
+                                <config_path>scalexpert_long_credit_fr_without_fees/payment_method/title</config_path>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+
+                            <field id="sub_title" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                                <label>Subtitle</label>
+                                <config_path>scalexpert_long_credit_fr_without_fees/payment_method/subtitle</config_path>
+                                <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            </field>
+                        </group>
+                    </group>
+                    <group id="exclude_category_group" translate="label" showInDefault="1" showInWebsite="1" showInStore="1" sortOrder="20">
+                        <label>Categories / Products to exclude</label>
+                        <field id="exclude_category" translate="label" type="multiselect" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Categories to exclude</label>
+                            <config_path>scalexpert_long_credit_fr_without_fees/payment_method/exclude_categories</config_path>
+                            <source_model>Scalexpert\Plugin\Model\System\Config\Source\Category</source_model>
+                            <can_be_empty>1</can_be_empty>
+                            <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
+                            <tooltip>Press the CTRL key to select multiple categories</tooltip>
+                        </field>
+                        <field id="exclude_product" translate="label" type="textarea" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                            <label>Products to exclude</label>
+                            <config_path>scalexpert_long_credit_fr_without_fees/payment_method/exclude_products</config_path>
                             <can_be_empty>1</can_be_empty>
                             <frontend_model>Scalexpert\Plugin\Model\Config\Source\Disable</frontend_model>
                             <comment>Separate SKU by ; or |</comment>

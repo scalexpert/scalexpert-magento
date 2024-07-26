@@ -56,16 +56,72 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
         $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
         $financing = $this->restApi->getFinancingEligibleSolutions($quotetotal, $countryId);
 
-        $codes_per_methods = [
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X => SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
-            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES => SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES,
-        ];
+        $codes_per_methods = [];
+
+        if ($this->scopeConfig->getValue(
+            SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_PAYMENT_3X_WITH_FEES_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_3X_WITH_FEES] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X_WITH_FEES;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_PAYMENT_4X_WITH_FEES_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_4X_WITH_FEES] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITH_FEES_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITHOUT_FEES;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
+        }
+        if ($this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_DE_WITH_FEES_ENABLE) &&
+            $this->scopeConfig->getValue(
+                SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_WITH_FEES_PAYMENT_CONFIG_ENABLE)
+        ) {
+            $codes_per_methods[SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES] = SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES;
+        }
+
         $method_per_code = [];
         foreach ($codes_per_methods as $method => $codes) {
             foreach ($codes as $code) {
@@ -176,6 +232,23 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
                 'visualInformationNoticeURL' => '',
                 'visualProductTermsURL' => '',
             ],
+            SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES => [
+                'customTitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_TITLE
+                ),
+                'customSubtitle' => $this->scopeConfig->getValue(
+                    SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
+                ),
+                'visualTitle' => '',
+                'visualDescription' => '',
+                'visualInformationIcon' => '',
+                'visualAdditionalInformation' => '',
+                'visualLegalText' => '',
+                'visualTableImage' => '',
+                'visualLogo' => '',
+                'visualInformationNoticeURL' => '',
+                'visualProductTermsURL' => '',
+            ],
             SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE => [
                 'customTitle' => $this->scopeConfig->getValue(
                     SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PAYMENT_CONFIG_PAYMENT_TITLE
@@ -265,9 +338,6 @@ class CheckoutPaymentConfigProvider implements \Magento\Checkout\Model\ConfigPro
 
     public function getDeSolution()
     {
-        return array_merge(
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES
-        );
+        return \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_DE_SOLUTION;
     }
 }

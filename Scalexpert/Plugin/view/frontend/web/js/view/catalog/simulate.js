@@ -97,7 +97,7 @@ define([
             return installments;
         },
         isBankCard: function (data) {
-            let creditCodes = ['SCFRLT-TXNO', 'SCFRLT-TXPS', 'SCDELT-DXCO', 'SCDELT-DXTS'];
+            let creditCodes = ['SCFRLT-TXNO', 'SCFRLT-TXPS', 'SCFRLT-TXTS', 'SCDELT-DXCO', 'SCDELT-DXTS'];
             let result = $.inArray(window.scalexepert[data]['merchantkit']['solutionCode'], creditCodes);
             return result < 0;
         },

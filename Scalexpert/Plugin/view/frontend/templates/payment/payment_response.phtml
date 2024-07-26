@@ -46,6 +46,21 @@ $status = __($informationsApi['consolidated_status']);
         <p><?= $escaper->escapeHtml(__('We\'ll email you an order confirmation with details and tracking info.')) ?></p>
     <?php endif; ?>
 
+    <?php if (!is_null($block->isOrderIsGuest())): ?>
+        <?php if ($informationsApi['consolidated_status'] === 'ABORTED'
+            || $informationsApi['consolidated_status'] === 'REJECTED'
+        ): ?>
+            <?php $reorderUrl = $block->getUrl("sales/order/reorder", ['order_id' => $orderId]); ?>
+            <p><a href="#" data-post='<?= /* @noEscape */
+                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                    ->getPostData($reorderUrl)
+                ?>' class="action primary order">
+                    <span><?= $escaper->escapeHtml(__('Reorder')) ?></span>
+                </a></p>
+        <?php endif; ?>
+    <?php endif; ?>
+
+
     <div class="actions-toolbar">
         <div class="primary">
             <a class="action primary continue" href="<?= $escaper->escapeUrl($block->getContinueUrl()) ?>"><span><?= $escaper->escapeHtml(__('Continue Shopping')) ?></span></a>

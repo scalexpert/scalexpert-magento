@@ -11,7 +11,9 @@
 /** @var Scalexpert\Plugin\Block\Payment\Info $block */
 /* @var \Magento\Framework\Escaper $escaper */
 $info = $block->getPaymentDetail();
+
 $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$paymentDe = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_DE_SOLUTION;
 ?>
 <?php if(is_array($info) && !empty($info)):
     $registration = new \DateTime($info['registration_timestamp'], new \DateTimezone('UTC'));
@@ -20,7 +22,10 @@ $priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
     <div>
         <span><b><?= $escaper->escapeHtml(__('Buyer financed amount')); ?></b></span> : <span><?= $escaper->escapeHtml($priceHelper->currency($info['buyer_financedAmount'], true, false)); ?></span><br/>
         <?php if (!$info['status_message_error']): ?>
-            <span><b><?= $escaper->escapeHtml(__('Consolidated status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['consolidated_status'])); ?></span><br/><br/>
+            <span><b><?= $escaper->escapeHtml(__('Consolidated status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['consolidated_status'])); ?></span><br/>
+            <?php if (!in_array($info['solution_code'],$paymentDe)): ?>
+                <span><b><?= $escaper->escapeHtml(__('Consolidated sub status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['consolidated_sub_status'])); ?></span><br/><br/>
+            <?php endif ; ?>
         <?php else: ?>
             <span><b><?= $escaper->escapeHtml(__('Financing Status')); ?></b></span> : <span><?= $escaper->escapeHtml(__($info['status_message_error'])); ?></span><br/>
         <?php endif; ?>

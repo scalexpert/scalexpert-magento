@@ -18,6 +18,7 @@ class Product extends \Magento\Catalog\Block\Product\View
     protected $systemConfigData;
     protected $scalexpertHelper;
     protected $logger;
+    const TYPE_SIMPLE = 'simple';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -64,7 +65,7 @@ class Product extends \Magento\Catalog\Block\Product\View
 
     public function getFinancingEligibleSolutions($countryId = 'FR')
     {
-        $amount = $this->getProduct()->getPrice();
+        $amount = $this->getProduct()->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
 
         return $this->restApi->getFinancingEligibleSolutions($amount, $countryId);
     }
@@ -270,6 +271,41 @@ class Product extends \Magento\Catalog\Block\Product\View
         );
     }
 
+    public function getConfigurationLongCreditFrWithoutFeesBlockProduct($product)
+    {
+        $excludedCategory = false;
+        $configurationExcludedCategory = $this->systemConfigData->getScalexpertConfigData(
+            \Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_CATEGORY);
+        $configurationExcludedCategory = explode(',', $configurationExcludedCategory ?? '');
+//        $productCategoryIds = $this->getProduct()->getCategoryIds();
+        $productCategoryIds = $product->getCategoryIds();
+
+        if (array_intersect($productCategoryIds, $configurationExcludedCategory)) {
+            $excludedCategory = true;
+        }
+
+        $excludedProduct = false;
+        $configurationExcludedProduct = $this->systemConfigData->getScalexpertConfigData(
+            \Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_EXCLUDE_PRODUCT);
+        $configurationExcludedProduct = str_replace('|', ';', $configurationExcludedProduct ?? '');
+        $configurationExcludedProduct = explode(';', $configurationExcludedProduct ?? '');
+//        $productSku = $this->getProduct()->getSku();
+        $productSku = $product->getSku();
+
+        $configurationExcludedProduct = array_map('trim', $configurationExcludedProduct);
+        if (in_array($productSku, $configurationExcludedProduct)) {
+            $excludedProduct = true;
+        }
+
+        return array(
+            'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_LONG_CREDIT_FR_WITHOUT_FEES_ENABLE),
+            'show' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
+            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
+            'excluded_category' => $excludedCategory,
+            'excluded_product' => $excludedProduct
+        );
+    }
+
     public function getConfigurationLongCreditDeBlockProduct($product)
     {
         $excludedCategory = false;
@@ -468,6 +504,7 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationPayment4xWithFeesBlockProduct = $this->getConfigurationPayment4xWithFeesBlockProduct($product);
         $configurationLongCreditFrBlockProduct = $this->getConfigurationLongCreditFrBlockProduct($product);
         $configurationLongCreditFrWithFeesBlockProduct = $this->getConfigurationLongCreditFrWithFeesBlockProduct($product);
+        $configurationLongCreditFrWithoutFeesBlockProduct = $this->getConfigurationLongCreditFrWithoutFeesBlockProduct($product);
         $configurationLongCreditDeBlockProduct = $this->getConfigurationLongCreditDeBlockProduct($product);
         $configurationLongCreditDeWithFeesBlockProduct = $this->getConfigurationLongCreditDeWithFeesBlockProduct($product);
         $configurationInsertBlockProduct = $this->getConfigurationInsertBlockProduct();
@@ -476,7 +513,7 @@ class Product extends \Magento\Catalog\Block\Product\View
         $countryId = $this->getCountryId();
         $financing = $this->getFinancingEligibleSolutions($countryId);
 //        $amount = $this->getProduct()->getPrice();
-        $amount = $product->getPrice();
+        $amount = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
         $finalSolutions = array();
         if($financing['status']){
             $paymentCode3XSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
@@ -485,6 +522,7 @@ class Product extends \Magento\Catalog\Block\Product\View
             $paymentCode4XWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_4X_WITH_FEES;
             $LongCreditFrSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR;
             $LongCreditFrWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITH_FEES;
+            $LongCreditFrWithoutFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_FR_WITHOUT_FEES;
             $longCreditDeSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE;
             $longCreditDeWithFeesSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES;
 
@@ -492,26 +530,32 @@ class Product extends \Magento\Catalog\Block\Product\View
                 if (in_array($solution->solutionCode, $paymentCode3XSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment3xBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $paymentCode3XWithFeesSolutionCode)) {
+                else if (in_array($solution->solutionCode, $paymentCode3XWithFeesSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment3xWithFeesBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $paymentCode4XSolutionCode)) {
+                else if (in_array($solution->solutionCode, $paymentCode4XSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment4xBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $paymentCode4XWithFeesSolutionCode)) {
+                else if (in_array($solution->solutionCode, $paymentCode4XWithFeesSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationPayment4xWithFeesBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $LongCreditFrSolutionCode)) {
+                else if (in_array($solution->solutionCode, $LongCreditFrSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditFrBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $LongCreditFrWithFeesSolutionCode)) {
+                else if (in_array($solution->solutionCode, $LongCreditFrWithFeesSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditFrWithFeesBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $longCreditDeSolutionCode)) {
+                else if (in_array($solution->solutionCode, $LongCreditFrWithoutFeesSolutionCode)) {
+                    $solution->communicationKit->magentoConfiguration = $configurationLongCreditFrWithoutFeesBlockProduct;
+                }
+                else if (in_array($solution->solutionCode, $longCreditDeSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditDeBlockProduct;
                 }
-                if (in_array($solution->solutionCode, $longCreditDeWithFeesSolutionCode)) {
+                else if (in_array($solution->solutionCode, $longCreditDeWithFeesSolutionCode)) {
                     $solution->communicationKit->magentoConfiguration = $configurationLongCreditDeWithFeesBlockProduct;
+                }
+                else{
+                    continue 1;
                 }
                 $solution->communicationKit->magentoConfiguration['logo'] = $configurationInsertBlockProduct['logo'];
                 if(!isset($solution->communicationKit->magentoConfiguration)
@@ -523,19 +567,20 @@ class Product extends \Magento\Catalog\Block\Product\View
                     continue 1;
                 }
 
-
                 if (!in_array($solution->solutionCode, $this->getDeSolution())) {
                     array_push($finalSolutions, $solution->solutionCode);
                 } else {
                     $enabled_solutions[] = $solution->communicationKit;
                 }
             }
-
-            $simulations = $this->restApi->getSimulateSolutions(
-                $amount,
-                $finalSolutions,
-                false
-            );
+            $simulations = false;
+            if($finalSolutions != array()){
+                $simulations = $this->restApi->getSimulateSolutions(
+                    $amount,
+                    $finalSolutions,
+                    false
+                );
+            }
             if ($simulations['status']) {
                 foreach ($simulations['result']->solutionSimulations as $sim) {
                     foreach($financing['result']->solutions as $solution) {
@@ -576,33 +621,34 @@ class Product extends \Magento\Catalog\Block\Product\View
         $configurationWarrantyBlockProduct = $this->getConfigurationWarrantyBlockProduct();
         $configurationInsertBlockProduct = $this->getConfigurationInsertBlockProduct();
         $simulateLayout = 'scalexpert_simulate_product';
-
-        $positions = array( $configurationWarrantyBlockProduct['position'], $configurationInsertBlockProduct['position'], $simulateLayout);
-
+        $insertDe = '';
         switch ($configurationInsertBlockProduct['position']) {
             case 'catalog.product.view.after.title.scalexpert.simulate':
-                $positions[] = 'catalog.product.view.after.title.scalexpert.credit.de.insert';
+                $insertDe = 'catalog.product.view.after.title.scalexpert.credit.de.insert';
                 break;
             case 'catalog.product.view.before.qty.scalexpert.simulate':
-                $positions[] = 'catalog.product.view.before.qty.scalexpert.credit.de.insert';
+                if($this->getProduct()->getTypeId() != self::TYPE_SIMPLE){
+                    $configurationInsertBlockProduct['position'] = 'catalog.product.view.before.qty.scalexpert.simulate.conf';
+                    $insertDe = 'catalog.product.view.before.qty.scalexpert.credit.de.insert.conf';
+                }
+                else{
+                    $insertDe = 'catalog.product.view.before.qty.scalexpert.credit.de.insert';
+                }
                 break;
             case 'catalog.product.view.after.addtocart.scalexpert.simulate':
-                $positions[] = 'catalog.product.view.after.addtocart.scalexpert.credit.de.insert';
+                $insertDe = 'catalog.product.view.after.addtocart.scalexpert.credit.de.insert';
                 break;
         }
-
+        if($this->getProduct()->getTypeId() != self::TYPE_SIMPLE && $configurationWarrantyBlockProduct['position'] == 'catalog.product.view.before.qty.scalexpert.warranty.insert'){
+            $configurationWarrantyBlockProduct['position'] = 'catalog.product.view.before.qty.scalexpert.warranty.insert.conf';
+        }
+        $positions = array($configurationWarrantyBlockProduct['position'], $configurationInsertBlockProduct['position'], $simulateLayout, $insertDe);
         return (in_array($this->getNameInLayout(),$positions) ? parent::_toHtml() : '');
     }
 
-    /**
-     * @return array[]
-     */
     public function getDeSolution()
     {
-        return array_merge(
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE,
-            \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_LONG_DE_WITH_FEES
-        );
+        return \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_DE_SOLUTION;
     }
 
     public function getCountryId()

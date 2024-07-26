@@ -55,6 +55,7 @@ class SalesOrderShipmentBefore implements ObserverInterface
 
         if ($paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR
             || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES
+            || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES
         ) {
             //check if shiping has tracking number
             $tracking = $observer->getEvent()->getShipment()->getTracks();

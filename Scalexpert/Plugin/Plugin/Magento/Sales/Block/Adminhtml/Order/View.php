@@ -38,6 +38,7 @@ class View
         if ($view->getOrder()->getStatus() !== \Magento\Sales\Model\Order::STATE_CANCELED) {
             if ($paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR
                 || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITH_FEES
+                || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_FR_WITHOUT_FEES
                 || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE
                 || $paymentMethod === \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_MAGENTO_CODE_LONG_DE_WITH_FEES
             ) {

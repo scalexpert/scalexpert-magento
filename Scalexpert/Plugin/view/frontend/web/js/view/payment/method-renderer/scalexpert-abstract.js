@@ -24,7 +24,7 @@ define(
                 return this.isBankcard;
             },
             getVisualTitle: function () {
-                return ((this.salexpertPaymentData.customTitle && this.salexpertPaymentData.customTitle.length>1)?this.salexpertPaymentData.customTitle:this.salexpertPaymentData.visualTitle.replace(/(<([^>]+)>)/gi, ""));
+                return ((this.salexpertPaymentData.customTitle && this.salexpertPaymentData.customTitle.length>1)?this.salexpertPaymentData.customTitle.replace(/(<([^>]+)>)/gi, ""):(this.salexpertPaymentData.visualTitle)?this.salexpertPaymentData.visualTitle.replace(/(<([^>]+)>)/gi, ""):'');
             },
             getVisualInformationIcon: function () {
                 return this.salexpertPaymentData.visualInformationIcon;
@@ -33,7 +33,7 @@ define(
                 return this.salexpertPaymentData.visualLogo;
             },
             getSubtitle: function () {
-                return ((this.salexpertPaymentData.customSubtitle && this.salexpertPaymentData.customSubtitle.length>1)?this.salexpertPaymentData.customSubtitle:this.salexpertPaymentData.visualDescription);
+                return ((this.salexpertPaymentData.customSubtitle && this.salexpertPaymentData.customSubtitle.length>1)?this.salexpertPaymentData.customSubtitle.replace(/(<([^>]+)>)/gi, ""):(this.salexpertPaymentData.visualDescription)?this.salexpertPaymentData.visualDescription.replace(/(<([^>]+)>)/gi, ""):'');
             },
             getVisualAdditionalInformation: function () {
                 return this.salexpertPaymentData.visualAdditionalInformation;

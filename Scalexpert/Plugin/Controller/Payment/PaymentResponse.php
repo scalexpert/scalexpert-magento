@@ -186,7 +186,8 @@ class PaymentResponse implements HttpPostActionInterface, HttpGetActionInterface
                             'merchant_basket_id' => $informationsApi['api_result']->subscriptions[0]->merchantBasketId,
                             'merchant_global_order_id' => $informationsApi['api_result']->subscriptions[0]->merchantGlobalOrderId,
                             'buyer_financedAmount' => $informationsApi['api_result']->subscriptions[0]->buyerFinancedAmount,
-                            'consolidated_status' => $informationsApi['api_result']->subscriptions[0]->consolidatedStatus
+                            'consolidated_status' => $informationsApi['api_result']->subscriptions[0]->consolidatedStatus,
+                            'consolidated_sub_status' => $informationsApi['api_result']->subscriptions[0]->consolidatedSubstatus
                         );
 
                         $payment->setAdditionalData($this->serializer->serialize($dataPayment));

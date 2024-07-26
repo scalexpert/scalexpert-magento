@@ -2,7 +2,7 @@
 
 Scalexpert plugins for Magento CE & EE 2.4.3, 2.4.4, 2.4.6
 
-version: 1.3.0
+version: 1.4.0
  
 ## Installation & upgrade
 
