@@ -11,6 +11,20 @@
 -->
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
+        <referenceContainer name="checkout.cart.items">
+            <block class="Scalexpert\Plugin\Block\Simulate\Cart"
+                   name="checkout.cart.view.after.scalexpert.simulate"
+                   as="scalexpert_checkout_simulate_cart_view_after"
+                   template="Scalexpert_Plugin::simulate/cart/preload.phtml"
+                   after="-"/>
+        </referenceContainer>
+        <referenceContainer name="checkout.cart.items">
+            <block class="Scalexpert\Plugin\Block\Simulate\Cart"
+                   name="checkout.cart.view.before.scalexpert.simulate"
+                   as="scalexpert_checkout_simulate_cart_view_before"
+                   template="Scalexpert_Plugin::simulate/cart/preload.phtml"
+                   before="-"/>
+        </referenceContainer>
         <referenceBlock name="additional.product.info">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Cart" name="scalexpert.cart.insurance" template="Scalexpert_Plugin::insurance/cart.phtml" after="-" />
         </referenceBlock>

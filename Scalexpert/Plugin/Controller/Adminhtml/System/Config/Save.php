@@ -161,36 +161,43 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             ],
             'SCFRLT-TXTS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRLT-TXPS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRLT-TXNO' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-4XTS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-4XPS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-3XTS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
             'SCFRSP-3XPS' => [
                 'product_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE,
+                'checkout_block_title' => $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE,
                 'payment_method_title' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_TITLE,
                 'payment_method_subtitle' => systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE
             ],
@@ -206,33 +213,12 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             $productBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
             $pathProductBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['product_block_title'];
 
-            $apiDefault = $this->defaultApiCollectionFactory->create()
-                ->addFieldToFilter('path', ['eq' => $pathProductBlockTitle])
-                ->addFieldToFilter('scope', ['eq' => $scope])
-                ->addFieldToFilter('store', ['eq' => $store])
-                ->getFirstItem();
-            if ($apiDefault != null) {
-                $apiDefault->setPath($pathProductBlockTitle);
-                $apiDefault->setScope($scope);
-                $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($productBlockTitle);
-                $apiDefault->save();
-            } else {
-                $apiDefault = $this->defautApiFactory->create();
-                $apiDefault->setPath($pathProductBlockTitle);
-                $apiDefault->setScope($scope);
-                $apiDefault->setStore($store);
-                $apiDefault->setDefaultValue($productBlockTitle);
+            $this->setBlockTitleDefaultValue($pathProductBlockTitle, $productBlockTitle, $scope, $store);
+
+            if (isset($matchingSolutionCodes[$eligibleSolution->solutionCode]['checkout_block_title'])) {
+                $pathCheckoutBlockTitle = $matchingSolutionCodes[$eligibleSolution->solutionCode]['checkout_block_title'];
+                $this->setBlockTitleDefaultValue($pathCheckoutBlockTitle, $productBlockTitle, $scope, $store);
             }
-            $apiDefault->save();
-
-            $this->systemConfigData->setScalexpertConfigData(
-                $pathProductBlockTitle,
-                $productBlockTitle,
-                $scope,
-                $store
-            );
-
 
             if ($eligibleSolution->solutionCode == 'CIFRWE-DXCO') {
                 $cartBlockTitle = $this->systemConfigData->replaceDiv($solutionCommunicationKit->visualTitle);
@@ -361,7 +347,6 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             }
         }
     }
-
 
     protected function setEligiblesSolution($eligibleSolutionCodes,$scope = null,$scopeId = null){
         $matchingSolutionCodes = [
@@ -955,6 +940,37 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
         }
 
         return array_filter($filtered);
+    }
+
+
+    public function setBlockTitleDefaultValue($pathBlockTitle, $blockTitle, $scope, $store)
+    {
+        $apiDefault = $this->defaultApiCollectionFactory->create()
+            ->addFieldToFilter('path', ['eq' => $pathBlockTitle])
+            ->addFieldToFilter('scope', ['eq' => $scope])
+            ->addFieldToFilter('store', ['eq' => $store])
+            ->getFirstItem();
+        if ($apiDefault != null) {
+            $apiDefault->setPath($pathBlockTitle);
+            $apiDefault->setScope($scope);
+            $apiDefault->setStore($store);
+            $apiDefault->setDefaultValue($blockTitle);
+            $apiDefault->save();
+        } else {
+            $apiDefault = $this->defautApiFactory->create();
+            $apiDefault->setPath($pathBlockTitle);
+            $apiDefault->setScope($scope);
+            $apiDefault->setStore($store);
+            $apiDefault->setDefaultValue($blockTitle);
+        }
+        $apiDefault->save();
+
+        $this->systemConfigData->setScalexpertConfigData(
+            $pathBlockTitle,
+            $blockTitle,
+            $scope,
+            $store
+        );
     }
 
 }

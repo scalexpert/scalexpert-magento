@@ -52,3 +52,9 @@
     Added new payment method "Long credit without fees FR"
     Added reorder button on financing failure page
     Bug fix: warranty personalization was not disabled when option not active on contract
+
+1.5.0, 2024-08-28:
+=============
+    
+    Added simulation widget on checkout cart
+    Fixed translation

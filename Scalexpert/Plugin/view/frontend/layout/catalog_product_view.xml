@@ -44,28 +44,28 @@
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.title.scalexpert.simulate"
                    as="scalexpert_simulate_product_after_title"
-                   template="Scalexpert_Plugin::simulate/preload.phtml"
+                   template="Scalexpert_Plugin::simulate/catalog/preload.phtml"
                    before="-"/>
         </referenceContainer>
         <referenceContainer name="product.info.form.content">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.before.qty.scalexpert.simulate"
                    as="scalexpert_simulate_product_before_qty"
-                   template="Scalexpert_Plugin::simulate/preload.phtml"
+                   template="Scalexpert_Plugin::simulate/catalog/preload.phtml"
                    before="-"/>
         </referenceContainer>
         <referenceContainer name="product.info.options.wrapper">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.before.qty.scalexpert.simulate.conf"
                    as="scalexpert_simulate_product_before_qty_conf"
-                   template="Scalexpert_Plugin::simulate/preload.phtml"
+                   template="Scalexpert_Plugin::simulate/catalog/preload.phtml"
                    after="-"/>
         </referenceContainer>
         <referenceContainer name="product.info.main">
             <block class="Scalexpert\Plugin\Block\FinancingAndInsurance\Product"
                    name="catalog.product.view.after.addtocart.scalexpert.simulate"
                    as="scalexpert_simulate_insert_product_after_addtocart"
-                   template="Scalexpert_Plugin::simulate/preload.phtml"
+                   template="Scalexpert_Plugin::simulate/catalog/preload.phtml"
                    after="-"/>
         </referenceContainer>
 

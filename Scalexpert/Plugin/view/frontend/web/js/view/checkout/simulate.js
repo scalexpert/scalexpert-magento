@@ -17,7 +17,7 @@ define([
 
     return Component.extend({
         defaults: {
-            template: 'Scalexpert_Plugin/simulate/catalog/product',
+            template: 'Scalexpert_Plugin/simulate/cart/cart',
             selectedOption : entries[0][0] ? entries[0][0] : null,
         },
         initialize: function () {

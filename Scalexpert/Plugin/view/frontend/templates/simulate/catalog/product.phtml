@@ -1,0 +1,149 @@
+<?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
+/** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Product $block */
+
+$productId = $block->getData('product_id');
+?>
+
+<?php if ($block->getCountryId() === 'FR'):?>
+    <?php if($financing = $block->getProductFinancing($productId)) { ?>
+        <div id="simulate" data-bind="scope:'simulate'">
+            <script>
+                window.scalexepert = <?php /* @escapeNotVerified */ echo json_encode($financing); ?>;
+            </script>
+            <script type="text/x-magento-init">
+                {
+                    "*": {
+                        "Magento_Ui/js/core/app": {
+                            "components": {
+                                "simulate": {
+                                    "component": "Scalexpert_Plugin/js/view/catalog/simulate"
+                                }
+                            }
+                        }
+                    }
+                }
+            </script>
+            <div class="scalexpert-simulate">
+                <div class="scalexpert-simulate-top">
+                    <div data-bind="text: getVisualTitle(selectedOption())"></div>
+                    <span id="scalexpert-simulate-btn">
+                    <img data-bind="attr: {'src': getVisualInformationIcon(selectedOption()), 'alt': 'Information'}" width="16">
+                </span>
+                    <!-- ko if: getVisualLogoIsEnabled(selectedOption()) != 0-->
+                    <img data-bind="attr: {'src': getVisualLogo(selectedOption()), 'alt': 'Société Générale'}" class="scalexpert-simulate-logo" width="41">
+                    <!--/ko-->
+                </div>
+                <div class="scalexpert-simulate-content">
+                    <!-- ko foreach: {data: getDataAll(), as: 'options'} -->
+                        <div data-bind="attr: {'id': 'scalexpert-simulate-item-' + options[0]}, css: (options[0] == $parents[0].selectedOption()) ? 'active' : '', click: function() { $parents[0].selectedOption(options[0]); return true; }" class="scalexpert-simulate-item">x<span data-bind="text: options[1]['simulations']['duration']"></span></div>
+                    <!--/ko-->
+
+                    <span class="scalexpert-simulate-text">
+                    <!-- ko if: getMultipleInstallment(selectedOption()) -->
+                        soit un 1er prélèvement de <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span></b> (frais inclus) puis <span data-bind="text: getRemainingDuration(selectedOption())"></span> prélèvements de <b><span data-bind="text: getAmount(1, selectedOption(), true)"></span></b>
+                        <!--/ko-->
+                        <!-- ko ifnot: getMultipleInstallment(selectedOption()) -->
+                        soit <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span>/mois</b>
+                        <!--/ko-->
+                </span>
+                </div>
+                <!-- ko if: getVisualDescription(selectedOption()) -->
+                <div class="scalexpert-simulate-bot" data-bind="html: getVisualDescription(selectedOption())"></div>
+                <!--/ko-->
+            </div>
+
+            <div class="scalexpert-modal-container"
+                 data-bind="mageInit: {
+                'Magento_Ui/js/modal/modal':{
+                    'type': 'popup',
+                    'trigger': '#scalexpert-simulate-btn',
+                    'modalClass': 'scalexpert-modal',
+                    'responsive': true,
+                    'innerScroll': true,
+                    'buttons': []
+                }}">
+
+                <div class="scalexpert-modal-title" data-bind="text: getVisualTitle(selectedOption())"></div>
+
+                <div class="scalexpert-modal-content">
+                    <div class="scalexpert-modal-blocs">
+                        <div class="scalexpert-modal-bloc" data-bind="html: getVisualAdditionalInformation(selectedOption())"></div>
+                        <div class="scalexpert-modal-bloc">
+                            <div class="scalexpert-modal-simulate">
+                                <div class="scalexpert-modal-simulate-top">
+                                    <b><?= __('Simulez votre paiement'); ?></b>
+                                    <!-- ko if: getVisualLogoIsEnabled(selectedOption()) != 0 -->
+                                        <img data-bind="attr: {'src': getVisualLogo(selectedOption()), 'alt': 'Société Générale'}" class="scalexpert-simulate-logo" width="54">
+                                    <!--/ko-->
+                                </div>
+                                <div class="scalexpert-modal-simulate-solutions">
+                                    <!-- ko foreach: {data: getDataAll(), as: 'options'} -->
+                                        <div data-bind="attr: {'id': 'scalexpert-simulate-item-' + options[0]}, css: (options[0] == $parents[0].selectedOption()) ? 'active' : '', click: function() { $parents[0].selectedOption(options[0]); return true; }" class="scalexpert-simulate-item">x<span data-bind="text: options[1]['simulations']['duration']"></span></div>
+                                    <!--/ko-->
+                                </div>
+                                <div class="scalexpert-modal-simulate-text">
+                                    <!-- ko if: getMultipleInstallment(selectedOption()) -->
+                                        Soit <b>un 1er prélèvement</b> de <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span></b> (frais inclus) puis <b><span data-bind="text: getRemainingDuration(selectedOption())"></span> prélèvements</b> de <b><span data-bind="text: getAmount(1, selectedOption(), true)"></span></b>
+                                    <!--/ko-->
+                                    <!-- ko ifnot: getMultipleInstallment(selectedOption()) -->
+                                        Soit <b><span data-bind="text: getDuration(selectedOption())"></span> prélèvements</b> de <b><span data-bind="text: getAmount(0, selectedOption(), true)"></span></b>
+                                    <!--/ko-->
+                                </div>
+                                <hr>
+                                <div class="scalexpert-modal-simulate-details">
+                                    <!-- ko ifnot: getMultipleInstallment(selectedOption()) -->
+                                        <div>
+                                            <span><?= __('Montant total dû'); ?></span>
+                                            <span><span data-bind="text: getDueTotalAmount(selectedOption())"></span></span>
+                                        </div>
+                                        <div>
+                                            <span>Payer en <span data-bind="text: getDuration(selectedOption())"></span> fois</span>
+                                            <span><span data-bind="text: getAmount(0, selectedOption(), true)"></span></span>
+                                        </div>
+                                    <!--/ko-->
+                                    <!-- ko if: getMultipleInstallment(selectedOption()) -->
+                                        <div>
+                                            <span><?= __('Montant total dû'); ?></span>
+                                            <span><span data-bind="text: getDueTotalAmount(selectedOption())"></span></span>
+                                        </div>
+                                        <!-- ko foreach: {data: getInstallments(selectedOption()), as: 'installment'} -->
+                                            <div>
+                                                <span data-bind="text: installment.label"></span>
+                                                <span data-bind="text: installment.amount"></span>
+                                            </div>
+                                        <!--/ko-->
+                                    <!--/ko-->
+                                </div>
+                                <div class="scalexpert-modal-simulate-conditions">
+                                    <span><?= __('Montant du financement :'); ?> <span data-bind="text: getInitialAmount(selectedOption())"></span>.</span>
+                                    <span><?= __('TAEG FIXE :'); ?> <span data-bind="text: getEffectiveAnnualPercentageRate(selectedOption())"></span>.</span>
+                                    <!-- ko if: !isBankCard(selectedOption()) -->
+                                    <span><?= __('Taux débiteur fixe :'); ?> <span data-bind="text: getNominalPercentageRate(selectedOption())"></span>.</span>
+                                    <span><?= __('Coût du crédit :'); ?> <span data-bind="text: getTotalCost(selectedOption())"></span>.</span>
+                                    <span><?= __('Frais de dossier :'); ?> <span data-bind="text: getFeesAmount(selectedOption())"></span>.</span>
+                                    <!--/ko-->
+                                    <!-- ko if: isBankCard(selectedOption()) -->
+                                    <span><?= __('Frais :'); ?> <span data-bind="text: getFeesAmount(selectedOption())"></span>.</span>
+                                    <!--/ko-->
+                                    <span><?= __('Montant total dû :'); ?> <span data-bind="text: getDueTotalAmount(selectedOption())"></span>.</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="scalexpert-modal-conditions" data-bind="html: getVisualLegalText(selectedOption())"></div>
+                </div>
+
+            </div>
+        </div>
+    <?php } ?>
+<?php endif; ?>
+

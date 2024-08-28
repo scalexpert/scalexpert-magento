@@ -146,7 +146,6 @@ class Disable extends Field
     }
 
     private function disableFieldByBackendElement($element,$scope,$scopeId){
-        $isActivationConfig = strpos($element->getName(), "groups[activation]") !== false;
         $isWarrantyConfig = strpos($element->getName(), "[warranty_extension]") !== false || strpos($element->getName(), "[warranty]") !== false;
         $isEfunding3XConfig = strpos($element->getName(), "[e_funding][groups][payment_3x]") !== false;
         $isEfunding3XWithFeesConfig = strpos($element->getName(), "[e_funding][groups][payment_3x_with_fees]") !== false;
@@ -289,6 +288,8 @@ class Disable extends Field
             "groups[e_funding][groups][long_credit_fr][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $isCreditLongFrPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_fr][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $isCreditLongFrCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * Long Credit FR with fees
          */
@@ -298,6 +299,8 @@ class Disable extends Field
             "groups[e_funding][groups][long_credit_fr_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $isCreditLongFrWithFeesPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_fr_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $isCreditLongFrWithFeesCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr_with_fees][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * Long Credit FR without fees
          */
@@ -307,6 +310,8 @@ class Disable extends Field
             "groups[e_funding][groups][long_credit_fr_without_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $isCreditLongFrWithoutFeesPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_fr_without_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $isCreditLongFrWithoutFeesCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][long_credit_fr_without_fees][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * Long Credit DE
          */
@@ -316,6 +321,7 @@ class Disable extends Field
             "groups[e_funding][groups][long_credit_de][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $isCreditLongDePaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][long_credit_de][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+
         /**
          * Long Credit DE with fees
          */
@@ -334,6 +340,8 @@ class Disable extends Field
             "groups[e_funding][groups][payment_4x][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $is4XPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_4x][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $is4XCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_4x][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * 4X with fees
          */
@@ -343,6 +351,8 @@ class Disable extends Field
             "groups[e_funding][groups][payment_4x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $is4XWithFeesPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_4x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $is4XWithFeesCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_4x_with_fees][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * 3X
          */
@@ -352,6 +362,8 @@ class Disable extends Field
             "groups[e_funding][groups][payment_3x][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $is3XPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_3x][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $is3XCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_3x][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         /**
          * 3X with fees
          */
@@ -361,6 +373,8 @@ class Disable extends Field
             "groups[e_funding][groups][payment_3x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][title][value]";
         $is3XWithFeesPaymentSubTitleConfig = $element->getName() ==
             "groups[e_funding][groups][payment_3x_with_fees][groups][payment_configuration][groups][customize_payment_method][fields][sub_title][value]";
+        $is3XWithFeesCartTitleConfig = $element->getName() ==
+            "groups[e_funding][groups][payment_3x_with_fees][groups][checkout][groups][customize_checkout_block][fields][title][value]";
         switch (true){
             case $isWarrantyTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
@@ -380,6 +394,9 @@ class Disable extends Field
             case $is3XPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $is3XCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
+                break;
             case $is3XWithFeesTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -388,6 +405,9 @@ class Disable extends Field
                 break;
             case $is3XWithFeesPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
+            case $is3XWithFeesCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_3X_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
                 break;
             case $is4XTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
@@ -398,6 +418,9 @@ class Disable extends Field
             case $is4XPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $is4XCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
+                break;
             case $is4XWithFeesTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -406,6 +429,9 @@ class Disable extends Field
                 break;
             case $is4XWithFeesPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
+            case $is4XWithFeesCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_PAYMENT_4X_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
                 break;
             case $isCreditFrTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
@@ -416,6 +442,9 @@ class Disable extends Field
             case $isCreditLongFrPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $isCreditLongFrCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
+                break;
             case $isCreditFrWithFeesTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -425,6 +454,9 @@ class Disable extends Field
             case $isCreditLongFrWithFeesPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
                 break;
+            case $isCreditLongFrWithFeesCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITH_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
+                break;
             case $isCreditFrWithoutFeesTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
                 break;
@@ -433,6 +465,9 @@ class Disable extends Field
                 break;
             case $isCreditLongFrWithoutFeesPaymentSubTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_PAYMENT_CONFIG_PAYMENT_SUB_TITLE;
+                break;
+            case $isCreditLongFrWithoutFeesCartTitleConfig:
+                $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_FR_WITHOUT_FEES_CHECKOUT_CUSTOMIZE_CHECKOUT_BLOCK_TITLE;
                 break;
             case $isCreditDeTitleConfig:
                 $path = $this->systemConfigData::XML_SCALEXPERT_CUSTOMISATION_LONG_CREDIT_DE_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE;
