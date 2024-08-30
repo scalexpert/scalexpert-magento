@@ -48,13 +48,21 @@ class Index implements HttpGetActionInterface
     {
         $resultJson = $this->jsonFactory->create();
         $productId = $this->request->getParam('product_id');
+        $isCart = $this->request->getParam('is_cart');
         $simulateLayout = 'scalexpert_simulate_product';
-
-        $html = $this->layoutFactory->create()
-            ->createBlock('Scalexpert\Plugin\Block\FinancingAndInsurance\Product', $simulateLayout)
-            ->setData('product_id', $productId)
-            ->setTemplate('Scalexpert_Plugin::simulate/product.phtml')
-            ->toHtml();
+        if($productId){
+            $html = $this->layoutFactory->create()
+                ->createBlock('Scalexpert\Plugin\Block\FinancingAndInsurance\Product', $simulateLayout)
+                ->setData('product_id', $productId)
+                ->setTemplate('Scalexpert_Plugin::simulate/catalog/product.phtml')
+                ->toHtml();
+        }
+        elseif ($isCart){
+            $html = $this->layoutFactory->create()
+                ->createBlock('Scalexpert\Plugin\Block\Simulate\Cart', $simulateLayout)
+                ->setTemplate('Scalexpert_Plugin::simulate/cart/cart.phtml')
+                ->toHtml();
+        }
 
         return $resultJson->setData([
             'result' => $html
