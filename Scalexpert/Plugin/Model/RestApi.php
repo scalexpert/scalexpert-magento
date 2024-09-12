@@ -1437,16 +1437,26 @@ class RestApi
     public function cleanPhoneNumber($phoneNumber, $countryCode)
     {
         switch($countryCode) {
-            case 'DE':
-                $phoneNumber = preg_replace('/^(?:\+?49|\+?33|0)?/','+49', $phoneNumber);
-                break;
             case 'FR':
-                $phoneNumber = preg_replace('/^(?:\+?49|\+?33|0)?/','+33', $phoneNumber);
+            case 'DE':
+                $phoneNumber = $this->formatPhoneNumber($phoneNumber, $countryCode);
                 break;
             default:
                 break;
         }
 
+        return $phoneNumber;
+    }
+
+    public function formatPhoneNumber($phoneNumber, $countryCode)
+    {
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+        try {
+            $numberProto = $phoneUtil->parse($phoneNumber, $countryCode);
+            $phoneNumber = $phoneUtil->format($numberProto, \libphonenumber\PhoneNumberFormat::E164);
+        } catch (\libphonenumber\NumberParseException $e) {
+            $this->writeLog('ERROR format phone:: ' , $e->getMessage());
+        }
         return $phoneNumber;
     }
 

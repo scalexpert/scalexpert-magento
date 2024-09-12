@@ -11,15 +11,19 @@ namespace Scalexpert\Plugin\Plugin\Magento\Quote\Model;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Quote\Model\Quote;
+use Magento\Store\Model\ScopeInterface;
 
 class QuoteManagement
 {
     protected $manager;
+    protected $scopeConfig;
 
     public function __construct(
-        \Magento\Framework\Message\ManagerInterface $manager
+        \Magento\Framework\Message\ManagerInterface $manager,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
         $this->manager = $manager;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -39,9 +43,12 @@ class QuoteManagement
         if ($isScalexpertPayment) {
             $billingTelephone = $quote->getBillingAddress()->getTelephone();
             $shippingTelephone = $quote->getShippingAddress()->getTelephone();
-            $regex = '/^(\+?\d{2}|0)?\d{9,12}$/';
+            $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
+            $validateBilling = $this->phoneIsValid($billingTelephone, $countryId);
+            $validateShipping = $this->phoneIsValid($shippingTelephone, $countryId);
 
-            if (!preg_match($regex, $billingTelephone) || !preg_match($regex, $shippingTelephone)) {
+
+            if (!$validateBilling || !$validateShipping) {
                 throw new LocalizedException(
                     __('Please specify a valid phone number for this payment')
                 );
@@ -49,5 +56,19 @@ class QuoteManagement
         }
 
         return [$quote, $orderData];
+    }
+
+    public function phoneIsValid($phoneNumber, $countryCode)
+    {
+        $isValid = false;
+        $phoneUtil = \libphonenumber\PhoneNumberUtil::getInstance();
+        try {
+            $numberProto = $phoneUtil->parse($phoneNumber, $countryCode);
+            $isValid = $phoneUtil->isValidNumber($numberProto);
+        } catch (\libphonenumber\NumberParseException $e) {
+
+        }
+
+        return $isValid;
     }
 }

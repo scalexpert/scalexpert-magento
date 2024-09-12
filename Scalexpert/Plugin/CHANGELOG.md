@@ -58,3 +58,8 @@
     
     Added simulation widget on checkout cart
     Fixed translation
+
+1.6.0, 2024-09-11:
+=============
+    
+    Added libphonenumber library for validate and format phone number
