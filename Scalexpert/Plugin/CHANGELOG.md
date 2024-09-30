@@ -63,3 +63,9 @@
 =============
     
     Added libphonenumber library for validate and format phone number
+    
+1.6.1, 2024-09-30:
+=============
+    
+    Minor code fixes
+    
