@@ -36,21 +36,23 @@
                 statusDiv.text("<?= __('Your API credentials are empty. Save them to enable Scalexpert API') ?>");
             }else{
                 let urlValidity = "<?= $block->getUrl('scalexpert_plugin/ajax/checkvalidity') ?>";
+                let storeId = <?= is_int($this->getRequest()->getParam('store'))? $this->getRequest()->getParam('store') : 0 ?>;
+                let websiteId = <?= is_int($this->getRequest()->getParam('website')) != null ? $this->getRequest()->getParam('website') : 0 ?>;
                 var params;
                 if(mode === 'PRODUCTION'){
                     params = {
                         'app_id': idProd,
                         'app_key': keyProd,
-                        'website' : <?= $this->getRequest()->getParam('website') != null ?$this->getRequest()->getParam('website'):0?>,
-                        'store':<?= $this->getRequest()->getParam('store')?$this->getRequest()->getParam('store'):0 ?>,
+                        'website' : websiteId,
+                        'store': storeId,
                         'form_key': '<?= $block->getFormKey() ?>'
                     };
                 }else{
                     params = {
                         'app_id': idTest,
                         'app_key': keyTest,
-                        'website' : <?= $this->getRequest()->getParam('website') != null ?$this->getRequest()->getParam('website'):0?>,
-                        'store':<?= $this->getRequest()->getParam('store')?$this->getRequest()->getParam('store'):0 ?>,
+                        'website' : websiteId,
+                        'store': storeId,
                         'form_key': '<?= $block->getFormKey() ?>'
                     };
                 }

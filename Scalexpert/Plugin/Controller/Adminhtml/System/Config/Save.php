@@ -848,6 +848,14 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
             );
         }
 
+        /**
+         * Testing libphonenumber class
+         */
+        if (!class_exists('\libphonenumber\PhoneNumberUtil')) {
+            $message = __('Please, run the following command in Magento 2 root folder : composer require giggsey/libphonenumber-for-php');
+            $this->messageManager->addErrorMessage($message);
+        }
+
         $this->_saveState($this->getRequest()->getPost('config_state'));
         /** @var \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();
