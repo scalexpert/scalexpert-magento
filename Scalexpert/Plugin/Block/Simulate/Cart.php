@@ -40,10 +40,12 @@ class Cart extends \Magento\Checkout\Block\Cart
         $this->scopeConfig = $scopeConfig;
     }
 
-    public function getSimulateData()
+    public function getSimulateData($total)
     {
         $items = $this->getItems();
-
+        if($total){
+            return $this->getProductFinancing($total, $items);
+        }
         return $this->getProductFinancing($this->getQuote()->getBaseGrandTotal(), $items);
     }
 
@@ -164,6 +166,7 @@ class Cart extends \Magento\Checkout\Block\Cart
                                 $enabled_solutions[$duration['duration'].'-'.$code]['solutionCode'] = $code;
                                 $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit'] = $merchantKit;
                                 $enabled_solutions[$duration['duration'].'-'.$code]['simulations'] = $duration;
+                                $enabled_solutions[$duration['duration'].'-'.$code]['updateSimulationUrl'] = $this->getUrl('scalexpert/ajax/index');
                                 if (!is_null($enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['magentoConfiguration']['title'])) {
                                     $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['visualTitle'] =
                                         $enabled_solutions[$duration['duration'].'-'.$code]['merchantkit']['magentoConfiguration']['title'];

@@ -8,7 +8,7 @@
  * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
  */
 -->
-
+<!-- ko if: (getSimulation() && getNeedUpdate(selectedOption())) || !getSimulation() -->
 <div class="payment-method scalexpert-paiement" data-bind="css: {'_active': (getCode() == isChecked())}">
 
     <div class="payment-method-title">
@@ -175,3 +175,4 @@
     </div>
 
 </div>
+<!--/ko-->
