@@ -69,3 +69,9 @@
     
     Minor code fixes
     
+1.6.2, 2024-11-04:
+=============
+    
+    Minor code fixes
+    Bug fix: fix simulation widget datas when shipping rates are updated on cart or payment page
+    

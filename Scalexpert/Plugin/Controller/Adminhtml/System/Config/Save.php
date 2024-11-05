@@ -874,7 +874,7 @@ class Save extends \Magento\Config\Controller\Adminhtml\System\Config\Save
      * @param array $configData
      * @return array
      */
-    private function filterNodes(array $configData): array
+    public function filterNodes(array $configData): array
     {
         if (!empty($configData['groups'])) {
             $systemXmlPathsFromKeys = array_keys($this->_configStructure->getFieldPaths());

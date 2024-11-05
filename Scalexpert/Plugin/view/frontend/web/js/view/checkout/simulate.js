@@ -10,8 +10,10 @@
 define([
     'jquery',
     'uiComponent',
-    'Magento_Catalog/js/price-utils'
-], function ($, Component, priceUtils) {
+    'Magento_Catalog/js/price-utils',
+    'Magento_Checkout/js/model/totals',
+    'domReady!'
+], function ($, Component, priceUtils, totals) {
     'use strict';
     const entries = Object.entries(window.scalexepert);
 
@@ -141,6 +143,40 @@ define([
             };
             return priceUtils.formatPrice(percent, percentFormat);
         },
+        getCanUpdate: function () {
+            let init = this.getFormattedPrice(window.scalexepert[entries[0][0]]['simulations']['dueTotalAmount'] - window.scalexepert[entries[0][0]]['simulations']['totalCost']);
+            let tot = this.getFormattedPrice(totals.getSegment('grand_total').value);
+            if(init !== tot){
+                this.updateSimulate(totals.getSegment('grand_total').value)
+            }
+            return true;
+        },
+        updateSimulate: function (total) {
+            jQuery(document).ready(function() {
+            let url = window.scalexepert[entries[0][0]]['updateSimulationUrl'];
+            let simulate_div =  $('.simulate_block');
+            $.ajax({
+                url: url,
+                data: {
+                    is_cart: true,
+                    total: total
+                },
+                success: function (data) {
+                    simulate_div.empty();
+                    $('.scalexpert-modal').remove();
+                    $('.modals-overlay').removeClass('modals-overlay');
+                    simulate_div.append(data.result);
+                    simulate_div.first().trigger('contentUpdated');
+                    if ($.fn.applyBindings !== undefined) {
+                        $('#simulate').applyBindings();
+                    }
+                },
+                error: function (err) {
+                    console.error('scalexpert simulation render error', err);
+                }
+            });
+            });
+        }
 
     });
 });

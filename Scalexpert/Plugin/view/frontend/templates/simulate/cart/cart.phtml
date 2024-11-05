@@ -12,8 +12,9 @@
 
 ?>
 
+<?php $total = $block->getData('total'); ?>
 <?php if ($block->getCountryId() === 'FR'):?>
-    <?php if($financing = $block->getSimulateData()) { ?>
+    <?php if($financing = $block->getSimulateData($total)) { ?>
         <div id="simulate" data-bind="scope:'simulate'">
             <script>
                 window.scalexepert = <?php /* @escapeNotVerified */ echo json_encode($financing); ?>;
@@ -31,6 +32,7 @@
                     }
                 }
             </script>
+            <!-- ko if: getCanUpdate() -->
             <div class="scalexpert-simulate">
                 <div class="scalexpert-simulate-top">
                     <div data-bind="text: getVisualTitle(selectedOption())"></div>
@@ -142,6 +144,7 @@
                 </div>
 
             </div>
+            <!--/ko-->
         </div>
     <?php } ?>
 <?php endif; ?>

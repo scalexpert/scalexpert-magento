@@ -12,9 +12,11 @@ define(
         'jquery',
         'Magento_Checkout/js/view/payment/default',
         'mage/url',
-        'Magento_Catalog/js/price-utils'
+        'Magento_Catalog/js/price-utils',
+        'Magento_Checkout/js/model/totals',
+        'Magento_Checkout/js/model/full-screen-loader',
     ],
-    function($, Component, url, priceUtils) {
+    function($, Component, url, priceUtils, totals, fullScreenLoader) {
         'use strict';
 
         return Component.extend({
@@ -145,6 +147,18 @@ define(
 
             afterPlaceOrder: function() {
                 $.mage.redirect(url.build('scalexpert/payment/redirect'));
+            },
+
+            getNeedUpdate: function (data) {
+                let init = this.getFormattedPrice(this.salexpertPaymentData.simulate[data]['simulations']['dueTotalAmount'] - this.salexpertPaymentData.simulate[data]['simulations']['totalCost']);
+                let tot = this.getFormattedPrice(totals.getSegment('grand_total').value);
+                if(init !== tot){
+                    fullScreenLoader.startLoader();
+                    jQuery(document).ready(function() {
+                    window.location.reload();
+                    });
+                }
+                return true;
             },
         });
     }

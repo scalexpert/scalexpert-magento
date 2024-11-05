@@ -49,6 +49,7 @@ class Index implements HttpGetActionInterface
         $resultJson = $this->jsonFactory->create();
         $productId = $this->request->getParam('product_id');
         $isCart = $this->request->getParam('is_cart');
+        $total = $this->request->getParam('total');
         $simulateLayout = 'scalexpert_simulate_product';
         if($productId){
             $html = $this->layoutFactory->create()
@@ -60,6 +61,7 @@ class Index implements HttpGetActionInterface
         elseif ($isCart){
             $html = $this->layoutFactory->create()
                 ->createBlock('Scalexpert\Plugin\Block\Simulate\Cart', $simulateLayout)
+                ->setData('total', $total)
                 ->setTemplate('Scalexpert_Plugin::simulate/cart/cart.phtml')
                 ->toHtml();
         }

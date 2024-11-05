@@ -13,14 +13,21 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\App\State;
 
 class ValidityStatus extends Field
 {
     protected $_template = 'Scalexpert_Plugin::system/config/status.phtml';
 
-    public function __construct(Context $context, array $data = [], ?SecureHtmlRenderer $secureRenderer = null)
+    /**
+     * @var State
+     */
+    private $state;
+
+    public function __construct(State $state, Context $context, array $data = [], ?SecureHtmlRenderer $secureRenderer = null)
     {
         parent::__construct($context, $data, $secureRenderer);
+        $this->state = $state;
     }
 
     public function render(AbstractElement $element)
@@ -32,5 +39,23 @@ class ValidityStatus extends Field
     protected function _getElementHtml(AbstractElement $element)
     {
         return $this->_toHtml();
+    }
+
+    public function getCurrentScopeWebsiteId() {
+        $websiteId = 0;
+        if ($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            $request = $this->_request;
+            $websiteId = (int) $request->getParam('website', 0);
+        }
+        return $websiteId;
+    }
+
+    public function getCurrentScopeStoreId() {
+        $storeId = 0;
+        if ($this->state->getAreaCode() == \Magento\Framework\App\Area::AREA_ADMINHTML) {
+            $request = $this->_request;
+            $storeId = (int) $request->getParam('store', 0);
+        }
+        return $storeId;
     }
 }

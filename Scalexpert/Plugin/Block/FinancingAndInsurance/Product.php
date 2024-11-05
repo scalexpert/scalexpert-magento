@@ -581,7 +581,7 @@ class Product extends \Magento\Catalog\Block\Product\View
                     false
                 );
             }
-            if ($simulations['status']) {
+            if (isset($simulations['status'])) {
                 foreach ($simulations['result']->solutionSimulations as $sim) {
                     foreach($financing['result']->solutions as $solution) {
                         if ($solution->solutionCode === $sim->solutionCode) {
