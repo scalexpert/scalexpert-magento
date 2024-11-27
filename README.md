@@ -1,4 +1,4 @@
-# Plugin scalexpert for Magento CE & EE 2.4.3, 2.4.4, 2.4.6
+# Plugin scalexpert for Magento CE & EE 2.4.4, 2.4.6, 2.4.7
 
 refer to readme and changelog files in directory "Scalexpert/Pugin" for more detail
 
