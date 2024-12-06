@@ -75,3 +75,10 @@
     Minor code fixes
     Bug fix: fix simulation widget datas when shipping rates are updated on cart or payment page
     
+1.7.0, 2024-12-06:
+=============
+    
+    Added simulation widget compatibility for configurable products
+    Added insurance widget compatibility for configurable products
+    Bug fix: fix insurance widget display on "After Product Add To Cart Button" position
+    

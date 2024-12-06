@@ -11,10 +11,15 @@
 /** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Product $block */
 
 $productId = $block->getData('product_id');
+$price = '';
+
+if (!is_null($block->getData('price'))) {
+    $price = $block->getData('price');
+}
 ?>
 
 <?php if ($block->getCountryId() === 'FR'):?>
-    <?php if($financing = $block->getProductFinancing($productId)) { ?>
+    <?php if($financing = $block->getProductFinancing($productId, $price)) { ?>
         <div id="simulate" data-bind="scope:'simulate'">
             <script>
                 window.scalexepert = <?php /* @escapeNotVerified */ echo json_encode($financing); ?>;
@@ -32,6 +37,7 @@ $productId = $block->getData('product_id');
                     }
                 }
             </script>
+            <!-- ko if: updateSelectedOption() -->
             <div class="scalexpert-simulate">
                 <div class="scalexpert-simulate-top">
                     <div data-bind="text: getVisualTitle(selectedOption())"></div>
@@ -143,6 +149,7 @@ $productId = $block->getData('product_id');
                 </div>
 
             </div>
+            <!--/ko-->
         </div>
     <?php } ?>
 <?php endif; ?>

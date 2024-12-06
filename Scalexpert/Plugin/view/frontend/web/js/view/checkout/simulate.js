@@ -15,7 +15,7 @@ define([
     'domReady!'
 ], function ($, Component, priceUtils, totals) {
     'use strict';
-    const entries = Object.entries(window.scalexepert);
+    let entries = Object.entries(window.scalexepert);
 
     return Component.extend({
         defaults: {
@@ -144,6 +144,8 @@ define([
             return priceUtils.formatPrice(percent, percentFormat);
         },
         getCanUpdate: function () {
+            entries = Object.entries(window.scalexepert);
+            this.selectedOption(entries[0][0]);
             let init = this.getFormattedPrice(window.scalexepert[entries[0][0]]['simulations']['dueTotalAmount'] - window.scalexepert[entries[0][0]]['simulations']['totalCost']);
             let tot = this.getFormattedPrice(totals.getSegment('grand_total').value);
             if(init !== tot){

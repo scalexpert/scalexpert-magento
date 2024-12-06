@@ -70,9 +70,9 @@ class Product extends \Magento\Catalog\Block\Product\View
         return $this->restApi->getFinancingEligibleSolutions($amount, $countryId);
     }
 
-    public function getWarranty($countryId = 'FR')
+    public function getWarranty($product, $price, $countryId = 'FR')
     {
-        return $this->scalexpertHelper->getWarranty($this->getProduct(), $countryId);
+        return $this->scalexpertHelper->getWarranty($product, $price, $countryId);
     }
 
     public function getConfigurationPayment3xBlockProduct($product)
@@ -396,8 +396,8 @@ class Product extends \Magento\Catalog\Block\Product\View
         return array(
             'enable' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_SHOW_PRODUCT_BLOCK_ENABLE),
             'position' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_SHOW_PRODUCT_BLOCK_POSITION),
-            'title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE),
-            'sub_title' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_SUB_TITLE),
+            'title' => $this->stripTags($this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_TITLE)),
+            'sub_title' => $this->stripTags($this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_SUB_TITLE)),
             'logo' => $this->systemConfigData->getScalexpertConfigData(\Scalexpert\Plugin\Model\SystemConfigData::XML_SCALEXPERT_CUSTOMISATION_WARRANTY_PRODUCT_CUSTOMIZE_PRODUCT_BLOCK_LOGO_ENABLE),
             'excluded_category' => $excludedCategory,
             'excluded_product' => $excludedProduct
@@ -429,10 +429,11 @@ class Product extends \Magento\Catalog\Block\Product\View
             && $isWarrantyFirstItemStatusTrue);
     }
 
-    public function getProductWarranty() {
+    public function getProductWarranty($productId, $price) {
+        $product = $this->productRepository->getById($productId);
         $configurationWarrantyBlockProduct = $this->getConfigurationWarrantyBlockProduct();
         $countryId = $this->scopeConfig->getValue('general/country/default', ScopeInterface::SCOPE_STORE);
-        $warranty = $this->getWarranty($countryId);
+        $warranty = $this->getWarranty($product, $price, $countryId);
 
         $informations = [];
 
@@ -496,7 +497,7 @@ class Product extends \Magento\Catalog\Block\Product\View
         return $informations;
     }
 
-    public function getProductFinancing($productId) {
+    public function getProductFinancing($productId, $price = '') {
         $product = $this->productRepository->getById($productId);
         $configurationPayment3xBlockProduct = $this->getConfigurationPayment3xBlockProduct($product);
         $configurationPayment3xWithFeesBlockProduct = $this->getConfigurationPayment3xWithFeesBlockProduct($product);
@@ -512,8 +513,13 @@ class Product extends \Magento\Catalog\Block\Product\View
         $enabled_solutions = array();
         $countryId = $this->getCountryId();
         $financing = $this->getFinancingEligibleSolutions($countryId);
-//        $amount = $this->getProduct()->getPrice();
-        $amount = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        $amount = '';
+        if ($price === '') {
+            $amount = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+        } else {
+            $amount = preg_replace('/[^A-Za-z0-9,\-]/', '', $price);
+        }
+
         $finalSolutions = array();
         if($financing['status']){
             $paymentCode3XSolutionCode = \Scalexpert\Plugin\Model\SystemConfigData::SCALEXPERT_PAYMENT_CODES_3X;
@@ -627,20 +633,11 @@ class Product extends \Magento\Catalog\Block\Product\View
                 $insertDe = 'catalog.product.view.after.title.scalexpert.credit.de.insert';
                 break;
             case 'catalog.product.view.before.qty.scalexpert.simulate':
-                if($this->getProduct()->getTypeId() != self::TYPE_SIMPLE){
-                    $configurationInsertBlockProduct['position'] = 'catalog.product.view.before.qty.scalexpert.simulate.conf';
-                    $insertDe = 'catalog.product.view.before.qty.scalexpert.credit.de.insert.conf';
-                }
-                else{
-                    $insertDe = 'catalog.product.view.before.qty.scalexpert.credit.de.insert';
-                }
+                $insertDe = 'catalog.product.view.before.qty.scalexpert.credit.de.insert';
                 break;
             case 'catalog.product.view.after.addtocart.scalexpert.simulate':
                 $insertDe = 'catalog.product.view.after.addtocart.scalexpert.credit.de.insert';
                 break;
-        }
-        if($this->getProduct()->getTypeId() != self::TYPE_SIMPLE && $configurationWarrantyBlockProduct['position'] == 'catalog.product.view.before.qty.scalexpert.warranty.insert'){
-            $configurationWarrantyBlockProduct['position'] = 'catalog.product.view.before.qty.scalexpert.warranty.insert.conf';
         }
         $positions = array($configurationWarrantyBlockProduct['position'], $configurationInsertBlockProduct['position'], $simulateLayout, $insertDe);
         return (in_array($this->getNameInLayout(),$positions) ? parent::_toHtml() : '');
