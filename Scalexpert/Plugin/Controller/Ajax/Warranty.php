@@ -10,34 +10,37 @@
 namespace Scalexpert\Plugin\Controller\Ajax;
 
 use \Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\View\LayoutFactory;
 
-class Index implements HttpGetActionInterface
+class Warranty implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $request;
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     protected $jsonFactory;
 
     /**
-     * @var \Magento\Framework\View\LayoutFactory
+     * @var LayoutFactory
      */
     protected $layoutFactory;
 
     /**
      * GetPopularBlock constructor.
-     * @param \Magento\Framework\App\Request\Http $request
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
+     * @param Http $request
+     * @param JsonFactory $jsonFactory
+     * @param LayoutFactory $layoutFactory
      */
     public function __construct(
-        \Magento\Framework\App\Request\Http $request,
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Magento\Framework\View\LayoutFactory $layoutFactory
+        Http $request,
+        JsonFactory $jsonFactory,
+        LayoutFactory $layoutFactory
     ) {
         $this->request = $request;
         $this->jsonFactory = $jsonFactory;
@@ -49,22 +52,15 @@ class Index implements HttpGetActionInterface
         $resultJson = $this->jsonFactory->create();
         $productId = $this->request->getParam('product_id');
         $price = $this->request->getParam('price');
-        $isCart = $this->request->getParam('is_cart');
-        $total = $this->request->getParam('total');
+        $html = '';
         $simulateLayout = 'scalexpert_simulate_product';
+
         if($productId){
             $html = $this->layoutFactory->create()
                 ->createBlock('Scalexpert\Plugin\Block\FinancingAndInsurance\Product', $simulateLayout)
                 ->setData('product_id', $productId)
                 ->setData('price', $price)
-                ->setTemplate('Scalexpert_Plugin::simulate/catalog/product.phtml')
-                ->toHtml();
-        }
-        elseif ($isCart){
-            $html = $this->layoutFactory->create()
-                ->createBlock('Scalexpert\Plugin\Block\Simulate\Cart', $simulateLayout)
-                ->setData('total', $total)
-                ->setTemplate('Scalexpert_Plugin::simulate/cart/cart.phtml')
+                ->setTemplate('Scalexpert_Plugin::insurance/product.phtml')
                 ->toHtml();
         }
 

@@ -1,0 +1,53 @@
+<?php
+/**
+ * Copyright © Scalexpert.
+ * This file is part of Scalexpert plugin for Magento 2. See COPYING.md for license details.
+ *
+ * @author    Scalexpert (https://scalexpert.societegenerale.com/)
+ * @copyright Scalexpert
+ * @license   https://opensource.org/licenses/osl-3.0.php Open Software License (OSL 3.0)
+ */
+
+/** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Product $block */
+$url = $block->getUrl('scalexpert/ajax/warranty');
+$productId = $block->getProduct()->getId();
+?>
+<div class="warranty_block"></div>
+
+<script>
+    require([
+        'jquery',
+        'domReady!'
+    ], function ($) {
+        jQuery(document).ready(function() {
+
+            let url = '<?= $url ?>';
+            let productId = '<?= $productId ?>';
+            let warranty_div =  $('.warranty_block');
+
+            $.ajax({
+                url: url,
+                data: {
+                    product_id: productId
+                },
+                beforeSend: function () {
+                    $('body').trigger('processStart');
+                },
+                success: function (data) {
+                    warranty_div.empty();
+                    warranty_div.append(data.result);
+                    warranty_div.first().trigger('contentUpdated');
+                    if ($.fn.applyBindings !== undefined) {
+                        $('#warranty').applyBindings();
+                    }
+                    $('body').trigger('processStop');
+                },
+                error: function (err) {
+                    console.error('scalexpert warranty render error', err);
+                    $('body').trigger('processStop');
+                }
+            });
+
+        });
+    });
+</script>

@@ -10,72 +10,96 @@
 
 /** @var Scalexpert\Plugin\Block\FinancingAndInsurance\Product $block */
 
-$warranty = $block->getProductWarranty();
-$priceHelper = $this->helper('Magento\Framework\Pricing\Helper\Data');
+$productId = $block->getData('product_id');
+$price = '';
+
+if (!is_null($block->getData('price'))) {
+    $price = $block->getData('price');
+}
+$warranty = $block->getProductWarranty($productId, $price);
 ?>
-<?php if ($warranty && $warranty['enabled']) { ?>
-    <?php $input_type = ((count($warranty['insurances']) > 1)?'radio':'checkbox'); ?>
-    <?php $checked = ((count($warranty['insurances']) == 1)?true:false); ?>
-    <div class="scalexpert-box">
-        <div class="scalexpert-box-title">
-            <span><?= $warranty['title']; ?></span>
-            <div id="scalexpert-warranty-btn">
-                <img src="<?= $warranty['picto_info']; ?>" alt="<?= strip_tags($warranty['title']); ?>" width="16">
-            </div>
-            <?php if($warranty['logo']) { ?>
-                <img src="<?= $warranty['logo']; ?>" alt="<?= strip_tags($warranty['title']); ?>" class="scalexpert-logo" width="55">
-            <?php } ?>
-        </div>
-        <div class="scalexpert-box-content">
-            <?php foreach($warranty['insurances'] AS $code => $insurance) { ?>
-                <div class="scalexpert-option">
-                    <input type="<?= $input_type; ?>" id="insurance_<?= $insurance['insurance_id']; ?>" value="<?= $warranty['code'].'|'.$insurance['insurance_id']; ?>"
-                        <?= (($warranty['quotations_insurance_id'] && $warranty['quotations_insurance_id']==$insurance['insurance_id'])?'checked':''); ?> name="insurances">
-                    <label for="insurance_<?= $insurance['insurance_id']; ?>"><?= $insurance['description']; ?> (<?= $priceHelper->currency($insurance['price'], true, false); ?>)</label>
+
+<?php if($warranty && $warranty['enabled']) { ?>
+    <div id="warranty" data-bind="scope:'warranty'">
+        <script>
+            window.scalexepertWarranty = <?php /* @escapeNotVerified */ echo json_encode($warranty); ?>;
+        </script>
+        <script type="text/x-magento-init">
+            {
+                "*": {
+                    "Magento_Ui/js/core/app": {
+                        "components": {
+                            "warranty": {
+                                "component": "Scalexpert_Plugin/js/view/catalog/warranty"
+                            }
+                        }
+                    }
+                }
+            }
+        </script>
+        <div class="scalexpert-box scalexpert-box-warranty" data-bind="class: 'show'">
+            <div class="scalexpert-box-title">
+                <span data-bind="text: getTitle()"></span>
+                <div id="scalexpert-warranty-btn">
+                    <img data-bind="attr: {'src': getPictoInfo(), 'alt': 'Information'}" width="16">
                 </div>
-            <?php } ?>
-            <?php if($warranty['sub_title']) { ?>
-                <div class="scalexpert-description"><?= $warranty['sub_title']; ?></div>
-            <?php } ?>
+                <!-- ko if: getLogo() -->
+                    <img data-bind="attr: {'src': getLogo(), 'alt': 'Société Générale'}" class="scalexpert-logo" width="55">
+                <!--/ko-->
+            </div>
+            <div class="scalexpert-box-content">
+                <!-- ko foreach: {data: getInsurances(), as: 'insurance'} -->
+                    <div class="scalexpert-option">
+                        <input type="radio" data-bind="attr: {'id': insurance.id, 'value': insurance.code}" name="insurances">
+                        <label data-bind="attr: {'for': insurance.id}">
+                            <span data-bind="text: insurance.label"></span>
+                        </label>
+                    </div>
+                <!--/ko-->
+                <!-- ko if: getSubTitle() -->
+                    <div class="scalexpert-description" data-bind="text: getSubTitle()"></div>
+                <!--/ko-->
+            </div>
+            <div class="scalexpert-box-infos">
+                <!-- ko if: getInfoTerms() -->
+                    <a data-bind="attr: {'href': getInfoTerms()}" target="_blank"><?= __('Product Information Sheet (IPID)'); ?></a>
+                <!--/ko-->
+                <!-- ko if: getInfoNotice() -->
+                    <a data-bind="attr: {'href': getInfoNotice()}" target="_blank"><?= __('Information Notice (IN)'); ?></a>
+                <!--/ko-->
+            </div>
         </div>
-        <div class="scalexpert-box-infos">
-            <?php if($warranty['terms']) { ?>
-                <a href="<?= $warranty['terms']; ?>" target="_blank"><?= __('Product Information Sheet (IPID)'); ?></a>
-            <?php } ?>
-            <?php if($warranty['notice']) { ?>
-                <a href="<?= $warranty['notice']; ?>" target="_blank"><?= __('Information Notice (IN)'); ?></a>
-            <?php } ?>
-        </div>
-    </div>
-    <div class="scalexpert-modal-container"
-         data-bind="mageInit: {
-        'Magento_Ui/js/modal/modal':{
-            'type': 'popup',
-            'trigger': '#scalexpert-warranty-btn',
-            'modalClass': 'scalexpert-modal',
-            'responsive': true,
-            'innerScroll': true,
-            'buttons': []
-        }}">
+        <div class="scalexpert-modal-container"
+             data-bind="mageInit: {
+                'Magento_Ui/js/modal/modal':{
+                'type': 'popup',
+                'trigger': '#scalexpert-warranty-btn',
+                'modalClass': 'scalexpert-modal',
+                'responsive': true,
+                'innerScroll': true,
+                'buttons': []
+             }}">
 
-        <div class="scalexpert-modal-title">
-            <img src="<?= $this->getViewFileUrl('Scalexpert_Plugin::images/umbrella.svg'); ?>" alt="<?= strip_tags($warranty['title']); ?>">
-            <span><?= $warranty['title']; ?></span>
-        </div>
+            <div class="scalexpert-modal-title">
+                <img src="<?= $this->getViewFileUrl('Scalexpert_Plugin::images/umbrella.svg'); ?>" data-bind="attr: {'alt': getTitle()}">
+                <span data-bind="text: getTitle()"></span>
+            </div>
 
-        <div class="scalexpert-modal-content">
-            <div class="scalexpert_subtitle"><?= $warranty['sub_title']; ?></div>
-            <?= $warranty['additional']; ?>
-            <?= $warranty['legal_text']; ?>
-        </div>
+            <div class="scalexpert-modal-content">
+                <div class="scalexpert_subtitle" data-bind="text: getSubTitle()"></div>
+                <div data-bind="html: getAdditionalText()"></div>
+                <div data-bind="html: getLegalText()"></div>
+            </div>
 
-        <div class="scalexpert-modal-bottom">
-            <?php if($warranty['terms']) { ?>
-                <a href="<?= $warranty['terms']; ?>" target="_blank"><?= __('Product Information Sheet (IPID)'); ?></a>
-            <?php } ?>
-            <?php if($warranty['notice']) { ?>
-                <a href="<?= $warranty['notice']; ?>" target="_blank"><?= __('Information Notice (IN)'); ?></a>
-            <?php } ?>
+            <div class="scalexpert-modal-bottom">
+                <!-- ko if: getInfoTerms() -->
+                    <a data-bind="attr: {'href': getInfoTerms()}" target="_blank"><?= __('Product Information Sheet (IPID)'); ?></a>
+                <!--/ko-->
+                <!-- ko if: getInfoNotice() -->
+                    <a data-bind="attr: {'href': getInfoNotice()}" target="_blank"><?= __('Information Notice (IN)'); ?></a>
+                <!--/ko-->
+            </div>
+
         </div>
 
     </div>

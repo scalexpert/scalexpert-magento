@@ -12,7 +12,11 @@ var config = {
         mixins: {
             'Magento_Ui/js/view/messages': {
                 'Scalexpert_Plugin/js/view/messages-mixin': true
+            },
+            'Magento_Swatches/js/swatch-renderer': {
+                'Scalexpert_Plugin/js/swatch-renderer-mixin': true
             }
+
         }
     }
 };

@@ -78,11 +78,13 @@ class Cart extends \Magento\Checkout\Block\Cart\Item\Renderer
             if($insuranceInfos){
                 $parentItem = $quote->getItemById($insuranceInfos[0]['quote_item_id']);
                 $product = $parentItem->getProduct();
+                $price = $product->getFinalPrice();
             }
             else{
                 $product = $this->getProduct();
+                $price = '';
             }
-        return $this->scalexpertHelper->getWarranty($product);
+        return $this->scalexpertHelper->getWarranty($product, $price);
     }
 
     public function getConfigurationPayment3xBlockProduct()

@@ -13,7 +13,7 @@ define([
     'Magento_Catalog/js/price-utils'
 ], function ($, Component, priceUtils) {
     'use strict';
-    const entries = Object.entries(window.scalexepert);
+    let entries = Object.entries(window.scalexepert);
 
     return Component.extend({
         defaults: {
@@ -140,6 +140,11 @@ define([
                 requiredPrecision: 2
             };
             return priceUtils.formatPrice(percent, percentFormat);
+        },
+        updateSelectedOption: function () {
+                entries = Object.entries(window.scalexepert);
+                this.selectedOption(entries[0][0]);
+                return true;
         },
 
     });

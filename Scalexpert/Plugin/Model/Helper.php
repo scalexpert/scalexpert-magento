@@ -46,7 +46,7 @@ class Helper
         $this->serializer = $serializer;
     }
 
-    public function getWarranty($product, $countryId = 'FR')
+    public function getWarranty($product, $price = '',  $countryId = 'FR')
     {
         $solutions = $this->restApi->getInsuranceEligibleSolutions($countryId);
 
@@ -59,7 +59,12 @@ class Helper
 
                 if ($solutionResult['status']) {
                     $itemId = $solutionResult['result']->id;
-                    $searchItem = $this->restApi->searchInsuranceItem($solutionCode, $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue(), $itemId);
+                    if ($price === '') {
+                        $price = $product->getPriceInfo()->getPrice('final_price')->getAmount()->getValue();
+                    } else {
+                        $price = preg_replace('/[^A-Za-z0-9,\-]/', '', $price);
+                    }
+                    $searchItem = $this->restApi->searchInsuranceItem($solutionCode, $price, $itemId);
                     if ($searchItem['status']) {
                         array_push($searchData, $searchItem);
                     }
