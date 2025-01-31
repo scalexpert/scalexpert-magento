@@ -55,4 +55,13 @@ class Data extends AbstractHelper
 
         return implode(';', $categoryTree);
     }
+
+    /**
+     * @param $sku
+     * @return false|string
+     */
+    public function cleanSkuForApi($sku)
+    {
+        return substr($sku,0,36);
+    }
 }
