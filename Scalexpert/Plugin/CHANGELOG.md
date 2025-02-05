@@ -82,3 +82,10 @@
     Added insurance widget compatibility for configurable products
     Bug fix: fix insurance widget display on "After Product Add To Cart Button" position
     
+1.7.1, 2025-01-31:
+=============
+    
+    Added "expired" financing sub status
+    Bug fix: fix sku length for financing subscription
+    Bug fix: removed birthName parameter for financing subscription
+    

@@ -1,11 +1,11 @@
 {
 	"name" : "scalexpert/plugin",
-	"description" : "Société Général scalexpert for Magento 2",
+	"description" : "Scalexpert plugin for Magento 2",
 	"require" : {
 		"php" : "7.4|8.1|8.2"
 	},
 	"type" : "magento2-module",
-	"version" : "1.7.0",
+	"version" : "1.7.1",
     "license" : "OSL-3.0",
 	"autoload" : {
 		"files" : [

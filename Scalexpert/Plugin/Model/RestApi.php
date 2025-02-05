@@ -526,7 +526,7 @@ class RestApi
                             "specifications" => "NC",
                             "category" => "NC",
                             "isFinanced" => true,
-                            "sku" => $item->getSku()
+                            "sku" => $this->_helperData->cleanSkuForApi($item->getSku())
                         );
 
                         array_push($cartItems, $itemData);
@@ -542,7 +542,7 @@ class RestApi
                         ],
                         "buyers" => [
                             [
-                                "birthName" => $order->getBillingAddress()->getLastname(),
+                                "birthName" => "",
                                 "billingContact" => [
                                     "lastName" => $order->getBillingAddress()->getLastname(),
                                     "firstName" => $order->getBillingAddress()->getFirstname(),
